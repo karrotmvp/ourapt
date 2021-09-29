@@ -1,0 +1,4 @@
+version: '3.9'
+services:
+  maria_rdb:
+    platform: linux/arm64/v8
