@@ -19,7 +19,7 @@ do
 case $opt in
   p) profile=$OPTARG ;;
   u) build=true ;;
-  h) help ;;
+  h) help && exit 0 ;;
   m) m1=true ;;
   esac
 done
