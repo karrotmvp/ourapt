@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+  maria_rdb:
+    image: mariadb:10.6.4
+    environment:
+      MYSQL_ROOT_PASSWORD: daangn
+      MYSQL_DATABASE: ume_apartment
+      MYSQL_USER: daangn
+      MYSQL_PASSWORD: daangn
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+  common_api_server:
+    build: ./common_api_server
+    ports:
+      - 8080:8080
+    volumes:
+      - ./common_api_server:/server
+
+  # react_view_render_server:
+
+volumes:
+  mysql_data:

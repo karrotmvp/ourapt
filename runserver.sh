@@ -4,7 +4,7 @@ help() {
   echo 
   echo "Usage: ./runserver.sh -p [profile-name] [options]"
   echo "  Arguments"
-  echo "    [profile-name]       The name of profile to run (ex. local, staging, production)\n"
+  echo "    [profile-name]       The name of profile to run (ex. dev, staging, production)\n"
   echo "  Options:"
   echo "    -u                   Update runnning server container to edited code"
   echo "    -m                   Run on M1 Architecture"
@@ -25,8 +25,8 @@ case $opt in
 done
 
 case $profile in
-  local)
-    filename=docker-compose.local.yaml ;;
+  dev)
+    filename=docker-compose.dev.yaml ;;
   staging)
     filename=docker-compose.staging.yaml ;;
   production)
@@ -43,9 +43,9 @@ case $profile in
 
 command="docker-compose -f ${filename}"
 
-if [[ $profile = "local" && $m1 ]] 
+if [[ $profile = "dev" && $m1 ]] 
 then
-  command="${command} -f docker-compose.local-m1.yaml"
+  command="${command} -f docker-compose.dev-m1.yaml"
 fi
 
 command="${command} up -d"
