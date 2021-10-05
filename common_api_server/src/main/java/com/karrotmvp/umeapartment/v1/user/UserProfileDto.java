@@ -1,6 +1,6 @@
 package com.karrotmvp.umeapartment.v1.user;
 
-public class OAuthUserProfileDto {
+public class UserProfileDto {
   
 
   public User toEntity() {
