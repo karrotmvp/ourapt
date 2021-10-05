@@ -5,7 +5,7 @@ spring:
     resources:
       static-locations: classpath:/static/
   datasource:
-    url: jdbc:mariadb://localhost:3306/ume_apartment
+    url: jdbc:mariadb://maria_rdb:3306/ume_apartment
     driver-class-name: org.mariadb.jdbc.Driver
     username: daangn
     password: daangn
