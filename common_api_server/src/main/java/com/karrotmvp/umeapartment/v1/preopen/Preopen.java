@@ -13,7 +13,7 @@ public class Preopen extends BaseEntity {
   
   @Id
   @Column(name = "daangn_id")
-  private String daangn_id;
+  private String daangnId;
 
   @Column(name = "want_supply_checked")
   private Boolean wantSupplyChecked;
