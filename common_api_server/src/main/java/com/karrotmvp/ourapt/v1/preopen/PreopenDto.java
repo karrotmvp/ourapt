@@ -1,11 +1,11 @@
-package com.karrotmvp.umeapartment.v1.preopen;
+package com.karrotmvp.ourapt.v1.preopen;
 
 import lombok.Getter;
 
 @Getter
 public class PreopenDto {
 
-  private String daangnId;
+  private String karrotId;
 
   private Boolean wantSupplyChecked;
 
@@ -16,7 +16,7 @@ public class PreopenDto {
 
   public Preopen toEntity() {
     Preopen entity = new Preopen();
-    entity.setDaangnId(daangnId);
+    entity.setKarrotId(karrotId);
     entity.setWantSupplyChecked(wantSupplyChecked);
     entity.setWantDemandChecked(wantDemandChecked);
     entity.setJustFunChecked(justFunChecked);

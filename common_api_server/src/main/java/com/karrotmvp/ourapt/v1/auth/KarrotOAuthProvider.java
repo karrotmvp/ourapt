@@ -1,6 +1,6 @@
-package com.karrotmvp.umeapartment.v1.auth;
+package com.karrotmvp.ourapt.v1.auth;
 
-import com.karrotmvp.umeapartment.v1.user.UserProfileDto;
+import com.karrotmvp.ourapt.v1.user.UserProfileDto;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

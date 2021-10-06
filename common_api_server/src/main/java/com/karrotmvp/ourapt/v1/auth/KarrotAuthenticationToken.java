@@ -1,8 +1,8 @@
-package com.karrotmvp.umeapartment.v1.auth;
+package com.karrotmvp.ourapt.v1.auth;
 
 import java.util.Arrays;
 
-import com.karrotmvp.umeapartment.v1.user.UserProfileDto;
+import com.karrotmvp.ourapt.v1.user.UserProfileDto;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

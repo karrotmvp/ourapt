@@ -1,7 +1,7 @@
-package com.karrotmvp.umeapartment.v1.common.exception;
+package com.karrotmvp.ourapt.v1.common.exception;
 
-import com.karrotmvp.umeapartment.v1.common.ApiResult;
-import com.karrotmvp.umeapartment.v1.common.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.common.ApiResult;
+import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 
 import lombok.Getter;
 

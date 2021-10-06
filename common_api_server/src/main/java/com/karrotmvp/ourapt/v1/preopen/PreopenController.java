@@ -1,11 +1,11 @@
-package com.karrotmvp.umeapartment.v1.preopen;
+package com.karrotmvp.ourapt.v1.preopen;
 
-import com.karrotmvp.umeapartment.v1.auth.KarrotAuthenticationToken;
-import com.karrotmvp.umeapartment.v1.common.ApiResult;
-import com.karrotmvp.umeapartment.v1.common.CommonResponseBody;
-import com.karrotmvp.umeapartment.v1.user.User;
-import com.karrotmvp.umeapartment.v1.user.UserProfileDto;
-import com.karrotmvp.umeapartment.v1.user.UserService;
+import com.karrotmvp.ourapt.v1.auth.KarrotAuthenticationToken;
+import com.karrotmvp.ourapt.v1.common.ApiResult;
+import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.user.User;
+import com.karrotmvp.ourapt.v1.user.UserProfileDto;
+import com.karrotmvp.ourapt.v1.user.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

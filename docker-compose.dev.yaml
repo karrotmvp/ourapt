@@ -4,7 +4,7 @@ services:
     image: mariadb:10.6.4
     environment:
       MYSQL_ROOT_PASSWORD: daangn
-      MYSQL_DATABASE: ume_apartment
+      MYSQL_DATABASE: ourapt
       MYSQL_USER: daangn
       MYSQL_PASSWORD: daangn
     ports:
@@ -17,7 +17,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./common_api_server:/usr/src/ume_apartment_api_server
+      - ./common_api_server:/usr/src/ourapt_api_server
     environment:
       - RDB_HOST=maria_rdb:3306
 

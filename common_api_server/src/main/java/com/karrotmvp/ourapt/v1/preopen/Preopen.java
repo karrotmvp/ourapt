@@ -1,15 +1,15 @@
-package com.karrotmvp.umeapartment.v1.preopen;
+package com.karrotmvp.ourapt.v1.preopen;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.karrotmvp.umeapartment.v1.common.BaseEntity;
-import com.karrotmvp.umeapartment.v1.user.User;
+import com.karrotmvp.ourapt.v1.common.BaseEntity;
+import com.karrotmvp.ourapt.v1.user.User;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,11 +21,11 @@ import lombok.Setter;
 public class Preopen extends BaseEntity {
   
   @Id
-  @Column(name = "daangn_id")
-  private String daangnId;
+  @Column(name = "karrot_id")
+  private String karrotId;
   
   @OneToOne(fetch = FetchType.LAZY) // cascade type
-  @JoinColumn(name = "daangn_id")
+  @PrimaryKeyJoinColumn(name = "karrot_id")
   private User user;
 
   @Column(name = "want_supply_checked")
@@ -36,8 +36,5 @@ public class Preopen extends BaseEntity {
   
   @Column(name = "just_fun_checked")
   private Boolean justFunChecked;
-
-  @Column(name = "test")
-  private String test;
   
 }

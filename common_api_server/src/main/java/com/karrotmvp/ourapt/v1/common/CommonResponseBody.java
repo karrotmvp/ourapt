@@ -1,4 +1,4 @@
-package com.karrotmvp.umeapartment.v1.common;
+package com.karrotmvp.ourapt.v1.common;
 
 import java.io.Serializable;
 

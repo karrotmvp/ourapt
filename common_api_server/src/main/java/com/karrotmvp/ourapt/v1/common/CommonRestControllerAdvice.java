@@ -1,6 +1,6 @@
-package com.karrotmvp.umeapartment.v1.common;
+package com.karrotmvp.ourapt.v1.common;
 
-import com.karrotmvp.umeapartment.v1.common.exception.RequestFailException;
+import com.karrotmvp.ourapt.v1.common.exception.RequestFailException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

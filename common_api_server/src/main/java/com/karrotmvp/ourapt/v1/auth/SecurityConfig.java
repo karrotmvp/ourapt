@@ -1,4 +1,4 @@
-package com.karrotmvp.umeapartment.v1.auth;
+package com.karrotmvp.ourapt.v1.auth;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity(debug=true)
+@EnableWebSecurity(debug=false)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final KarrotOAuthProvider karrotOAuthProvider;

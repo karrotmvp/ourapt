@@ -1,11 +1,11 @@
-package com.karrotmvp.umeapartment.v1.user;
+package com.karrotmvp.ourapt.v1.user;
 
 import lombok.Getter;
 
 @Getter
 public class UserProfileDto {
   
-  private String daangnId;
+  private String karrotId;
   
   private String nickname;
 

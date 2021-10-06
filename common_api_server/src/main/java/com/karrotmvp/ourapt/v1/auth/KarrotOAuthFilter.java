@@ -1,4 +1,4 @@
-package com.karrotmvp.umeapartment.v1.auth;
+package com.karrotmvp.ourapt.v1.auth;
 
 import java.io.IOException;
 
