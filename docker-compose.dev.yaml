@@ -11,12 +11,15 @@ services:
       - 3306:3306
     volumes:
       - mysql_data:/var/lib/mysql
+
   common_api_server:
     build: ./common_api_server
     ports:
       - 8080:8080
     volumes:
-      - ./common_api_server:/server
+      - ./common_api_server:/usr/src/ume_apartment_api_server
+    environment:
+      - RDB_HOST=maria_rdb:3306
 
   # react_view_render_server:
 

@@ -9,8 +9,7 @@ public class UserService {
   @Autowired
   private UserRepository userRepository;
 
-  public void addUser(UserProfileDto userProfile) {
-    User newUser = userProfile.toEntity();
+  public void addUser(User newUser) {
     userRepository.save(newUser);
   }
 }

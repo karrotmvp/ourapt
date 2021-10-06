@@ -6,21 +6,23 @@ help() {
   echo "  Arguments"
   echo "    [profile-name]       The name of profile to run (ex. dev, staging, production)\n"
   echo "  Options:"
-  echo "    -u                   Update runnning server container to edited code"
+  echo "    -b                   Update runnning server with rebuilding"
   echo "    -m                   Run on M1 Architecture"
+  echo "    -s [service-name]    Run only specific service. Select one among maria_rdb, common_api_server"
 }
 
 #ERROR CODE
 INVALID_ARGUMENT=3
 
 
-while getopts "up:hm" opt
+while getopts "bp:hms:" opt
 do
 case $opt in
   p) profile=$OPTARG ;;
-  u) build=true ;;
+  b) build=true ;;
   h) help && exit 0 ;;
   m) m1=true ;;
+  s) service=$OPTARG ;;
   esac
 done
 
@@ -50,11 +52,18 @@ fi
 
 command="${command} up -d"
 
+
 if [ $build ]
 then
   command="${command} --build"
 fi
 
+
+
+if [ $service ]
+then
+  command="${command} ${service}"
+fi
 
 echo "COMMAND: $command"
 $command

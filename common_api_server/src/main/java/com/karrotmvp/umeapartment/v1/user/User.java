@@ -13,8 +13,8 @@ import com.karrotmvp.umeapartment.v1.common.BaseEntity;
 
 import lombok.Getter;
 
-@Entity
 @Table(name = "user")
+@Entity
 @Getter
 public class User extends BaseEntity {
   
