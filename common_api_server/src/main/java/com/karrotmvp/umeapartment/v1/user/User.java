@@ -9,12 +9,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.karrotmvp.umeapartment.v1.common.BaseEntity;
+
 import lombok.Getter;
 
-@Entity
 @Table(name = "user")
+@Entity
 @Getter
-public class User {
+public class User extends BaseEntity {
   
   @Id
   private String id;
@@ -34,6 +36,5 @@ public class User {
   @Column(name = "push_agreed_at", nullable = true)
   @Temporal(TemporalType.TIMESTAMP)
   private Date pushAgreedAt;
-
 }
 
