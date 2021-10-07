@@ -75,13 +75,11 @@ jobs:
           pip install awsebcli --upgrade
           eb --version
 
-          echo "--- Set up environment variables for docker run"
-
           echo "--- Start EB deploy ---"
           cd ./common_api_server
           eb init --region ap-northeast-2 --platform "Docker running on 64bit Amazon Linux 2" ourapt_api
           eb use ourapt-api-alpha
-          echo "Setting up environment variables for docker run..."
-          OURAPT_IMAGE_REPO=${{ steps.login-ecr.outputs.registry }}/ourapt_api
-          OURAPT_IMAGE_TAG=${{ github.sha }}
+          echo "Setting up environment variables for Docker run..."
+          export OURAPT_IMAGE_REPO=${{ steps.login-ecr.outputs.registry }}/ourapt_api
+          export OURAPT_IMAGE_TAG=${{ github.sha }}
           eb deploy
