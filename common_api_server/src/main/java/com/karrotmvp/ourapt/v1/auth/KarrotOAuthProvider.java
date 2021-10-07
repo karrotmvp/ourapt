@@ -15,6 +15,7 @@ public class KarrotOAuthProvider {
   }
 
   public UserProfileDto getUserProfileFromKarrot(String accessToken) {
+    
     UserProfileDto userProfileFromKarrot = new UserProfileDto(); // temp, not implement yet TODO: karrot api call
     return userProfileFromKarrot;
   }
