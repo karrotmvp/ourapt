@@ -1,3 +1,4 @@
+# compose file for only local development environment
 version: '3.9'
 services:
   maria_rdb:
@@ -13,16 +14,15 @@ services:
       - mysql_data:/var/lib/mysql
 
   common_api_server:
-    build: ./common_api_server
+    build:
+      context: ./common_api_server
+      dockerfile: Dockerfile.dev
     ports:
       - 8080:8080
     volumes:
       - ./common_api_server:/usr/src/ourapt_api_server
-    environment:
-      - RDB_HOST=maria_rdb:3306
-      - KARROT_APP_ID=6e6ba05f78534202aa4afe21daf1c825
-      - KARROT_APP_SECRET=8c22a99c27ef45f6a18e7c39b87c6568
-      - KARROT_API_KEY=FKT4tn5arLHR0ontSGNarIayhldHf0t4fVi4cVG0IUI=
+    env_file:
+      - ./common_api_server/.env
 
   # react_view_render_server:
 

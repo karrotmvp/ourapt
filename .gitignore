@@ -69,3 +69,4 @@
 **/.nb-gradle/
 
 **/.gradle
+**/.env

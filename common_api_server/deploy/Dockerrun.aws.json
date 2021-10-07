@@ -1,0 +1,18 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "$IMAGE_REPO:$IMAGE_TAG",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "$PORT"
+    }
+  ],
+  "environment": [
+    {
+      "name": "ENVIRONMENT",
+      "value": "$ENVIRONMENT"
+    }
+  ]
+}
