@@ -37,3 +37,20 @@ jobs:
 
       - name: Build with Gradle
         run: cd ./common_api_server && ./gradlew build -x test
+
+      - name: Setup AWS with credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.OURAPT_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.OURAPT_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - id: login-ecr
+        name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Api server image
+        run: cd ./common_api_server && docker build --tag ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }} .
+
+      - name: Push Api server image to ECR
+        run: cd ./common_api_server && docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
