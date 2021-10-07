@@ -57,12 +57,12 @@ jobs:
       - name: Build image
         run: |
           cd ./common_api_server && \
-          && docker build --tag ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }} --file ./Dockerfile.alpha .
+          docker build --tag ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }} --file ./Dockerfile.alpha .
 
       - name: Push image to ECR
         run: |
           cd ./common_api_server && \
-          && docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
+          docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
 
       - name: Set up EB-cli
         run: |
