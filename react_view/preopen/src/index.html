@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- 스타일링 -->
-    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="stylesheet" href="./style.css" />
     <link
       href="//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css"
       rel="stylesheet"
@@ -18,7 +18,7 @@
   <body>
     <nav id="nav">
       <div id="back-btn" class="back-arrow">
-        <img src="./src/back-arrow.png" alt="뒤로가기" />
+        <img src="./back-arrow.png" alt="뒤로가기" />
       </div>
     </nav>
     <h1 class="logo">
@@ -31,20 +31,20 @@
     <p class="multiple-selection-info">(중복 선택 가능)</p>
     <ul>
       <li>
-        <a href="#">
-          <img src="./src/check-unselect.png" alt="선택해제" />
+        <a id="wantSupply" href="#">
+          <img src="./check-unselect.png" alt="선택해제" />
           <p>우리 이웃에게 묻고 싶은 게 있어요</p>
         </a>
       </li>
       <li>
-        <a href="#">
-          <img src="./src/check-unselect.png" alt="선택해제" />
+        <a id="wantDemand" href="#">
+          <img src="./check-unselect.png" alt="선택해제" />
           <p>이웃의 물음에 대한 답을 골라줄 수 있어요</p>
         </a>
       </li>
       <li>
-        <a href="#">
-          <img src="./src/check-unselect.png" alt="선택해제" />
+        <a id="justFun" href="#">
+          <img src="./check-unselect.png" alt="선택해제" />
           <p>아직 잘 몰라서 구경할래요</p>
         </a>
       </li>
@@ -54,9 +54,16 @@
         알림 신청하고 우리 이웃의 정보를 놓치지 마세요!
       </p>
       <p class="register-bubble">
-        <span>🔥</span>1234명이 벌써 오픈을 기다리고 있어요
+        <span>🔥</span><span id="registered">1234</span> 명이 벌써 오픈을
+        기다리고 있어요
       </p>
-      <button class="register-btn">오픈시 알림받기</button>
+      <button
+        id="register-btn"
+        class="register-btn register-btn-disabled"
+        disabled
+      >
+        오픈시 알림받기
+      </button>
     </div>
   </body>
 
