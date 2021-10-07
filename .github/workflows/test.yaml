@@ -36,4 +36,4 @@ jobs:
         run: chmod +x ./common_api_server/gradlew
 
       - name: Build with Gradle
-        run: cd ./common_api_server && ./gradlew build
+        run: cd ./common_api_server && ./gradlew build -x test
