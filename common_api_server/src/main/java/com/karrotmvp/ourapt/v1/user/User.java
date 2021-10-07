@@ -12,10 +12,12 @@ import javax.persistence.TemporalType;
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Table(name = "user")
 @Entity
 @Getter
+@Setter
 public class User extends BaseEntity {
   
   @Id

@@ -1,5 +1,7 @@
 package com.karrotmvp.ourapt.v1.user;
 
+import java.util.Date;
+
 import lombok.Getter;
 
 @Getter
@@ -14,6 +16,9 @@ public class UserProfileDto {
   private String phoneNumber;
 
   public User toEntity() {
-    return new User();
+    User newUser = new User();
+    newUser.setKarrotId(karrotId);
+    newUser.setPushAgreedAt(new Date());
+    return newUser;
   }
 }

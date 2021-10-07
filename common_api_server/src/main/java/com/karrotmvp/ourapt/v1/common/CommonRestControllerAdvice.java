@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.common;
 
-import com.karrotmvp.ourapt.v1.common.exception.RequestFailException;
+import com.karrotmvp.ourapt.v1.exception.RequestFailException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +17,8 @@ public class CommonRestControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(RequestFailException.class)
     public CommonResponseBody<Void> handleRequestFailException(RequestFailException exception) {
-        logger.error(exception.getDevMessage());
-        logger.error(exception.getMessage());
+        logger.info(exception.getDevMessage());
+        logger.info(exception.getMessage());
         return exception.toCommonResponseBody();
     }
 

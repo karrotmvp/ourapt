@@ -4,8 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
@@ -14,18 +15,19 @@ import com.karrotmvp.ourapt.v1.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
-@Table(name = "preopen")
+@Table(name = "preopen_form")
 @Entity
 @Getter
 @Setter
-public class Preopen extends BaseEntity {
+public class PreopenForm extends BaseEntity {
   
   @Id
   @Column(name = "karrot_id")
   private String karrotId;
   
   @OneToOne(fetch = FetchType.LAZY) // cascade type
-  @PrimaryKeyJoinColumn(name = "karrot_id")
+  @JoinColumn(name = "karrot_id")
+  @MapsId
   private User user;
 
   @Column(name = "want_supply_checked")

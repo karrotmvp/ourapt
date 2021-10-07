@@ -2,6 +2,8 @@ package com.karrotmvp.ourapt.v1.common;
 
 import java.io.Serializable;
 
+import com.karrotmvp.ourapt.v1.common.constant.ApiResult;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

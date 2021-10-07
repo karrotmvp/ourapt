@@ -24,3 +24,10 @@ spring:
       enabled: true
     restart:
       enabled: true
+
+karrot:
+  api:
+    app-id: ${KARROT_APP_ID}
+    app-secret: ${KARROT_APP_SECRET}
+    base-url: ${KARROT_BASE_URL}
+    api-key: ${KARROT_API_KEY}
