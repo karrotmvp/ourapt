@@ -75,6 +75,8 @@ jobs:
           pip install awsebcli --upgrade
           eb --version
 
-          echo "--- Deploy start ---"
+          echo "--- Start EB deploy ---"
           cd ./common_api_server
+          eb init --region ap-northeast-2 --platform "Docker running on 64bit Amazon Linux 2" ourapt_api
+          eb use ourapt-api-alpha
           eb deploy
