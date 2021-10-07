@@ -25,8 +25,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     web.ignoring()
         .antMatchers(HttpMethod.GET,
             "/v1/app/health-check",
+            "/v1/app/api-doc",
+            "/**",
             "/swagger/**",
-            "/swagger-ui/**",
+            "/swagger-ui/",
             "/swagger-resources/**");
   }
 
