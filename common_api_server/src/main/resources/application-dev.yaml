@@ -1,11 +1,11 @@
 spring:
   application:
-    name: ume_apartment_api_server
+    name: ourapt_api_server
   web:
     resources:
       static-locations: classpath:/static/
   datasource:
-    url: jdbc:mariadb://${RDB_HOST}/ume_apartment
+    url: jdbc:mariadb://${RDB_HOST}/ourapt
     driver-class-name: org.mariadb.jdbc.Driver
     username: daangn
     password: daangn
@@ -24,3 +24,10 @@ spring:
       enabled: true
     restart:
       enabled: true
+
+karrot:
+  api:
+    app-id: ${KARROT_APP_ID}
+    app-secret: ${KARROT_APP_SECRET}
+    base-url: ${KARROT_BASE_URL}
+    api-key: ${KARROT_API_KEY}

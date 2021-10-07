@@ -1,10 +1,10 @@
-package com.karrotmvp.umeapartment;
+package com.karrotmvp.ourapt;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UmeapartmentApplicationTests {
+class OuraptApplicationTests {
 
 	@Test
 	void contextLoads() {

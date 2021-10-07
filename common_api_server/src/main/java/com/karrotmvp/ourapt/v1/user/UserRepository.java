@@ -1,4 +1,4 @@
-package com.karrotmvp.umeapartment.v1.user;
+package com.karrotmvp.ourapt.v1.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

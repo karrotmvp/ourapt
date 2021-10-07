@@ -1,22 +1,23 @@
-package com.karrotmvp.umeapartment.v1.preopen;
+package com.karrotmvp.ourapt.v1.preopen.dto;
+
+import com.karrotmvp.ourapt.v1.preopen.PreopenForm;
 
 import lombok.Getter;
 
 @Getter
-public class PreopenDto {
+public class PreopenFormDto {
 
-  private String daangnId;
+  private String karrotId;
 
   private Boolean wantSupplyChecked;
 
   private Boolean wantDemandChecked;
   
   private Boolean justFunChecked;
-  
 
-  public Preopen toEntity() {
-    Preopen entity = new Preopen();
-    entity.setDaangnId(daangnId);
+  public PreopenForm toEntity() {
+    PreopenForm entity = new PreopenForm();
+    entity.setKarrotId(karrotId);
     entity.setWantSupplyChecked(wantSupplyChecked);
     entity.setWantDemandChecked(wantDemandChecked);
     entity.setJustFunChecked(justFunChecked);
