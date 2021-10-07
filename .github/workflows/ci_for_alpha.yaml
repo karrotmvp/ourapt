@@ -59,3 +59,6 @@ jobs:
 
       - name: Push Api server image to ECR
         run: cd ./common_api_server && docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
+
+      - name: Install EB CLI
+        run: git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git && ./aws-elastic-beanstalk-cli-setup/scripts/bundled_installer
