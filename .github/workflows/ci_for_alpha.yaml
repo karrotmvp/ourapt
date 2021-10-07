@@ -54,11 +54,20 @@ jobs:
         name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build Api server image
-        run: cd ./common_api_server && docker build --tag ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }} --file ./Dockerfile.alpha .
+      - name: Build image
+        run: |
+          cd ./common_api_server \
+          docker build --tag ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }} --file ./Dockerfile.alpha .
 
-      - name: Push Api server image to ECR
-        run: cd ./common_api_server && docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
+      - name: Push image to ECR
+        run: |
+          cd ./common_api_server \
+          docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
 
-      - name: Install EB CLI
-        run: git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git && ./aws-elastic-beanstalk-cli-setup/scripts/bundled_installer
+      - name: Set up EB-cli
+        run: |
+          git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git \
+          ./aws-elastic-beanstalk-cli-setup/scripts/bundled_installer
+
+      - name: Deploy to EB
+        run: eb deploy
