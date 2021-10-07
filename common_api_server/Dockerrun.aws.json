@@ -1,5 +1,5 @@
 {
-  "AWSEBDockerrunVersion": "2",
+  "AWSEBDockerrunVersion": "1",
   "Image": {
     "Name": "$OURAPT_IMAGE_REPO:$OURAPT_IMAGE_TAG",
     "Update": "true"
