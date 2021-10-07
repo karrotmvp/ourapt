@@ -74,12 +74,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install awsebcli --upgrade
           eb --version
+
           echo "--- Deploy start ---"
+          cd ./common_api_server
           eb deploy
-
-          git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git
-          ./aws-elastic-beanstalk-cli-setup/scripts/bundled_installer 
-          echo 'export PATH="/home/runner/.ebcli-virtual-env/executables:$PATH"' >> ~/.bash_profile && source ~/.bash_profile
-
-      - name: Deploy to EB
-        run: eb deploy
