@@ -2,6 +2,11 @@ const mini = new Mini();
 var backBtn = document.getElementById("back-btn");
 var registerBtn = document.getElementById("register-btn");
 
+// 임시코드
+// if (window.localStorage.getItem("isAgreedOuraptPreopen")) {
+//   window.localStorage.removeItem("isAgreedOuraptPreopen");
+// }
+
 if (window.localStorage.getItem("isAgreedOuraptPreopen")) {
   console.log("받아왔어요");
   document.getElementById("register-btn").innerText = "알림받기 완료";
@@ -85,11 +90,25 @@ document
       onSuccess: function (result) {
         if (result && result.code) {
           console.log(result.code);
+          // alert(result.code);
         }
       },
     });
   });
 
-// function registeredModal() {
+// 모달 제어
 
-// }
+document
+  .getElementById("modal-close")
+  .addEventListener("click", function (event) {
+    console.log("ee?");
+    closeRegisteredModal();
+  });
+
+function openRegisteredModal() {
+  document.getElementById("modal").style.display = "block";
+}
+
+function closeRegisteredModal() {
+  document.getElementById("modal").style.display = "none";
+}

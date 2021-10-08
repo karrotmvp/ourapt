@@ -217,3 +217,56 @@ ul li a p {
 .register-btn-abled {
   background-color: #bd1f36;
 }
+
+/* 모달 영역 */
+
+#modal {
+  display: none;
+}
+
+.modal-overlay {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  width: 75%;
+  height: 200px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content h1 {
+  font-size: 18px;
+  padding-bottom: 24px;
+}
+
+.modal-content p {
+  font-size: 16px;
+}
+
+.modal-content button {
+  width: 100%;
+  height: 44px;
+  margin-top: auto;
+
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  background-color: #bd1f36;
+
+  border: none;
+  border-radius: 8px;
+}
