@@ -12,8 +12,12 @@ checkDisable();
 function checkDisable() {
   if (window.localStorage.getItem("isAgreedOuraptPreopen")) {
     console.log("받아왔어요");
-    document.getElementById("register-btn").innerText = "알림받기 완료";
+    document.getElementById("register-btn").innerText = "알림 받기 완료";
     registerBtn.disabled = true;
+    registerBtn.classList.replace(
+      "register-btn-abled",
+      "register-btn-disabled"
+    );
     document.getElementsByTagName("ul")[0].style.pointerEvents = "none";
     // 기존 데이터 값을 받아와서 아래로 내려보내주고, answerCheck와 registerBtnActive를 다시 불러줄까?
   }
@@ -73,9 +77,10 @@ function registerBtnActive() {
     );
     registerBtn.disabled = false;
   } else {
-    document
-      .getElementById("register-btn")
-      .classList.replace("register-btn-abled", "register-btn-disabled");
+    registerBtn.classList.replace(
+      "register-btn-abled",
+      "register-btn-disabled"
+    );
     registerBtn.disabled = true;
   }
 }
