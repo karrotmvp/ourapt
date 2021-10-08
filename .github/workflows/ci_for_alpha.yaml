@@ -69,6 +69,8 @@ jobs:
           docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
 
       - name: Deploy to EB-cli
+        env:
+          IMAGE_REPO: ${{ steps.login-ecr.outputs.registry }}/ourapt-api
         run: |
           echo "--- Installing EB CLI ---"
           python -m pip install --upgrade pip
@@ -80,6 +82,8 @@ jobs:
           eb init --region ap-northeast-2 --platform "Docker running on 64bit Amazon Linux 2" ourapt_api
           eb use ourapt-api-alpha
           echo "Setting up environment variables for Docker run..."
-          export OURAPT_IMAGE_REPO=${{ steps.login-ecr.outputs.registry }}/ourapt_api
-          export OURAPT_IMAGE_TAG=${{ github.sha }}
+          sed s/$OURAPT_IMAGE_REPO/${{ env.IMAGE_REPO }}/
+          sed s/$OURAPT_IMAGE_TAG/${{ github }}/ 
+          # TODO: 윗줄 환경변수가 아니라 sed 로 Dockerrun.aws.json 내용 바꿔주기 
+          # TODO: image download 되는것 까지는 확인, health check가 안되서 그런가?
           eb deploy
