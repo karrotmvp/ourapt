@@ -1,9 +1,9 @@
 spring:
   application:
     name: ourapt_api_server
-  web:
-    resources:
-      static-locations: classpath:/static/
+  # web:
+  #   resources:
+  #     static-locations: classpath:/static/
   datasource:
     url: jdbc:mariadb://${RDB_HOST}/ourapt
     driver-class-name: org.mariadb.jdbc.Driver

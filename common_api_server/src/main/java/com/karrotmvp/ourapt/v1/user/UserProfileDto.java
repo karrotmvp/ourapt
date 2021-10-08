@@ -2,12 +2,14 @@ package com.karrotmvp.ourapt.v1.user;
 
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 @Getter
 public class UserProfileDto {
   
-  private String karrotId;
+  private String userId;
   
   private String nickname;
 
@@ -17,7 +19,7 @@ public class UserProfileDto {
 
   public User toEntity() {
     User newUser = new User();
-    newUser.setKarrotId(karrotId);
+    newUser.setKarrotId(userId);
     newUser.setPushAgreedAt(new Date());
     return newUser;
   }

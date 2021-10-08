@@ -15,7 +15,9 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SwaggerConfig {
   @Bean
   public Docket api() {
-    return new Docket(DocumentationType.OAS_30).useDefaultResponseMessages(false).select()
+    return new Docket(DocumentationType.OAS_30)
+        .useDefaultResponseMessages(false)
+        .select()
         .apis(RequestHandlerSelectors.any())
         .paths(PathSelectors.any())
         .build()
@@ -26,5 +28,4 @@ public class SwaggerConfig {
     return new ApiInfoBuilder().title("Our APT").description("Our APT common_api service").version("1.0").build();
   }
 }
-
 

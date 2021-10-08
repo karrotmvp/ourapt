@@ -11,6 +11,11 @@ public abstract class RequestFailException extends RuntimeException {
     private String displayMessage = "";
 
 
+    @Override
+    public String getMessage() {
+        return devMessage;
+    }
+
     public RequestFailException(String devMessage, String displayMessage) {
         this.devMessage = devMessage;
         this.displayMessage = displayMessage;
