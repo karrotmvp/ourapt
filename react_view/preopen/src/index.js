@@ -7,12 +7,16 @@ var registerBtn = document.getElementById("register-btn");
 //   window.localStorage.removeItem("isAgreedOuraptPreopen");
 // }
 
-if (window.localStorage.getItem("isAgreedOuraptPreopen")) {
-  console.log("받아왔어요");
-  document.getElementById("register-btn").innerText = "알림받기 완료";
-  registerBtn.disabled = true;
-  document.getElementsByTagName("ul")[0].style.pointerEvents = "none";
-  // 기존 데이터 값을 받아와서 아래로 내려보내주고, answerCheck와 registerBtnActive를 다시 불러줄까?
+checkDisable();
+
+function checkDisable() {
+  if (window.localStorage.getItem("isAgreedOuraptPreopen")) {
+    console.log("받아왔어요");
+    document.getElementById("register-btn").innerText = "알림받기 완료";
+    registerBtn.disabled = true;
+    document.getElementsByTagName("ul")[0].style.pointerEvents = "none";
+    // 기존 데이터 값을 받아와서 아래로 내려보내주고, answerCheck와 registerBtnActive를 다시 불러줄까?
+  }
 }
 
 // 내비게이션 바
@@ -80,6 +84,7 @@ document
   .getElementById("register-btn")
   .addEventListener("click", function (event) {
     console.log("제출할게요");
+    openRegisteredModal();
     window.localStorage.setItem("isAgreedOuraptPreopen", true);
     mini.startPreset({
       preset:
@@ -103,6 +108,7 @@ document
   .addEventListener("click", function (event) {
     console.log("ee?");
     closeRegisteredModal();
+    checkDisable();
   });
 
 function openRegisteredModal() {
