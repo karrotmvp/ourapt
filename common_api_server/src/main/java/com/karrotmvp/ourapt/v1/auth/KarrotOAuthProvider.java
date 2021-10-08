@@ -43,7 +43,7 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
                 .bodyToMono(new ParameterizedTypeReference<KarrotResponseBody<UserProfileDto>>() {
                 });
         Optional<KarrotResponseBody<UserProfileDto>> optionalUserProfile = userProfileMono.blockOptional();
-        //TODO: API 결과에 따라서 line 41 에서 받을 수 있도록 다른 Exception 던지도록 수정
+        //TODO: API 결과에 따라서 line 57 에서 받을 수 있도록 다른 Exception 던지도록 수정
         return optionalUserProfile.orElseThrow(() -> new ThirdPartyApiCallFailException("Fail to get profile from karrot", "")).getData();
     }
 
