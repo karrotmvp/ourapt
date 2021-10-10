@@ -26,6 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
+                // Never make SecurityFilterChain for this pattern.
                 .antMatchers(HttpMethod.GET,
                         "/error",
                         "/swagger/**",
@@ -43,12 +44,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(this.customFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
+                // Try to authenticate this pattern, but I don't check the authority.
                 .antMatchers(
                      "/api/v1/app/**"
                 )
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
+                // Handle failure to authority check
                 .exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
                     logger.info("FAIL_AUTHENTICATION !!!");
                     response.sendError(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
