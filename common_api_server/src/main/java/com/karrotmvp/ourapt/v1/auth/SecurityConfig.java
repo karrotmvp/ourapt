@@ -1,18 +1,17 @@
 package com.karrotmvp.ourapt.v1.auth;
 
-import com.karrotmvp.ourapt.v1.common.CustomAuthenticationFailureHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.GenericFilterBean;
 
 @Configuration
 @EnableWebSecurity(debug = false)
@@ -20,18 +19,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private KarrotOAuthProvider karrotOAuthProvider;
-
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(karrotOAuthProvider);
+    public GenericFilterBean customFilter() throws Exception {
+        return new KarrotOAuthFilter(authenticationManagerBean());
     }
 
-    @Bean
-    public KarrotOAuthFilter authenticationFilter() throws Exception {
-        return new KarrotOAuthFilter(karrotOAuthProvider);
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers(HttpMethod.GET,
+                        "/error",
+                        "/swagger/**",
+                        "/swagger-resources/**",
+                        "/swagger-ui/**");
     }
 
     @Override
@@ -42,18 +41,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilterBefore(this.customFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(
-//             "/api/v1/app/**",
-                        "/swagger/**",
-                        "/swagger-resources/**",
-                        "/swagger-ui/**").permitAll()
+                     "/api/v1/app/**"
+                )
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
-                    logger.info("인증 실패");
-                    response.sendError(HttpStatus.FORBIDDEN.value(), exception.getMessage());
+                    logger.info("FAIL_AUTHENTICATION !!!");
+                    response.sendError(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
                 });
     }
 }

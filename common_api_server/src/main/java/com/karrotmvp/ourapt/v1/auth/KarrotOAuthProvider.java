@@ -5,16 +5,14 @@ import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
 import com.karrotmvp.ourapt.v1.exception.ThirdPartyApiCallFailException;
 import com.karrotmvp.ourapt.v1.user.UserProfileDto;
 
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
@@ -25,7 +23,9 @@ import reactor.core.publisher.Mono;
 import java.util.Optional;
 
 @Component
+@AllArgsConstructor
 public class KarrotOAuthProvider implements AuthenticationProvider {
+    // Spring Security loads all the 'AuthenticationProvider Beans' when it initializes ProviderManager(AuthenticationManager)
 
     @Autowired
     private WebClient webClient;
@@ -33,7 +33,10 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
     @Autowired
     private KarrotProperty karrotProperty;
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     public UserProfileDto asyncGetUserProfileFromKarrot(String accessToken) {
+        logger.info("KARROT_API_CALLED");
         Mono<KarrotResponseBody<UserProfileDto>> userProfileMono = webClient.mutate()
                 .defaultHeader(HttpHeaders.AUTHORIZATION, accessToken)
                 .build()
