@@ -95,6 +95,6 @@ jobs:
           sed -i s,#KARROT_APP_SECRET,${{ secrets.KARROT_APP_SECRET }},g ./Dockerrun.aws.json
           sed -i s,#KARROT_API_KEY,${{ secrets.KARROT_API_KEY }},g ./Dockerrun.aws.json
           sed -i s,#KARROT_OPEN_API_BASE_URL,https://openapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
-          sed -i s,#KARROT_O_API_BASE_URL,${{ secrets.KARROT_O_API_BASE_URL }},g ./Dockerrun.aws.json
+          sed -i s,#KARROT_O_API_BASE_URL,https://oapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
           cat ./Dockerrun.aws.json
           eb deploy
