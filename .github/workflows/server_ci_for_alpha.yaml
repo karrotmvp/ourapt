@@ -114,7 +114,7 @@ jobs:
           environment_name: ourapt-api-alpha
           version_label: docker-app-${{ steps.format-time.outputs.replaced }}
           region: ap-northeast-2
-          deployment_package: ./common_api_server/deploy.zip
+          deployment_package: ./common_api_server/deploy/deploy.zip
 
       # - name: Deploy to EB
       #   env:
