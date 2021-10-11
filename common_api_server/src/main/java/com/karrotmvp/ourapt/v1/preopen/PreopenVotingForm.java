@@ -19,8 +19,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class PreopenForm extends BaseEntity {
-  
+public class PreopenVotingForm extends BaseEntity {
+
   @Id
   @Column(name = "karrot_id")
   private String karrotId;

@@ -21,10 +21,18 @@ public class CommonResponseBody<T> implements Serializable {
   @Builder.Default
   private String displayMessage = "";
 
+  @Builder.Default
   private T data = null;
+
 
   public static class CommonResponseBodyBuilder<T> {
     private String status;
+
+    public CommonResponseBodyBuilder<T> success() {
+      this.status = ApiResult.SUCCESS.getResult();
+      return this;
+    }
+
     public CommonResponseBodyBuilder<T> result(ApiResult result) {
       this.status = result.getResult();
       return this;

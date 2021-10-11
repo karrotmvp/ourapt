@@ -29,9 +29,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Never make SecurityFilterChain for this pattern.
                 .antMatchers(HttpMethod.GET,
                         "/error",
+                        "/favicon.ico",
                         "/swagger/**",
-                        "/swagger-resources/**",
-                        "/swagger-ui/**");
+                        "/swagger-ui**",
+                        "/swagger-ui/**",
+                        "/swagger-resources/**");
     }
 
     @Override
@@ -46,7 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // Try to authenticate this pattern, but I don't check the authority.
                 .antMatchers(
-                     "/api/v1/app/**"
+                        "/api/v1/app/**",
+                        "/api/v1/preopen/voting/count"
                 )
                 .permitAll()
                 .anyRequest().authenticated()

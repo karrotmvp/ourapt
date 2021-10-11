@@ -10,7 +10,7 @@ public class ThirdPartyApiCallFailException extends RequestFailException{
 
   @Override
   public ApiResult getApiResult() {
-    return ApiResult.RESOURCE_NOT_FOUND; // TODO: change to proper ApiResult
+    return ApiResult.DATA_NOT_FOUND_FROM_DB; // TODO: change to proper ApiResult
   }
   
 }
