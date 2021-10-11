@@ -1,8 +1,8 @@
-package com.karrotmvp.ourapt.v1.exception;
+package com.karrotmvp.ourapt.v1.common.exception.application;
 
 import com.karrotmvp.ourapt.v1.common.constant.ApiResult;
 
-public class DuplicatedRequestException extends RequestFailException {
+public class DuplicatedRequestException extends AbstractWebApplicationContextException {
 
   public DuplicatedRequestException(String devMessage, String displayMessage) {
     super(devMessage, displayMessage);

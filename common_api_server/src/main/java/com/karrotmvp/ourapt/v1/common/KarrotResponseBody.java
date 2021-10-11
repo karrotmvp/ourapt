@@ -1,14 +1,17 @@
 package com.karrotmvp.ourapt.v1.common;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Date;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class KarrotResponseBody<T> {
 
+    @JsonProperty("status")
     private int status;
-    private String message;
     private T data;
-    private Date timestamp;
+    @JsonProperty("timestamp")
+    private String timestamp;
 }

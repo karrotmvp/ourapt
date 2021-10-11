@@ -1,7 +1,10 @@
-package com.karrotmvp.ourapt.v1.auth;
+package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
+import com.karrotmvp.ourapt.v1.common.exception.security.KarrotInvalidAccessTokenException;
+import com.karrotmvp.ourapt.v1.common.exception.security.KarrotUnexpectedResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -10,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -33,7 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger/**",
                         "/swagger-ui**",
                         "/swagger-ui/**",
-                        "/swagger-resources/**");
+                        "/swagger-resources/**"
+                );
     }
 
     @Override
@@ -49,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Try to authenticate this pattern, but I don't check the authority.
                 .antMatchers(
                         "/api/v1/app/**",
+                        "/api/v1/oauth/karrot",
                         "/api/v1/preopen/voting/count"
                 )
                 .permitAll()
@@ -56,8 +62,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // Handle failure to authority check
                 .exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
-                    logger.info("FAIL_AUTHENTICATION !!!");
-                    response.sendError(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
+                    response.sendError(
+                            HttpStatus.UNAUTHORIZED.value(),
+                            String.valueOf(request.getAttribute("firstExceptionMessage")));
                 });
+//                .accessDeniedHandler()
+
     }
 }

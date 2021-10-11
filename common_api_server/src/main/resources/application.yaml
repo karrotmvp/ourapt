@@ -38,5 +38,6 @@ karrot:
   api:
     app-id: ${KARROT_APP_ID}
     app-secret: ${KARROT_APP_SECRET}
-    base-url: ${KARROT_BASE_URL}
     api-key: ${KARROT_API_KEY}
+    open-api-base-url: ${KARROT_OPEN_API_BASE_URL}
+    o-api-base-url: ${KARROT_O_API_BASE_URL}

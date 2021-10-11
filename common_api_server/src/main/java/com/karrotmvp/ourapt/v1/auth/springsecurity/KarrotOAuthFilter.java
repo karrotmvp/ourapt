@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.auth;
+package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -6,6 +6,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -47,7 +48,7 @@ public class KarrotOAuthFilter extends GenericFilterBean {
             Authentication authorizedAuthentication = authenticationManager.authenticate(unAuthorizedAuthentication);
             this.successfulAuthentication(request, response, chain, authorizedAuthentication);
         } catch (AuthenticationException e) {
-            this.unsuccessfulAuthentication(request, response, chain);
+            this.unsuccessfulAuthentication(request, response, chain, e);
         }
     }
 
@@ -57,8 +58,9 @@ public class KarrotOAuthFilter extends GenericFilterBean {
         chain.doFilter(request, response);
     }
 
-    private void unsuccessfulAuthentication(ServletRequest request, ServletResponse response, FilterChain chain)
+    private void unsuccessfulAuthentication(ServletRequest request, ServletResponse response, FilterChain chain, AuthenticationException exception)
             throws ServletException, IOException {
+        request.setAttribute("firstExceptionMessage", exception.getMessage());
         SecurityContextHolder.clearContext();
         chain.doFilter(request, response);
     }

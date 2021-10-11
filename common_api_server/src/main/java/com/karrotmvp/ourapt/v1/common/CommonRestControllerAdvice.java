@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.common;
 
-import com.karrotmvp.ourapt.v1.exception.RequestFailException;
+import com.karrotmvp.ourapt.v1.common.exception.application.AbstractWebApplicationContextException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +15,9 @@ public class CommonRestControllerAdvice {
 
     // 일단 정상 응답 성공 시 Http status 는 모두 200으로, API 수행 성공여부는 responseBody 에서 다루는 형태.
     @ResponseStatus(HttpStatus.OK)
-    @ExceptionHandler(RequestFailException.class)
-    public CommonResponseBody<Void> handleRequestFailException(RequestFailException exception) {
-        logger.info(exception.getDevMessage());
-        logger.info(exception.getMessage());
+    @ExceptionHandler(AbstractWebApplicationContextException.class)
+    public CommonResponseBody<Void> handleRequestFailException(AbstractWebApplicationContextException exception) {
+        logger.info("Dev :: " + exception.getDevMessage());
         return exception.toCommonResponseBody();
     }
 

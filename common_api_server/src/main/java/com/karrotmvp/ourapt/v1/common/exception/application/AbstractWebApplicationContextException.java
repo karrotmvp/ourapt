@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.exception;
+package com.karrotmvp.ourapt.v1.common.exception.application;
 
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.constant.ApiResult;
@@ -6,7 +6,7 @@ import com.karrotmvp.ourapt.v1.common.constant.ApiResult;
 import lombok.Getter;
 
 @Getter
-public abstract class RequestFailException extends RuntimeException {
+public abstract class AbstractWebApplicationContextException extends RuntimeException {
     private String devMessage = "";
     private String displayMessage = "";
 
@@ -16,7 +16,7 @@ public abstract class RequestFailException extends RuntimeException {
         return devMessage;
     }
 
-    public RequestFailException(String devMessage, String displayMessage) {
+    public AbstractWebApplicationContextException(String devMessage, String displayMessage) {
         this.devMessage = devMessage;
         this.displayMessage = displayMessage;
     };

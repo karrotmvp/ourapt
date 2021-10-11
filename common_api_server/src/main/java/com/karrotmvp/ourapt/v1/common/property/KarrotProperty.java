@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class KarrotProperty {
   private final String appId;
   private final String appSecret;
-  private final String baseUrl;
   private final String apiKey;
+  private final String openApiBaseUrl;
+  private final String oApiBaseUrl;
 }
