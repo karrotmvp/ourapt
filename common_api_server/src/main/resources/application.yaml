@@ -16,8 +16,8 @@ spring:
   datasource:
     url: jdbc:mariadb://${RDB_HOST}/ourapt
     driver-class-name: org.mariadb.jdbc.Driver
-    username: daangn
-    password: daangn
+    username: ${RDB_USERNAME}
+    password: ${RDB_PASSWORD}
   jpa:
     open-in-view: false
     generate-ddl: true

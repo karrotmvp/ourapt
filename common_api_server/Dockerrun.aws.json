@@ -15,6 +15,14 @@
       "value": "#RDB_HOST"
     },
     {
+      "name": "RDB_USERNAME",
+      "value": "#RDB_USERNAME"
+    },
+    {
+      "name": "RDB_PASSWORD",
+      "value": "#RDB_PASSWORD"
+    },
+    {
       "name": "KARROT_APP_ID",
       "value": "#KARROT_APP_ID"
     },

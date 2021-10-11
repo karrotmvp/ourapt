@@ -85,11 +85,13 @@ jobs:
           echo "Setting up environment variables for Docker run..."
 
           sed -i s,#OURAPT_IMAGE_REPO,${{ env.IMAGE_REPO }},g ./Dockerrun.aws.json 
-          sed -i s,#OURAPT_IMAGE_NAME,ourapt-api,g ./Dockerrun.aws.json
+          sed -i s,#OURAPT_IMAGE_NAME,ourapt_api,g ./Dockerrun.aws.json
           sed -i s,#OURAPT_IMAGE_TAG,${{ github.sha }},g ./Dockerrun.aws.json
 
           sed -i s,#API_LISTENING_PORT,8080,g ./Dockerrun.aws.json
-          sed -i s,#RDB_HOST,${{ secrets.RDB_HOST }},g ./Dockerrun.aws.json
+          sed -i s,#RDB_HOST,${{ secrets.RDB_HOST_ALPHA }},g ./Dockerrun.aws.json
+          sed -i s,#RDB_USERNAME,${{ secrets.RDB_USERNAME_ALPHA }},g ./Dockerrun.aws.json
+          sed -i s,#RDB_PASSWORD,${{ secrets.RDB_PASSWORD_ALPHA }},g ./Dockerrun.aws.json
 
           sed -i s,#KARROT_APP_ID,${{ secrets.KARROT_APP_ID }},g ./Dockerrun.aws.json
           sed -i s,#KARROT_APP_SECRET,${{ secrets.KARROT_APP_SECRET }},g ./Dockerrun.aws.json
