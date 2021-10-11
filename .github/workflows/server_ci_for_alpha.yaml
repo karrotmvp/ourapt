@@ -77,33 +77,33 @@ jobs:
       #     pip install awsebcli --upgrade
       #     eb --version
 
-      - name: Edit Dockerrun.aws.json
+      - name: Replace string of Dockerrun.aws.json
         env:
           IMAGE_REPO: ${{ steps.login-ecr.outputs.registry }}
+
         run: |
           cd ./common_api_server/deploy 
-          echo "Setting up environment variables for Docker run..."
+          echo "Setting up environment variables for Docker run`..."
 
-          sed -i s,#OURAPT_IMAGE_REPO,${{ env.IMAGE_REPO }},g ./Dockerrun.aws.json
-          sed -i s,#OURAPT_IMAGE_NAME,ourapt_api,g ./Dockerrun.aws.json
-          sed -i s,#OURAPT_IMAGE_TAG,${{ github.sha }},g ./Dockerrun.aws.json
+          sed -i s,#OURAPT_IMAGE_REPO,${{ env.IMAGE_REPO }},g ./deploy/Dockerrun.aws.json
+          sed -i s,#OURAPT_IMAGE_NAME,ourapt_api,g ./deploy/Dockerrun.aws.json
+          sed -i s,#OURAPT_IMAGE_TAG,${{ github.sha }},g ./deploy/Dockerrun.aws.json
 
-          sed -i s,#API_LISTENING_PORT,8080,g ./Dockerrun.aws.json
-          sed -i s,#RDB_HOST,${{ secrets.RDB_HOST_ALPHA }},g ./Dockerrun.aws.json
-          sed -i s,#RDB_USERNAME,${{ secrets.RDB_USERNAME_ALPHA }},g ./Dockerrun.aws.json
-          sed -i s,#RDB_PASSWORD,${{ secrets.RDB_PASSWORD_ALPHA }},g ./Dockerrun.aws.json
+          sed -i s,#API_LISTENING_PORT,8080,g ./deploy/Dockerrun.aws.json
+          sed -i s,#RDB_HOST,${{ secrets.RDB_HOST_ALPHA }},g ./deploy/Dockerrun.aws.json
+          sed -i s,#RDB_USERNAME,${{ secrets.RDB_USERNAME_ALPHA }},g ./deploy/Dockerrun.aws.json
+          sed -i s,#RDB_PASSWORD,${{ secrets.RDB_PASSWORD_ALPHA }},g ./deploy/Dockerrun.aws.json
 
-          sed -i s,#KARROT_APP_ID,${{ secrets.KARROT_APP_ID }},g ./Dockerrun.aws.json
-          sed -i s,#KARROT_APP_SECRET,${{ secrets.KARROT_APP_SECRET }},g ./Dockerrun.aws.json
-          sed -i s,#KARROT_API_KEY,${{ secrets.KARROT_API_KEY }},g ./Dockerrun.aws.json
-          sed -i s,#KARROT_OPEN_API_BASE_URL,https://openapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
-          sed -i s,#KARROT_O_API_BASE_URL,https://oapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
+          sed -i s,#KARROT_APP_ID,${{ secrets.KARROT_APP_ID }},g ./deploy/Dockerrun.aws.json
+          sed -i s,#KARROT_APP_SECRET,${{ secrets.KARROT_APP_SECRET }},g ./deploy/Dockerrun.aws.json
+          sed -i s,#KARROT_API_KEY,${{ secrets.KARROT_API_KEY }},g ./deploy/Dockerrun.aws.json
+          sed -i s,#KARROT_OPEN_API_BASE_URL,https://openapi.alpha.kr.karrotmarket.com,g ./deploy/Dockerrun.aws.json
+          sed -i s,#KARROT_O_API_BASE_URL,https://oapi.alpha.kr.karrotmarket.com,g ./deploy/Dockerrun.aws.json
           cat ./Dockerrun.aws.json
 
       - name: Generate deployment package
         run: |
-          cd ./common_api_server/deploy
-          zip -r deploy.zip .
+          zip -r deploy.zip ./common_api_server/deploy
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v18
@@ -112,9 +112,9 @@ jobs:
           aws_secret_key: ${{ secrets.OURAPT_AWS_SECRET_ACCESS_KEY }}
           application_name: ourapt_api
           environment_name: ourapt-api-alpha
-          version_label: docker-app-${{ steps.format-time.outputs.replaced }}
+          version_label: docker-app-${{ github.sha }}
           region: ap-northeast-2
-          deployment_package: ./common_api_server/deploy/deploy.zip
+          deployment_package: deploy.zip
 
       # - name: Deploy to EB
       #   env:
