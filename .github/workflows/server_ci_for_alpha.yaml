@@ -68,23 +68,23 @@ jobs:
           cd ./common_api_server 
           docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
 
-      - name: Setup EB-cli
-        run: |
-          python -m pip install --upgrade pip
-          pip install awsebcli --upgrade
-          eb --version
+      # - name: Deploy to EB
+      #   uses: ei
 
-      # TODO: image download 되는것 까지는 확인, health check가 안되서 그런가?
-      - name: Deploy to EB
+      # - name: Setup EB-cli
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install awsebcli --upgrade
+      #     eb --version
+
+      - name: Edit Dockerrun.aws.json
         env:
           IMAGE_REPO: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          cd ./common_api_server
-          eb init --region ap-northeast-2 --platform "Docker running on 64bit Amazon Linux 2" ourapt_api
-          eb use ourapt-api-alpha
+          cd ./common_api_server/deploy 
           echo "Setting up environment variables for Docker run..."
 
-          sed -i s,#OURAPT_IMAGE_REPO,${{ env.IMAGE_REPO }},g ./Dockerrun.aws.json 
+          sed -i s,#OURAPT_IMAGE_REPO,${{ env.IMAGE_REPO }},g ./Dockerrun.aws.json
           sed -i s,#OURAPT_IMAGE_NAME,ourapt_api,g ./Dockerrun.aws.json
           sed -i s,#OURAPT_IMAGE_TAG,${{ github.sha }},g ./Dockerrun.aws.json
 
@@ -99,4 +99,45 @@ jobs:
           sed -i s,#KARROT_OPEN_API_BASE_URL,https://openapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
           sed -i s,#KARROT_O_API_BASE_URL,https://oapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
           cat ./Dockerrun.aws.json
-          eb deploy
+
+      - name: Generate deployment package
+        run: |
+          cd ./common_api_server/deploy
+          zip -r deploy.zip .
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v18
+        with:
+          aws_access_key: ${{ secrets.OURAPT_AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.OURAPT_AWS_SECRET_ACCESS_KEY }}
+          application_name: ourapt_api
+          environment_name: ourapt-api-alpha
+          version_label: docker-app-${{ steps.format-time.outputs.replaced }}
+          region: ap-northeast-2
+          deployment_package: ./common_api_server/deploy.zip
+
+      # - name: Deploy to EB
+      #   env:
+      #     IMAGE_REPO: ${{ steps.login-ecr.outputs.registry }}
+      #   run: |
+      #     cd ./common_api_server
+      #     eb init --region ap-northeast-2 --platform "Docker running on 64bit Amazon Linux 2" ourapt_api
+      #     eb use ourapt-api-alpha
+      #     echo "Setting up environment variables for Docker run..."
+
+      #     sed -i s,#OURAPT_IMAGE_REPO,${{ env.IMAGE_REPO }},g ./Dockerrun.aws.json
+      #     sed -i s,#OURAPT_IMAGE_NAME,ourapt_api,g ./Dockerrun.aws.json
+      #     sed -i s,#OURAPT_IMAGE_TAG,${{ github.sha }},g ./Dockerrun.aws.json
+
+      #     sed -i s,#API_LISTENING_PORT,8080,g ./Dockerrun.aws.json
+      #     sed -i s,#RDB_HOST,${{ secrets.RDB_HOST_ALPHA }},g ./Dockerrun.aws.json
+      #     sed -i s,#RDB_USERNAME,${{ secrets.RDB_USERNAME_ALPHA }},g ./Dockerrun.aws.json
+      #     sed -i s,#RDB_PASSWORD,${{ secrets.RDB_PASSWORD_ALPHA }},g ./Dockerrun.aws.json
+
+      #     sed -i s,#KARROT_APP_ID,${{ secrets.KARROT_APP_ID }},g ./Dockerrun.aws.json
+      #     sed -i s,#KARROT_APP_SECRET,${{ secrets.KARROT_APP_SECRET }},g ./Dockerrun.aws.json
+      #     sed -i s,#KARROT_API_KEY,${{ secrets.KARROT_API_KEY }},g ./Dockerrun.aws.json
+      #     sed -i s,#KARROT_OPEN_API_BASE_URL,https://openapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
+      #     sed -i s,#KARROT_O_API_BASE_URL,https://oapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
+      #     cat ./Dockerrun.aws.json
+      #     eb deploy
