@@ -9,7 +9,9 @@ const answer = [false, false, false];
 
 // 맨 처음 페이지 렌더링 할 때: 이미 신청한 사람인지 확인해요 (현재)
 // 이미 신청한 사람의 경우 당근에서 뭔가를 쏴준다고 했는데... 그게 뭔지 확인해보고 다시 적용해볼 것 -> with API
-checkIsAgreedOuraptPreopen();
+// url로 쿼리 파라미터를 보내주시는데: 동의한 사용자 id를 보내주신다!
+// checkIsAgreedOuraptPreopen();
+// alert(window.location.href);
 
 // 이미 신청한 사람이라면?
 // 0. 당근 서버에서 확인하는 절차를 거쳐요. 이미 신청한 사람이라는 것을 확인해줄 거예요. (지금의 로컬스토리지 플래그 사용할 필요 X)
@@ -103,6 +105,15 @@ document.getElementById("justFun").addEventListener("click", function (event) {
 // 현재 몇 명 신청했나 보여주기 -> with API
 document.getElementById("registered").innerText = "0";
 
+function toJacob(token) {
+  fetch(
+    `http://33dd-121-166-172-250.ngrok.io/api/v1/app/token?token=${token}`,
+    {
+      method: "GET",
+    }
+  );
+}
+
 // 오픈시 알림받기 -> with API
 document
   .getElementById("register-btn")
@@ -119,7 +130,37 @@ document
       onSuccess: function (result) {
         if (result && result.code) {
           console.log(result.code);
-          // alert(result.code);
+          toJacob(result.code);
+          alert(result.code);
+          fetch(`https://openapi.kr.karrotmarket.com/oauth/token`, {
+            method: "GET",
+            params: {
+              code: result.code,
+              scope: "account/profile+account/phone_number",
+              grant_type: "authorization_code",
+              response_type: "code",
+            },
+            headers: {
+              Authorization: `Basic ${btoa(
+                encodeURIComponent(
+                  "6e6ba05f78534202aa4afe21daf1c825" +
+                    ":" +
+                    "8c22a99c27ef45f6a18e7c39b87c6568"
+                )
+              )}`,
+            },
+          })
+            .then((res) => {
+              alert(JSON.stringify(res, null, 2));
+              if (res.ok) {
+                const AToken = res.json();
+                alert(AToken + "");
+                toJacob(AToken + "");
+              }
+            })
+            .catch((error) => {
+              alert(error);
+            });
         }
       },
     });
