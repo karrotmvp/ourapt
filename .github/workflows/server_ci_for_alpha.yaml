@@ -84,17 +84,16 @@ jobs:
           eb use ourapt-api-alpha
           echo "Setting up environment variables for Docker run..."
 
-          sed -i s/#OURAPT_IMAGE_REPO/${{ env.IMAGE_REPO }}/g ./Dockerrun.aws.json
+          sed -i s/#OURAPT_IMAGE_REPO/${{ env.IMAGE_REPO }}/g ./Dockerrun.aws.json 
           sed -i s/#OURAPT_IMAGE_NAME/ourapt-api/g ./Dockerrun.aws.json
-          sed -i s/#OURAPT_IMAGE_TAG/${{ github.sha }}/g ./Dockerfile.aws.json
+          sed -i s/#OURAPT_IMAGE_TAG/${{ github.sha }}/g ./Dockerrun.aws.json
 
-          sed -i s/#API_LISTENING_PORT/${{ secrets.API_LISTENING_PORT }}/g ./Dockerfile.aws.json
-          sed -i s/#RDB_HOST/${{ secrets.RDB_HOST }}/g ./Dockerfile.aws.json
+          sed -i s/#API_LISTENING_PORT/${{ secrets.API_LISTENING_PORT }}/g ./Dockerrun.aws.json
 
-          sed -i s/#KARROT_APP_ID/${{ secrets.KARROT_APP_ID }}/g ./Dockerfile.aws.json
-          sed -i s/#KARROT_APP_SECRET/${{ secrets.KARROT_APP_SECRET }}/g ./Dockerfile.aws.json
-          sed -i s/#KARROT_API_KEY/${{ secrets.KARROT_API_KEY }}/g ./Dockerfile.aws.json
-          sed -i s/#KARROT_OPEN_API_BASE_URL/${{ secrets.KARROT_OPEN_API_BASE_URL }}/g ./Dockerfile.aws.json
-          sed -i s/#KARROT_O_API_BASE_URL/${{ secrets.KARROT_O_API_BASE_URL }}/g ./Dockerfile.aws.json
+          sed -i s/#KARROT_APP_ID/${{ secrets.KARROT_APP_ID }}/g ./Dockerrun.aws.json
+          sed -i s/#KARROT_APP_SECRET/${{ secrets.KARROT_APP_SECRET }}/g ./Dockerrun.aws.json
+          sed -i s/#KARROT_API_KEY/${{ secrets.KARROT_API_KEY }}/g ./Dockerrun.aws.json
+          sed -i s/#KARROT_OPEN_API_BASE_URL/${{ secrets.KARROT_OPEN_API_BASE_URL }}/g ./Dockerrun.aws.json
+          sed -i s/#KARROT_O_API_BASE_URL/${{ secrets.KARROT_O_API_BASE_URL }}/g ./Dockerrun.aws.json
           cat ./Dockerrun.aws.json
           eb deploy
