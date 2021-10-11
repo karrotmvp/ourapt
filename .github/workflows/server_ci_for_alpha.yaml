@@ -68,6 +68,7 @@ jobs:
           cd ./common_api_server 
           docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
 
+      # TODO: image download 되는것 까지는 확인, health check가 안되서 그런가?
       - name: Deploy to EB-cli
         env:
           IMAGE_REPO: ${{ steps.login-ecr.outputs.registry }}/ourapt-api
@@ -83,8 +84,17 @@ jobs:
           eb use ourapt-api-alpha
           echo "Setting up environment variables for Docker run..."
 
-          sed s/$OURAPT_IMAGE_REPO/${{ env.IMAGE_REPO }}/
-          sed s/$OURAPT_IMAGE_TAG/${{ github }}/ 
-          # TODO: 윗줄 환경변수가 아니라 sed 로 Dockerrun.aws.json 내용 바꿔주기 
-          # TODO: image download 되는것 까지는 확인, health check가 안되서 그런가?
+          sed -i s/#OURAPT_IMAGE_REPO/${{ env.IMAGE_REPO }}/g ./Dockerrun.aws.json
+          sed -i s/#OURAPT_IMAGE_NAME/ourapt-api/g ./Dockerrun.aws.json
+          sed -i s/#OURAPT_IMAGE_TAG/${{ github.sha }}/g ./Dockerfile.aws.json
+
+          sed -i s/#API_LISTENING_PORT/${{ secrets.API_LISTENING_PORT }}/g ./Dockerfile.aws.json
+          sed -i s/#RDB_HOST/${{ secrets.RDB_HOST }}/g ./Dockerfile.aws.json
+
+          sed -i s/#KARROT_APP_ID/${{ secrets.KARROT_APP_ID }}/g ./Dockerfile.aws.json
+          sed -i s/#KARROT_APP_SECRET/${{ secrets.KARROT_APP_SECRET }}/g ./Dockerfile.aws.json
+          sed -i s/#KARROT_API_KEY/${{ secrets.KARROT_API_KEY }}/g ./Dockerfile.aws.json
+          sed -i s/#KARROT_OPEN_API_BASE_URL/${{ secrets.KARROT_OPEN_API_BASE_URL }}/g ./Dockerfile.aws.json
+          sed -i s/#KARROT_O_API_BASE_URL/${{ secrets.KARROT_O_API_BASE_URL }}/g ./Dockerfile.aws.json
+          cat ./Dockerrun.aws.json
           eb deploy
