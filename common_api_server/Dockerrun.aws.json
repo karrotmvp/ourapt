@@ -1,46 +1,46 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "#OURAPT_IMAGE_REPO/#OURAPT_IMAGE_NAME:#OURAPT_IMAGE_TAG",
+    "Name": "757005647945.dkr.ecr.ap-northeast-2.amazonaws.com/ourapt_api:60571da3e9caa36837198dabd5bfe44f0f041e9c",
     "Update": "true"
   },
   "Ports": [
     {
-      "ContainerPort": "#API_LISTENING_PORT"
+      "ContainerPort": "8080"
     }
   ],
   "environment": [
     {
       "name": "RDB_HOST",
-      "value": "#RDB_HOST"
+      "value": "ourapt-rds-alpha.c8zwh9jcttzy.ap-northeast-2.rds.amazonaws.com"
     },
     {
       "name": "RDB_USERNAME",
-      "value": "#RDB_USERNAME"
+      "value": "ouraptalpha"
     },
     {
       "name": "RDB_PASSWORD",
-      "value": "#RDB_PASSWORD"
+      "value": "ouraptalpha"
     },
     {
       "name": "KARROT_APP_ID",
-      "value": "#KARROT_APP_ID"
+      "value": "6e6ba05f78534202aa4afe21daf1c825"
     },
     {
       "name": "KARROT_APP_SECRET",
-      "value": "#KARROT_APP_SECRET"
+      "value": "8c22a99c27ef45f6a18e7c39b87c6568"
     },
     {
       "name": "KARROT_API_KEY",
-      "value": "#KARROT_API_KEY"
+      "value": "FKT4tn5arLHR0ontSGNarIayhldHf0t4fVi4cVG0IUI="
     },
     {
       "name": "KARROT_OPEN_API_BASE_URL",
-      "value": "#KARROT_OPEN_API_BASE_URL"
+      "value": "https://openapi.alpha.kr.karrotmarket.com"
     },
     {
       "name": "KARROT_O_API_BASE_URL",
-      "value": "#KARROT_O_API_BASE_URL"
+      "value": "https://oapi.alpha.kr.karrotmarket.com"
     }
   ]
 }
