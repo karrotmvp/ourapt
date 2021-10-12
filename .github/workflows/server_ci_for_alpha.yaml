@@ -80,8 +80,8 @@ jobs:
           echo "Set environment variables"
           eb setenv \
             RDB_HOST=${{ env.RDB_HOST }} \
-            KARROT_APP_ID=${{ KARROT_APP_ID }} \
-            KARROT_APP_SECRET=${{ KARROT_APP_SECRET }} \
+            KARROT_APP_ID=${{ env.KARROT_APP_ID }} \
+            KARROT_APP_SECRET=${{ env.KARROT_APP_SECRET }} \
             KARROT_API_KEY=${{ env.KARROT_API_KEY }} \
             KARROT_OPEN_API_BASE_URL=${{ env.KARROT_OPEN_API_BASE_URL }} \
             KARROT_O_API_BASE_URL=${{ env.KARROT_O_API_BASE_URL }}
