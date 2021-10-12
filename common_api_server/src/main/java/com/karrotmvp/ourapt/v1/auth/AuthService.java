@@ -1,10 +1,12 @@
 package com.karrotmvp.ourapt.v1.auth;
 
+import java.util.Base64;
+
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotAccessTokenDto;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnauthorizedCode;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
-import io.netty.handler.codec.CodecException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,9 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Mono;
 
-import java.util.Base64;
+import io.netty.handler.codec.CodecException;
+import reactor.core.publisher.Mono;
 
 @Service
 public class AuthService {
@@ -64,7 +66,7 @@ public class AuthService {
 
     private String assembleBasicToken(String appId, String appSecret) {
         String basicTokenSource = appId + ":" + appSecret;
-        return Base64.getEncoder().encodeToString(basicTokenSource.getBytes());
+        return "Basic " + Base64.getEncoder().encodeToString(basicTokenSource.getBytes());
     }
 
 
