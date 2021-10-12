@@ -8,9 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PreopenVotingFormDto {
-
-  private String karrotId;
-
   private Boolean wantSupplyChecked;
 
   private Boolean wantDemandChecked;
@@ -19,7 +16,6 @@ public class PreopenVotingFormDto {
 
   public PreopenVotingForm toEntity() {
     PreopenVotingForm entity = new PreopenVotingForm();
-    entity.setKarrotId(karrotId);
     entity.setWantSupplyChecked(wantSupplyChecked);
     entity.setWantDemandChecked(wantDemandChecked);
     entity.setJustFunChecked(justFunChecked);
@@ -28,7 +24,6 @@ public class PreopenVotingFormDto {
 
   public static PreopenVotingFormDto fromEntity(PreopenVotingForm entity) {
     PreopenVotingFormDto dto = new PreopenVotingFormDto();
-    dto.setKarrotId(entity.getKarrotId());
     dto.setWantSupplyChecked(entity.getWantSupplyChecked());
     dto.setWantDemandChecked(entity.getWantDemandChecked());
     dto.setJustFunChecked(entity.getJustFunChecked());

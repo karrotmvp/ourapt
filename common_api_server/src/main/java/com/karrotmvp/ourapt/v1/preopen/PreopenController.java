@@ -1,22 +1,22 @@
 package com.karrotmvp.ourapt.v1.preopen;
 
+import java.util.Date;
+import java.util.List;
+
 import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotAuthenticationToken;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.DuplicatedRequestException;
 import com.karrotmvp.ourapt.v1.preopen.dto.PreopenVotingCountDto;
 import com.karrotmvp.ourapt.v1.preopen.dto.PreopenVotingFormDto;
-
 import com.karrotmvp.ourapt.v1.user.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1/preopen")
@@ -58,7 +58,10 @@ public class PreopenController {
         }
         User newUser = authentication.getPrincipal().toEntity();
         newUser.setPushAgreedAt(new Date());
+
+        preOpenVotingForm.setKarrotId(newUser.getKarrotId());
         preOpenVotingForm.setUser(newUser);
+        
         preopenRepository.save(preOpenVotingForm);
 
         return CommonResponseBody.<Void>builder()

@@ -1,4 +1,0 @@
-FROM openjdk:11
-COPY ./build/libs/ourapt-0.0.1-SNAPSHOT.jar /usr/src/ourapt_api_server.jar
-WORKDIR /usr/src/ourapt_api_server
-CMD java -jar ./ourapt-0.0.1-SNAPSHOT.jar

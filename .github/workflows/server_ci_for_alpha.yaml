@@ -54,63 +54,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.OURAPT_AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - id: login-ecr
-        name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build image
-        run: |
-          cd ./common_api_server
-          docker build --tag ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }} --file ./Dockerfile.alpha .
-
-      - name: Push image to ECR
-        run: |
-          cd ./common_api_server 
-          docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
-
-      # - name: Deploy to EB
-      #   uses: ei
-
-      # - name: Setup EB-cli
-      #   run: |
-      #     python -m pip install --upgrade pip
-      #     pip install awsebcli --upgrade
-      #     eb --version
-
-      - name: Replace string of Dockerrun.aws.json
-        env:
-          IMAGE_REPO: ${{ steps.login-ecr.outputs.registry }}/ourapt_api
-        run: |
-          cd ./common_api_server/deploy
-          echo "Setting up environment variables for Docker run..."
-
-          sed -i s,#OURAPT_IMAGE_REPO,${{ env.IMAGE_REPO }},g ./Dockerrun.aws.json
-          sed -i s,#OURAPT_IMAGE_TAG,${{ github.sha }},g ./Dockerrun.aws.json
-
-          sed -i s,#API_LISTENING_PORT,8080,g ./Dockerrun.aws.json
-          sed -i s,#RDB_HOST,${{ secrets.RDB_HOST_ALPHA }},g ./Dockerrun.aws.json
-          sed -i s,#RDB_USERNAME,${{ secrets.RDB_USERNAME_ALPHA }},g ./Dockerrun.aws.json
-          sed -i s,#RDB_PASSWORD,${{ secrets.RDB_PASSWORD_ALPHA }},g ./Dockerrun.aws.json
-
-          sed -i s,#KARROT_APP_ID,${{ secrets.KARROT_APP_ID }},g ./Dockerrun.aws.json
-          sed -i s,#KARROT_APP_SECRET,${{ secrets.KARROT_APP_SECRET }},g ./Dockerrun.aws.json
-          sed -i s,#KARROT_API_KEY,${{ secrets.KARROT_API_KEY }},g ./Dockerrun.aws.json
-          sed -i s,#KARROT_OPEN_API_BASE_URL,https://openapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
-          sed -i s,#KARROT_O_API_BASE_URL,https://oapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
-          cat ./Dockerrun.aws.json
-
       - name: Generate deployment package
         run: |
-          cd ./common_api_server/deploy
-          zip -r deploy.zip .
+          cd ./common_api_server
+          ./gradlew bootJar
+          mkdir deploy
+          cp ./build/lib/*.jar ./deploy
 
       - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v18
-        with:
-          aws_access_key: ${{ secrets.OURAPT_AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.OURAPT_AWS_SECRET_ACCESS_KEY }}
-          application_name: ourapt_api
-          environment_name: ourapt-api-alpha
-          version_label: docker-app-${{ github.sha }}
-          region: ap-northeast-2
-          deployment_package: ./common_api_server/deploy/deploy.zip
+        run: |
+          echo "Installing EB - CLI..."
+          cd ./common_api_server/deploy
+          python -m pip install --upgrade pip
+          pip install awsebcli --upgrade
+          eb --version
+          echo "Initialize EB..."
+          eb init --region ap-northeast-2 --platform "Corretto 11 running on 64bit Amazon Linux 2" ourapt-api
+          eb use ourapt-api-alpha
+          echo "Start to deploy to EB..."
+          eb deploy
