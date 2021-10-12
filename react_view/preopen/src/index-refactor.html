@@ -29,26 +29,24 @@
       우리 아파트 이웃들과<br />이야기할 수 있는 공간을<br />오픈 준비 중이예요!
     </h2>
     <p class="multiple-selection-info">(중복 선택 가능)</p>
-    <ul>
-      <li>
-        <a id="wantSupply" href="#">
-          <img src="./check-unselect.png" alt="선택해제" />
-          <p>우리 이웃에게 <strong>묻고 싶은 게</strong> 있어요</p>
-        </a>
-      </li>
-      <li>
-        <a id="wantDemand" href="#">
-          <img src="./check-unselect.png" alt="선택해제" />
-          <p>이웃의 물음에 대한 <strong>답을 골라줄 수</strong> 있어요</p>
-        </a>
-      </li>
-      <li>
-        <a id="justFun" href="#">
-          <img src="./check-unselect.png" alt="선택해제" />
-          <p>아직 잘 몰라서 구경할래요</p>
-        </a>
-      </li>
-    </ul>
+    
+    <!-- form 태그 이용하여 선택지 만들기 -->
+
+    <form action="" method="get" id="registerCaseForm">
+        <fieldset>
+            <legend>우리아파트 서비스 이용 목적</legend>
+            <input type="checkbox" id="case01" value="wantSupply">
+            <span class="checkmark"></span>
+            <label for="case01">우리 이웃에게 <strong>묻고 싶은 게</strong> 있어요</label> <br>
+            <input type="checkbox" id="case02" value="wantDemand">
+            <span class="checkmark"></span>
+            <label for="case02">이웃의 물음에 대한 <strong>답을 골라줄 수</strong> 있어요</label> <br>
+            <input type="checkbox" id="case03" value="justFun">
+            <span class="checkmark"></span>
+            <label for="case03">아직 잘 몰라서 구경할래요</label>
+        </fieldset>
+    </form>
+
     <div class="register-area">
       <p class="register-info">
         알림 신청하고 우리아파트 오픈 소식을 놓치지 마세요!
@@ -58,6 +56,8 @@
         기다리고 있어요
       </p>
       <button
+      type="submit"
+      form="registerCaseForm"
         id="register-btn"
         class="register-btn register-btn-disabled"
         disabled
