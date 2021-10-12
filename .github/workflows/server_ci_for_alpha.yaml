@@ -63,6 +63,8 @@ jobs:
       - name: Deploy to EB
         env:
           RDB_HOST: ${{ secrets.RDB_HOST_ALPHA }}
+          RDB_USERNAME: ${{ secrets.RDB_USERNAME_ALPHA }}
+          RDB_PASSWORD: ${{ secrets.RDB_PASSWORD_ALPHA }}
           KARROT_APP_ID: ${{ secrets.KARROT_APP_ID_ALPHA }}
           KARROT_APP_SECRET: ${{ secrets.KARROT_APP_SECRET_ALPHA }}
           KARROT_API_KEY: ${{ secrets.KARROT_API_KEY_ALPHA }}
@@ -80,6 +82,8 @@ jobs:
           echo "Setting environment variables..."
           eb setenv \
             RDB_HOST=${{ env.RDB_HOST }} \
+            RDB_USERNAME=${{ env.RDB_USERNAME }} \
+            RDB_PASSWORD=${{ env.RDB_PASSWORD }} \
             KARROT_APP_ID=${{ env.KARROT_APP_ID }} \
             KARROT_APP_SECRET=${{ env.KARROT_APP_SECRET }} \
             KARROT_API_KEY=${{ env.KARROT_API_KEY }} \
