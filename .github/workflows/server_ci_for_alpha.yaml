@@ -57,9 +57,8 @@ jobs:
       - name: Generate deployment package
         run: |
           cd ./common_api_server
-          ./gradlew bootJar
-          mkdir deploy
-          cp ./build/lib/*.jar ./deploy
+          mkdir ./deploy
+          cp ./build/libs/*.jar ./deploy
 
       - name: Deploy to EB
         run: |
