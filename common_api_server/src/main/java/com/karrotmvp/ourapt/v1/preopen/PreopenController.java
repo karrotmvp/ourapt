@@ -11,12 +11,18 @@ import com.karrotmvp.ourapt.v1.preopen.dto.PreopenVotingCountDto;
 import com.karrotmvp.ourapt.v1.preopen.dto.PreopenVotingFormDto;
 import com.karrotmvp.ourapt.v1.user.User;
 
+import com.karrotmvp.ourapt.v1.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping(value = "/api/v1/preopen")
@@ -24,6 +30,9 @@ public class PreopenController {
 
     @Autowired
     private PreopenRepository preopenRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/me/voting")
     public CommonResponseBody<PreopenVotingFormDto> getMyVotedForm(KarrotAuthenticationToken authentication) {
@@ -47,21 +56,20 @@ public class PreopenController {
     }
 
     @PostMapping("/voting/submit")
-    public CommonResponseBody<Void> submitVotingForm(@RequestBody PreopenVotingFormDto dto, KarrotAuthenticationToken authentication) {
+    @Transactional
+    public CommonResponseBody<Void> submitVotingForm(@RequestBody(required = true) @Valid PreopenVotingFormDto dto, KarrotAuthenticationToken authentication) {
         PreopenVotingForm preOpenVotingForm = dto.toEntity();
-
+        User newUser = authentication.getPrincipal().toEntity();
+        newUser.setPushAgreedAt(new Date());
         // Check duplication
-        PreopenVotingForm duplicatedData = preopenRepository.findById(preOpenVotingForm.getKarrotId()).orElse(null);
-        ;
+        PreopenVotingForm duplicatedData = preopenRepository.findById(newUser.getKarrotId()).orElse(null);
         if (duplicatedData != null) {
             throw new DuplicatedRequestException("이미 알림톡 신청한 유저. 데이터 이미 있음.", "이미 알림톡을 신청하셨어요! 서비스가 오픈하면 알림톡으로 알려드릴게요!");
         }
-        User newUser = authentication.getPrincipal().toEntity();
-        newUser.setPushAgreedAt(new Date());
 
-        preOpenVotingForm.setKarrotId(newUser.getKarrotId());
+        userRepository.save(newUser);
+
         preOpenVotingForm.setUser(newUser);
-        
         preopenRepository.save(preOpenVotingForm);
 
         return CommonResponseBody.<Void>builder()

@@ -5,13 +5,19 @@ import com.karrotmvp.ourapt.v1.preopen.PreopenVotingForm;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 public class PreopenVotingFormDto {
+
+  @NotNull
   private Boolean wantSupplyChecked;
 
+  @NotNull
   private Boolean wantDemandChecked;
-  
+
+  @NotNull
   private Boolean justFunChecked;
 
   public PreopenVotingForm toEntity() {

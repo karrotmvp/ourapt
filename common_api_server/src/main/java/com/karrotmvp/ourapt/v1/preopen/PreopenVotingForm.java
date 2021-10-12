@@ -1,13 +1,6 @@
 package com.karrotmvp.ourapt.v1.preopen;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
 import com.karrotmvp.ourapt.v1.user.User;
@@ -25,8 +18,8 @@ public class PreopenVotingForm extends BaseEntity {
   @Column(name = "karrot_id")
   private String karrotId;
   
-  @OneToOne(fetch = FetchType.LAZY) // cascade type
-  @JoinColumn(name = "karrot_id")
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade type
+  @JoinColumn(name = "karrot_id", referencedColumnName = "karrot_id")
   @MapsId
   private User user;
 
@@ -38,5 +31,10 @@ public class PreopenVotingForm extends BaseEntity {
   
   @Column(name = "just_fun_checked")
   private Boolean justFunChecked;
+
+  public void setUser(User user) {
+    this.karrotId = user.getKarrotId();
+    this.user = user;
+  }
   
 }

@@ -5,6 +5,9 @@ import com.karrotmvp.ourapt.v1.common.exception.application.AbstractWebApplicati
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,9 +19,18 @@ public class CommonRestControllerAdvice {
     // 일단 정상 응답 성공 시 Http status 는 모두 200으로, API 수행 성공여부는 responseBody 에서 다루는 형태.
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(AbstractWebApplicationContextException.class)
-    public CommonResponseBody<Void> handleRequestFailException(AbstractWebApplicationContextException exception) {
-        logger.info("Dev :: " + exception.getDevMessage());
+    public CommonResponseBody<Void> handleWebApplicationContextException(AbstractWebApplicationContextException exception) {
+        logger.info(exception.getDevMessage());
         return exception.toCommonResponseBody();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({HttpMessageNotReadableException.class, HttpMediaTypeNotSupportedException.class, MethodArgumentNotValidException.class})
+    public CommonResponseBody<Void> handleHttpMessageNotReadableException(Exception exception) {
+        logger.info(exception.getMessage());
+        return CommonResponseBody.<Void>builder()
+                .devMessage(exception.getMessage())
+                .build();
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
