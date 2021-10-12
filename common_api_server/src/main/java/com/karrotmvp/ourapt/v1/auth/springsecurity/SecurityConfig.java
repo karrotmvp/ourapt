@@ -2,6 +2,7 @@ package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.GenericFilterBean;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity(debug = false)
@@ -63,6 +69,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             String.valueOf(request.getAttribute("firstExceptionMessage")));
                 });
 //                .accessDeniedHandler()
-
     }
+
 }

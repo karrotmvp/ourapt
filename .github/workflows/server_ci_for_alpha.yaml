@@ -74,10 +74,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install awsebcli --upgrade
           eb --version
-          echo "Initialize EB..."
+          echo "Initializing EB..."
           eb init --region ap-northeast-2 --platform "Corretto 11 running on 64bit Amazon Linux 2" ourapt-api
           eb use ourapt-api-alpha
-          echo "Set environment variables"
+          echo "Setting environment variables..."
           eb setenv \
             RDB_HOST=${{ env.RDB_HOST }} \
             KARROT_APP_ID=${{ env.KARROT_APP_ID }} \
