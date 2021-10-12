@@ -82,7 +82,7 @@ jobs:
           IMAGE_REPO: ${{ steps.login-ecr.outputs.registry }}/ourapt_api
         run: |
           cd ./common_api_server
-          echo "Setting up environment variables for Docker run`..."
+          echo "Setting up environment variables for Docker run..."
 
           sed -i s,#OURAPT_IMAGE_REPO,${{ env.IMAGE_REPO }},g ./Dockerrun.aws.json
           sed -i s,#OURAPT_IMAGE_TAG,${{ github.sha }},g ./Dockerrun.aws.json
