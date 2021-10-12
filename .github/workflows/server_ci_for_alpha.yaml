@@ -62,6 +62,7 @@ jobs:
 
       - name: Deploy to EB
         env:
+          SPRING_PROFILE_ACTIVE: dev
           RDB_HOST: ${{ secrets.RDB_HOST_ALPHA }}
           RDB_USERNAME: ${{ secrets.RDB_USERNAME_ALPHA }}
           RDB_PASSWORD: ${{ secrets.RDB_PASSWORD_ALPHA }}
@@ -81,6 +82,7 @@ jobs:
           eb use ourapt-api-alpha
           echo "Setting environment variables..."
           eb setenv \
+            SPRING_PROFILE_ACTIVE=${{ env.SPRING_PROFILE_ACTIVE }} \
             RDB_HOST=${{ env.RDB_HOST }} \
             RDB_USERNAME=${{ env.RDB_USERNAME }} \
             RDB_PASSWORD=${{ env.RDB_PASSWORD }} \
