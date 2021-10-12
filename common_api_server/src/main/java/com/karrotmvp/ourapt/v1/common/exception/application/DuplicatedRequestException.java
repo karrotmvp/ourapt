@@ -12,5 +12,5 @@ public class DuplicatedRequestException extends AbstractWebApplicationContextExc
   public ApiResult getApiResult() {
     return ApiResult.RESOURCE_DUPLICATE;
   }
-  
+
 }

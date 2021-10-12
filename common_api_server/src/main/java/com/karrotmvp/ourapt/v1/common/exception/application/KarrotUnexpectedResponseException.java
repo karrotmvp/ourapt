@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.common.exception.security;
+package com.karrotmvp.ourapt.v1.common.exception.application;
 
 import com.karrotmvp.ourapt.v1.common.constant.ApiResult;
 import com.karrotmvp.ourapt.v1.common.exception.application.AbstractWebApplicationContextException;

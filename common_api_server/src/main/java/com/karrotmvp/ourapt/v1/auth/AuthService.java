@@ -2,7 +2,9 @@ package com.karrotmvp.ourapt.v1.auth;
 
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotAccessTokenDto;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnauthorizedCode;
+import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
+import io.netty.handler.codec.CodecException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -46,13 +48,18 @@ public class AuthService {
                 )
                 .retrieve()
                 .onStatus((httpStatus) -> httpStatus.equals(HttpStatus.UNAUTHORIZED), (response) -> {
-                    throw new KarrotUnauthorizedCode("Karrot" , "");
+                    throw new KarrotUnauthorizedCode("유효하지 않은 KARROT authorization code 입니다." , "");
+                })
+                .onStatus((httpStatus) -> !httpStatus.equals(HttpStatus.OK), (response) -> {
+                    throw new KarrotUnexpectedResponseException("KARROT 서버로 부터 정상적이지 않은 응답을 받았습니다.");
                 })
                 .bodyToMono(KarrotAccessTokenDto.class);
-        return responseMono.blockOptional()
-                .orElseThrow(() -> new KarrotUnauthorizedCode(
-                        "KARROT 서버로 부터 액세스 토큰을 발급 받는 것에 실패했습니다.",
-                        ""));
+        try {
+            return responseMono.blockOptional()
+                    .orElseThrow(() -> new KarrotUnexpectedResponseException("KARROT API 응답으로부터 엑세스 토큰을 찾을 수 없습니다."));
+        } catch(CodecException ce) {
+            throw new KarrotUnexpectedResponseException("Karrot 서버의 응답을 역직렬화 할 수 없음", ce);
+        }
     }
 
     private String assembleBasicToken(String appId, String appSecret) {

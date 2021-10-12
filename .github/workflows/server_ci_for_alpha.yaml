@@ -61,6 +61,13 @@ jobs:
           cp ./build/libs/*.jar ./deploy
 
       - name: Deploy to EB
+        env:
+          RDB_HOST: ${{ secrets.RDB_HOST_ALPHA }}
+          KARROT_APP_ID: ${{ secrets.KARROT_APP_ID_ALPHA }}
+          KARROT_APP_SECRET: ${{ secrets.KARROT_APP_SECRET_ALPHA }}
+          KARROT_API_KEY: ${{ secrets.KARROT_API_KEY_ALPHA }}
+          KARROT_OPEN_API_BASE_URL: https://openapi.alpha.kr.karrotmarket.com
+          KARROT_O_API_BASE_URL: https://oapi.alpha.kr.karrotmarket.com
         run: |
           echo "Installing EB - CLI..."
           cd ./common_api_server/deploy
@@ -70,5 +77,13 @@ jobs:
           echo "Initialize EB..."
           eb init --region ap-northeast-2 --platform "Corretto 11 running on 64bit Amazon Linux 2" ourapt-api
           eb use ourapt-api-alpha
+          echo "Set environment variables"
+          eb setenv \
+            RDB_HOST=${{ env.RDB_HOST }} \
+            KARROT_APP_ID=${{ KARROT_APP_ID }} \
+            KARROT_APP_SECRET=${{ KARROT_APP_SECRET }} \
+            KARROT_API_KEY=${{ env.KARROT_API_KEY }} \
+            KARROT_OPEN_API_BASE_URL=${{ env.KARROT_OPEN_API_BASE_URL }} \
+            KARROT_O_API_BASE_URL=${{ env.KARROT_O_API_BASE_URL }}
           echo "Start to deploy to EB..."
           eb deploy

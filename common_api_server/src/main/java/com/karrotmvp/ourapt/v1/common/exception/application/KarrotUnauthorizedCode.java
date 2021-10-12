@@ -10,6 +10,6 @@ public class KarrotUnauthorizedCode extends AbstractWebApplicationContextExcepti
 
     @Override
     public ApiResult getApiResult() {
-        return null;
+        return ApiResult.KARROT_UNAUTHORIZED_CODE;
     }
 }
