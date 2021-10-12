@@ -101,8 +101,8 @@ jobs:
 
       - name: Generate deployment package
         run: |
-          cd ./common_api_server
-          zip -r deploy.zip ./deploy
+          cd ./common_api_server/deploy
+          zip -r deploy.zip .
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v18
@@ -113,4 +113,4 @@ jobs:
           environment_name: ourapt-api-alpha
           version_label: docker-app-${{ github.sha }}
           region: ap-northeast-2
-          deployment_package: ./common_api_server/deploy.zip
+          deployment_package: ./common_api_server/deploy/deploy.zip
