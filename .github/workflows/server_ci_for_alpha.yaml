@@ -61,12 +61,12 @@ jobs:
       - name: Build image
         run: |
           cd ./common_api_server
-          docker build --tag ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }} --file ./Dockerfile.alpha .
+          docker build --tag ${{ steps.login-ecr.outputs.registry }}:${{ github.sha }} --file ./Dockerfile.alpha .
 
       - name: Push image to ECR
         run: |
           cd ./common_api_server 
-          docker push ${{ steps.login-ecr.outputs.registry }}/ourapt_api:${{ github.sha }}
+          docker push ${{ steps.login-ecr.outputs.registry }}:${{ github.sha }}
 
       # - name: Deploy to EB
       #   uses: ei
@@ -82,11 +82,10 @@ jobs:
           IMAGE_REPO: ${{ steps.login-ecr.outputs.registry }}
 
         run: |
-          cd ./common_api_server/deploy 
+          cd ./common_api_server
           echo "Setting up environment variables for Docker run`..."
 
           sed -i s,#OURAPT_IMAGE_REPO,${{ env.IMAGE_REPO }},g ./Dockerrun.aws.json
-          sed -i s,#OURAPT_IMAGE_NAME,ourapt_api,g ./Dockerrun.aws.json
           sed -i s,#OURAPT_IMAGE_TAG,${{ github.sha }},g ./Dockerrun.aws.json
 
           sed -i s,#API_LISTENING_PORT,8080,g ./Dockerrun.aws.json
@@ -103,7 +102,7 @@ jobs:
 
       - name: Generate deployment package
         run: |
-          zip -r deploy.zip ./common_api_server/deploy/Dockerrun.aws.json
+          zip -r deploy.zip ./common_api_server/Dockerrun.aws.json
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v18
@@ -115,29 +114,3 @@ jobs:
           version_label: docker-app-${{ github.sha }}
           region: ap-northeast-2
           deployment_package: deploy.zip
-
-      # - name: Deploy to EB
-      #   env:
-      #     IMAGE_REPO: ${{ steps.login-ecr.outputs.registry }}
-      #   run: |
-      #     cd ./common_api_server
-      #     eb init --region ap-northeast-2 --platform "Docker running on 64bit Amazon Linux 2" ourapt_api
-      #     eb use ourapt-api-alpha
-      #     echo "Setting up environment variables for Docker run..."
-
-      #     sed -i s,#OURAPT_IMAGE_REPO,${{ env.IMAGE_REPO }},g ./Dockerrun.aws.json
-      #     sed -i s,#OURAPT_IMAGE_NAME,ourapt_api,g ./Dockerrun.aws.json
-      #     sed -i s,#OURAPT_IMAGE_TAG,${{ github.sha }},g ./Dockerrun.aws.json
-
-      #     sed -i s,#API_LISTENING_PORT,8080,g ./Dockerrun.aws.json
-      #     sed -i s,#RDB_HOST,${{ secrets.RDB_HOST_ALPHA }},g ./Dockerrun.aws.json
-      #     sed -i s,#RDB_USERNAME,${{ secrets.RDB_USERNAME_ALPHA }},g ./Dockerrun.aws.json
-      #     sed -i s,#RDB_PASSWORD,${{ secrets.RDB_PASSWORD_ALPHA }},g ./Dockerrun.aws.json
-
-      #     sed -i s,#KARROT_APP_ID,${{ secrets.KARROT_APP_ID }},g ./Dockerrun.aws.json
-      #     sed -i s,#KARROT_APP_SECRET,${{ secrets.KARROT_APP_SECRET }},g ./Dockerrun.aws.json
-      #     sed -i s,#KARROT_API_KEY,${{ secrets.KARROT_API_KEY }},g ./Dockerrun.aws.json
-      #     sed -i s,#KARROT_OPEN_API_BASE_URL,https://openapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
-      #     sed -i s,#KARROT_O_API_BASE_URL,https://oapi.alpha.kr.karrotmarket.com,g ./Dockerrun.aws.json
-      #     cat ./Dockerrun.aws.json
-      #     eb deploy
