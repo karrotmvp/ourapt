@@ -18,7 +18,7 @@ services:
       context: ./common_api_server
       dockerfile: Dockerfile.dev
     ports:
-      - 8080:8080
+      - 8080:5000
     volumes:
       - ./common_api_server:/usr/src/ourapt_api_server
     env_file:
