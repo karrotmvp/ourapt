@@ -66,7 +66,6 @@ public class PreopenController {
         if (duplicatedData != null) {
             throw new DuplicatedRequestException("이미 알림톡 신청한 유저. 데이터 이미 있음.", "이미 알림톡을 신청하셨어요! 서비스가 오픈하면 알림톡으로 알려드릴게요!");
         }
-
         userRepository.save(newUser);
 
         preOpenVotingForm.setUser(newUser);
