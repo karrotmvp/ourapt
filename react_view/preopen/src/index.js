@@ -197,9 +197,15 @@ document
   .addEventListener("click", function (event) {
     mini.startPreset({
       preset:
-        "https://mini-assets.kr.karrotmarket.com/presets/mvp-apartment-login/alpha.html",
+        // 알파 앱
+        // "https://mini-assets.kr.karrotmarket.com/presets/mvp-apartment-login/alpha.html",
+        // 프로덕션 앱
+        "https://mini-assets.kr.karrotmarket.com/presets/mvp-apartment-login/production.html",
       params: {
-        appId: "6e6ba05f78534202aa4afe21daf1c825",
+        // 알파 앱
+        // appId: "6e6ba05f78534202aa4afe21daf1c825",
+        // 프로덕션 앱
+        appId: "4eaa7851558f401eb6c2361337e8ef4f",
       },
       onSuccess: async function (result) {
         if (result && result.code) {
