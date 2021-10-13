@@ -5,7 +5,9 @@ backBtn.addEventListener("click", function (event) {
   mini.close();
 });
 
-let BASE_URL = "http://ourapt-api-alpha.ap-northeast-2.elasticbeanstalk.com";
+// let BASE_URL = "http://ourapt-api-alpha.ap-northeast-2.elasticbeanstalk.com";
+let BASE_URL =
+  "http://ourapt-api-production.ap-northeast-2.elasticbeanstalk.com/";
 let backBtn = document.getElementById("back-btn");
 let registerBtn = document.getElementById("register-btn");
 
