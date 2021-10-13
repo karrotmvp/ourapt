@@ -5,13 +5,13 @@ let BASE_URL = "http://ourapt-api-alpha.ap-northeast-2.elasticbeanstalk.com";
 // let BASE_URL = "http://localhost:8080";
 // let BASE_URL = "http://b833-121-166-172-250.ngrok.io";
 
-// let URLform = document.getElementById("BURLform");
-// URLform.addEventListener("submit", function (event) {
-//   event.preventDefault();
-//   BASE_URL = document.getElementById("BURL").value;
-//   console.log(`제이콥, 여기예요! ${BASE_URL}`);
-//   alert(BASE_URL);
-// });
+let URLform = document.getElementById("BURLform");
+URLform.addEventListener("submit", function (event) {
+  event.preventDefault();
+  BASE_URL = document.getElementById("BURL").value;
+  console.log(`제이콥, 여기예요! ${BASE_URL}`);
+  alert(BASE_URL);
+});
 
 let backBtn = document.getElementById("back-btn");
 let registerBtn = document.getElementById("register-btn");
@@ -155,19 +155,17 @@ async function submitVoting(token) {
   const response = await fetch(`${BASE_URL}/api/v1/preopen/voting/submit`, {
     method: "POST",
     headers: {
-      ContentType: "application/json",
+      "Content-Type": "application/json",
       Authorization: token,
     },
     body: JSON.stringify(
       !wantSupply && !wantDemand && !justFun
         ? {
-            karrotId: "",
             wantSupplyChecked: wantSupply,
             wantDemandChecked: wantDemand,
             justFunChecked: true,
           }
         : {
-            karrotId: "",
             wantSupplyChecked: wantSupply,
             wantDemandChecked: wantDemand,
             justFunChecked: justFun,
