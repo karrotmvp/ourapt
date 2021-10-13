@@ -8,7 +8,7 @@ server:
       prefix: stdout
       file-date-format:
       suffix:
-spring:
+ring:
   application:
     name: ourapt_api_server
   # web:

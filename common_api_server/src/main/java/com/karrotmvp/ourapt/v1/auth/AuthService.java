@@ -3,6 +3,7 @@ package com.karrotmvp.ourapt.v1.auth;
 import java.util.Base64;
 
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotAccessTokenDto;
+import com.karrotmvp.ourapt.v1.auth.dto.KarrotFailResponseDto;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnauthorizedCode;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
@@ -53,6 +54,7 @@ public class AuthService {
                     throw new KarrotUnauthorizedCode("유효하지 않은 KARROT authorization code 입니다." , "");
                 })
                 .onStatus((httpStatus) -> !httpStatus.equals(HttpStatus.OK), (response) -> {
+                    KarrotFailResponseDto failResponse = response.bodyToMono(KarrotFailResponseDto.class).block();
                     throw new KarrotUnexpectedResponseException("KARROT 서버로 부터 정상적이지 않은 응답을 받았습니다.");
                 })
                 .bodyToMono(KarrotAccessTokenDto.class);
