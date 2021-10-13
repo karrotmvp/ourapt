@@ -15,7 +15,7 @@ URLform.addEventListener("submit", function (event) {
 
 let backBtn = document.getElementById("back-btn");
 let registerBtn = document.getElementById("register-btn");
-let countOfVoting = 0;
+// let countOfVoting = 0;
 
 // 체크버튼 선택지: 구조 개선해놓기
 // 1) 지금은 리스트로 받는데 바로 객체로 받을 수 있도록 하기 - 서버 통신 쉬워지도록 : done!
@@ -33,7 +33,9 @@ console.log("URL 서치 파람즈");
 console.log(urlSearchParams.get("code"));
 
 checkIsAgreedOuraptPreopen();
-currentVotingCount();
+getVotingCount().then((count) => {
+  patchCountOfVoting(count);
+});
 // console.log("쿼리 파라미터 찍힐까요?");
 // console.log(window.location.search);
 
@@ -178,18 +180,24 @@ async function submitVoting(token) {
 }
 
 // 현재 투표 인원 받아오기
-async function currentVotingCount() {
+async function getVotingCount() {
   const response = await fetch(`${BASE_URL}/api/v1/preopen/voting/count`, {
     method: "GET",
   });
   if (response.ok) {
     const resBody = await response.json();
-    if (!resBody || !resBody.data) {
-      return "error 났어요!";
+    if (!resBody || !resBody.data || !resBody.data.countOfVoting) {
+      console.log("error 났어요!");
+      return;
     }
-    countOfVoting = resBody.data.countOfVoting;
-    console.log(`${countOfVoting}명 참여했대요.`);
+    // console.log(`${countOfVoting}명 참여했대요.`);
+    return resBody.data.countOfVoting;
   }
+}
+
+function patchCountOfVoting(count) {
+  // 현재 몇 명 신청했나 보여주기 -> with API
+  document.getElementById("registered").innerText = count;
 }
 
 // 모달창 열기: 신청버튼을 눌렀을 때, 전체 서버 통신이 안전하게 완료되고 난 다음 띄워줍니다.
@@ -221,9 +229,6 @@ document
 document.getElementById("justFun").addEventListener("click", function (event) {
   answerCheck(this, 2);
 });
-
-// 현재 몇 명 신청했나 보여주기 -> with API
-document.getElementById("registered").innerText = countOfVoting;
 
 async function toJacob(token) {
   const response = await fetch(
