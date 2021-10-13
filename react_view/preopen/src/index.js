@@ -1,5 +1,6 @@
 const mini = new Mini();
-let BASE_URL = "http://localhost:8080";
+let BASE_URL = "http://ourapt-api-alpha.ap-northeast-2.elasticbeanstalk.com";
+// let BASE_URL = "http://localhost:8080";
 // let BASE_URL = "http://b833-121-166-172-250.ngrok.io";
 let backBtn = document.getElementById("back-btn");
 let registerBtn = document.getElementById("register-btn");
@@ -35,8 +36,8 @@ function checkIsAgreedOuraptPreopen() {
   if (urlSearchParams.has("code")) {
     console.log("받아왔어요");
     document.getElementById("register-btn").innerText = "알림 받기 완료";
-    registerBtnDisable();
-    checkDisable();
+    // registerBtnDisable();
+    // checkDisable();
     // 기존 데이터 값을 받아와서 아래로 내려보내주고, answerCheck와 registerBtnActive를 다시 불러줄까?
     const code = urlSearchParams.get("code");
     const accessToken = getAccessToken(code);
@@ -169,6 +170,7 @@ async function currentVotingCount() {
       return "error 났어요!";
     }
     countOfVoting = resBody.data.countOfVoting;
+    console.log(`${countOfVoting}명 참여했대요.`);
   }
 }
 
