@@ -5,13 +5,13 @@ let BASE_URL = "http://ourapt-api-alpha.ap-northeast-2.elasticbeanstalk.com";
 // let BASE_URL = "http://localhost:8080";
 // let BASE_URL = "http://b833-121-166-172-250.ngrok.io";
 
-let URLform = document.getElementById("BURLform");
-URLform.addEventListener("submit", function (event) {
-  event.preventDefault();
-  BASE_URL = document.getElementById("BURL").value;
-  console.log(`제이콥, 여기예요! ${BASE_URL}`);
-  alert(BASE_URL);
-});
+// let URLform = document.getElementById("BURLform");
+// URLform.addEventListener("submit", function (event) {
+//   event.preventDefault();
+//   BASE_URL = document.getElementById("BURL").value;
+//   console.log(`제이콥, 여기예요! ${BASE_URL}`);
+//   alert(BASE_URL);
+// });
 
 let backBtn = document.getElementById("back-btn");
 let registerBtn = document.getElementById("register-btn");
@@ -49,8 +49,8 @@ async function checkIsAgreedOuraptPreopen() {
   if (urlSearchParams.has("code")) {
     console.log("받아왔어요");
     document.getElementById("register-btn").innerText = "알림 받기 완료";
-    // registerBtnDisable();
-    // checkDisable();
+    registerBtnDisable();
+    checkDisable();
     // 기존 데이터 값을 받아와서 아래로 내려보내주고, answerCheck와 registerBtnActive를 다시 불러줄까?
     const code = urlSearchParams.get("code");
     const accessToken = await getAccessToken(code);
@@ -95,15 +95,22 @@ async function getMyVote(token) {
       return "내 투표내역을 조회할 수 없어요!";
     }
     console.log(resBody.data);
-    if (resBody.data.wantSupplyChecked) {
-      answerCheck(document.getElementById("wantSupply"), 0);
-    }
-    if (resBody.data.wantDemandChecked) {
-      answerCheck(document.getElementById("wantDemand"), 1);
-    }
-    if (resBody.data.justFunChecked) {
-      answerCheck(document.getElementById("justFun"), 2);
-    }
+    // 로컬 스토리지에 정보를 저장해줘요.
+  } else {
+    // 이 때는 로컬 스토리지에서 받아올게요.
+  }
+}
+
+function patchMyVote() {
+  // 로컬스토리지로 수정
+  if (resBody.data.wantSupplyChecked) {
+    answerCheck(document.getElementById("wantSupply"), 0);
+  }
+  if (resBody.data.wantDemandChecked) {
+    answerCheck(document.getElementById("wantDemand"), 1);
+  }
+  if (resBody.data.justFunChecked) {
+    answerCheck(document.getElementById("justFun"), 2);
   }
 }
 
@@ -160,19 +167,24 @@ async function submitVoting(token) {
       "Content-Type": "application/json",
       Authorization: token,
     },
-    body: JSON.stringify(
-      !wantSupply && !wantDemand && !justFun
-        ? {
-            wantSupplyChecked: wantSupply,
-            wantDemandChecked: wantDemand,
-            justFunChecked: true,
-          }
-        : {
-            wantSupplyChecked: wantSupply,
-            wantDemandChecked: wantDemand,
-            justFunChecked: justFun,
-          }
-    ),
+    body: JSON.stringify({
+      wantSupplyChecked: wantSupply,
+      wantDemandChecked: wantDemand,
+      justFunChecked: justFun,
+    }),
+    // body: JSON.stringify(
+    //   !wantSupply && !wantDemand && !justFun
+    //     ? {
+    //         wantSupplyChecked: wantSupply,
+    //         wantDemandChecked: wantDemand,
+    //         justFunChecked: true,
+    //       }
+    //     : {
+    //         wantSupplyChecked: wantSupply,
+    //         wantDemandChecked: wantDemand,
+    //         justFunChecked: justFun,
+    //       }
+    // ),
   });
   if (response.ok) {
     console.log("투표 제출했습니다!");
@@ -251,7 +263,7 @@ document
     window.localStorage.setItem("isAgreedOuraptPreopen", true);
     mini.startPreset({
       preset:
-        "https://mini-assets.kr.karrotmarket.com/presets/common-login/alpha.html",
+        "https://mini-assets.kr.karrotmarket.com/presets/mvp-apartment-login/alpha.html",
       params: {
         appId: "6e6ba05f78534202aa4afe21daf1c825",
       },

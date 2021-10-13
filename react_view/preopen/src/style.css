@@ -200,7 +200,7 @@ ul li a p {
 .register-bubble::after {
   content: "";
   border: 6px solid transparent;
-  border-top: 8px solid #7a7a7a;
+  border-top: 8px solid #999999;
   position: absolute;
   top: 100%;
   right: 50%;
@@ -209,6 +209,13 @@ ul li a p {
 .register-bubble span:first-child {
   /* font-size: 0.9em; */
   margin-right: 4px;
+}
+
+#registered,
+#registered + span {
+  /* background-color: #bd1f36; */
+  /* color: red; */
+  font-weight: 700;
 }
 
 .register-btn {
