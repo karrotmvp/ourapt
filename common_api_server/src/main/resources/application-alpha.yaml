@@ -4,10 +4,7 @@ server:
     accesslog:
       enabled: true
       buffered: false
-      directory: /dev
-      prefix: stdout
-      file-date-format:
-      suffix:
+      directory: /var/log/tomcat8/
 spring:
   application:
     name: ourapt_api_server

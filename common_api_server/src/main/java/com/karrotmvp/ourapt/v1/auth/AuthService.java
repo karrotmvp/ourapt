@@ -50,6 +50,9 @@ public class AuthService {
                 )
                 .retrieve()
                 .onStatus((httpStatus) -> httpStatus.equals(HttpStatus.UNAUTHORIZED), (response) -> {
+                    throw new KarrotUnexpectedResponseException("잘못된 KARROT APP ID 입니다.");
+                })
+                .onStatus((httpStatus) -> httpStatus.equals(HttpStatus.BAD_REQUEST), (response) -> {
                     throw new KarrotUnauthorizedCode("유효하지 않은 KARROT authorization code 입니다." , "");
                 })
                 .onStatus((httpStatus) -> !httpStatus.equals(HttpStatus.OK), (response) -> {
