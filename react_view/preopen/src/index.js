@@ -1,15 +1,15 @@
 const mini = new Mini();
 
-// 내비게이션 바
-backBtn.addEventListener("click", function (event) {
-  mini.close();
-});
-
 // let BASE_URL = "http://ourapt-api-alpha.ap-northeast-2.elasticbeanstalk.com";
 let BASE_URL =
   "http://ourapt-api-production.ap-northeast-2.elasticbeanstalk.com/";
 let backBtn = document.getElementById("back-btn");
 let registerBtn = document.getElementById("register-btn");
+
+// 내비게이션 바
+backBtn.addEventListener("click", function (event) {
+  mini.close();
+});
 
 // 체크버튼 선택지:
 const wantSupply = false;
@@ -97,12 +97,11 @@ function checkDisable() {
   document.getElementsByTagName("ul")[0].style.pointerEvents = "none";
 }
 
-// 사전오픈 신청 버튼 활성화: 1) 선택지를 선택한 경우에만 활성화됩니다.
-function registerBtnAble() {
-  console.log("외않되?");
-  registerBtn.classList.replace("register-btn-disabled", "register-btn-abled");
-  registerBtn.disabled = false;
-}
+// 사전오픈 신청 버튼 활성화: 늘 활성화 되어있어요.
+// function registerBtnAble() {
+//   registerBtn.classList.replace("register-btn-disabled", "register-btn-abled");
+//   registerBtn.disabled = false;
+// }
 
 // 사전오픈 신청 버튼 비활성화: 1) 이미 신청한 경우 비활성화됩니다.
 function registerBtnDisable() {
@@ -111,13 +110,13 @@ function registerBtnDisable() {
 }
 
 // 사전오픈 신청 버튼 활성화/비활성화 여부 체크: 선택지 클릭 발생 시 매번 체크해줍니다.
-function registerBtnActive() {
-  if (answer[0] || answer[1] || answer[2]) {
-    registerBtnAble();
-  } else {
-    registerBtnDisable();
-  }
-}
+// function registerBtnActive() {
+//   if (answer[0] || answer[1] || answer[2]) {
+//     registerBtnAble();
+//   } else {
+//     registerBtnDisable();
+//   }
+// }
 
 // 선택지를 클릭할 때: 해당 선택지에 따라 저장한 answer값 변경하고, 선택지 컬러를 변경하며, 사전오픈 신청 버튼 활성화 여부를 체크해줍니다.
 function answerCheck(item, i) {
@@ -182,6 +181,7 @@ function closeRegisteredModal() {
 document
   .getElementById("wantSupply")
   .addEventListener("click", function (event) {
+    console.log("emergency@");
     answerCheck(this, 0);
   });
 document
