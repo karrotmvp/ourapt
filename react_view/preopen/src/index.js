@@ -1,15 +1,17 @@
+// screen.lockOrientation("portrait");
+
 const mini = new Mini();
 let BASE_URL = "http://ourapt-api-alpha.ap-northeast-2.elasticbeanstalk.com";
 // let BASE_URL = "http://localhost:8080";
 // let BASE_URL = "http://b833-121-166-172-250.ngrok.io";
 
-let URLform = document.getElementById("BURLform");
-URLform.addEventListener("submit", function (event) {
-  event.preventDefault();
-  BASE_URL = document.getElementById("BURL").value;
-  console.log(`제이콥, 여기예요! ${BASE_URL}`);
-  alert(BASE_URL);
-});
+// let URLform = document.getElementById("BURLform");
+// URLform.addEventListener("submit", function (event) {
+//   event.preventDefault();
+//   BASE_URL = document.getElementById("BURL").value;
+//   console.log(`제이콥, 여기예요! ${BASE_URL}`);
+//   alert(BASE_URL);
+// });
 
 let backBtn = document.getElementById("back-btn");
 let registerBtn = document.getElementById("register-btn");
@@ -40,7 +42,7 @@ currentVotingCount();
 // 1. 만약 신청한 사람이라면, 제이콥에게 이 사람의 정보를 보내줄 거예요.
 // 2. 제이콥이 이 사람이 이전에 골랐던 선택지를 보내줄 거예요. 그걸 확인해서 체크버튼을 보여줘야 해요. => 체크버튼 반영하는 함수를 분리해서 따보는 것도 방법?
 // 3. 이미 신청했으므로, 선택지를 고르거나 신청 버튼을 누르는 등의 인터랙션을 막아줘요.
-function checkIsAgreedOuraptPreopen() {
+async function checkIsAgreedOuraptPreopen() {
   // if (window.localStorage.getItem("isAgreedOuraptPreopen")) {
   if (urlSearchParams.has("code")) {
     console.log("받아왔어요");
@@ -49,8 +51,8 @@ function checkIsAgreedOuraptPreopen() {
     // checkDisable();
     // 기존 데이터 값을 받아와서 아래로 내려보내주고, answerCheck와 registerBtnActive를 다시 불러줄까?
     const code = urlSearchParams.get("code");
-    const accessToken = getAccessToken(code);
-    getMyVote(accessToken);
+    const accessToken = await getAccessToken(code);
+    await getMyVote(accessToken);
   }
 }
 
@@ -71,7 +73,7 @@ async function getAccessToken(code) {
       return "액세스토큰을 받아오지 못해요!";
     }
     console.log(`액세스 토큰을 받아왔는데요, ${resBody.data.access_token}`);
-    return resBody.data.access_token;
+    return "Bearer " + resBody.data.access_token;
   }
   // console.log(await response.json());
 }
@@ -137,13 +139,13 @@ function registerBtnActive() {
 function answerCheck(item, i) {
   if (answer[i]) {
     answer[i] = false;
-    item.childNodes[1].src = "./check-unselect.png";
-    registerBtnActive();
+    item.childNodes[1].src = "./check-unselect.svg";
+    // registerBtnActive();
     console.log(answer);
   } else {
     answer[i] = true;
-    item.childNodes[1].src = "./check-selected.png";
-    registerBtnActive();
+    item.childNodes[1].src = "./check-selected.svg";
+    // registerBtnActive();
     console.log(answer);
   }
 }
@@ -156,12 +158,21 @@ async function submitVoting(token) {
       ContentType: "application/json",
       Authorization: token,
     },
-    body: JSON.stringify({
-      karrotId: "",
-      wantSupplyChecked: wantSupply,
-      wantDemandChecked: wantDemand,
-      justFunChecked: justFun,
-    }),
+    body: JSON.stringify(
+      !wantSupply && !wantDemand && !justFun
+        ? {
+            karrotId: "",
+            wantSupplyChecked: wantSupply,
+            wantDemandChecked: wantDemand,
+            justFunChecked: true,
+          }
+        : {
+            karrotId: "",
+            wantSupplyChecked: wantSupply,
+            wantDemandChecked: wantDemand,
+            justFunChecked: justFun,
+          }
+    ),
   });
   if (response.ok) {
     console.log("투표 제출했습니다!");
@@ -234,7 +245,6 @@ document
   .getElementById("register-btn")
   .addEventListener("click", function (event) {
     console.log("제출할게요");
-    openRegisteredModal();
     window.localStorage.setItem("isAgreedOuraptPreopen", true);
     mini.startPreset({
       preset:
@@ -244,14 +254,16 @@ document
       },
       onSuccess: async function (result) {
         if (result && result.code) {
+          console.log("미니 프리셋은 온석세슽!");
           console.log(result.code);
           // toJacob(result.code);
           // alert(result.code);
           const accessToken = await getAccessToken(result.code);
           if (accessToken) {
-            submitVoting(accessToken);
+            await submitVoting(accessToken);
           }
           // submitVoting(getAccessToken(result.code));
+          openRegisteredModal();
         }
       },
       onError: function (error) {
