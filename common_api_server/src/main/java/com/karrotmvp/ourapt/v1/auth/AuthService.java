@@ -3,7 +3,6 @@ package com.karrotmvp.ourapt.v1.auth;
 import java.util.Base64;
 
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotAccessTokenDto;
-import com.karrotmvp.ourapt.v1.auth.dto.KarrotFailResponseDto;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnauthorizedCode;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
