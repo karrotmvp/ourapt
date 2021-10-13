@@ -1,8 +1,7 @@
 const mini = new Mini();
 
-// let BASE_URL = "http://ourapt-api-alpha.ap-northeast-2.elasticbeanstalk.com";
-let BASE_URL =
-  "http://ourapt-api-production.ap-northeast-2.elasticbeanstalk.com/";
+// let BASE_URL = "https://api-alpha.daangn-ourapt.com/";
+let BASE_URL = "https://api.daangn-ourapt.com";
 let backBtn = document.getElementById("back-btn");
 let registerBtn = document.getElementById("register-btn");
 
@@ -141,7 +140,6 @@ function closeRegisteredModal() {
 document
   .getElementById("wantSupply")
   .addEventListener("click", function (event) {
-    console.log("emergency@");
     answerCheck(this, 0);
   });
 document
