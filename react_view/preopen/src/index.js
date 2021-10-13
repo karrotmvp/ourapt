@@ -242,13 +242,15 @@ document
       params: {
         appId: "6e6ba05f78534202aa4afe21daf1c825",
       },
-      onSuccess: function (result) {
+      onSuccess: async function (result) {
         if (result && result.code) {
           console.log(result.code);
           // toJacob(result.code);
           // alert(result.code);
-          const accessToken = getAccessToken(result.code);
-          submitVoting(accessToken);
+          const accessToken = await getAccessToken(result.code);
+          if (accessToken) {
+            submitVoting(accessToken);
+          }
           // submitVoting(getAccessToken(result.code));
         }
       },
