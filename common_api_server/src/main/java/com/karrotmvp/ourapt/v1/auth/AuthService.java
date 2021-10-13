@@ -54,7 +54,6 @@ public class AuthService {
                     throw new KarrotUnauthorizedCode("유효하지 않은 KARROT authorization code 입니다." , "");
                 })
                 .onStatus((httpStatus) -> !httpStatus.equals(HttpStatus.OK), (response) -> {
-                    KarrotFailResponseDto failResponse = response.bodyToMono(KarrotFailResponseDto.class).block();
                     throw new KarrotUnexpectedResponseException("KARROT 서버로 부터 정상적이지 않은 응답을 받았습니다.");
                 })
                 .bodyToMono(KarrotAccessTokenDto.class);
