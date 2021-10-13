@@ -21,9 +21,6 @@ const answer = [wantSupply, wantDemand, justFun];
 let urlSearchParams = new URLSearchParams(window.location.search);
 
 checkIsAgreedOuraptPreopen();
-getVotingCount().then((count) => {
-  patchCountOfVoting(count);
-});
 
 // 이미 신청한 사람이라면?
 // 0. 당근 서버에서 확인하는 절차를 거쳐요.
@@ -97,39 +94,20 @@ function checkDisable() {
   document.getElementsByTagName("ul")[0].style.pointerEvents = "none";
 }
 
-// 사전오픈 신청 버튼 활성화: 늘 활성화 되어있어요.
-// function registerBtnAble() {
-//   registerBtn.classList.replace("register-btn-disabled", "register-btn-abled");
-//   registerBtn.disabled = false;
-// }
-
 // 사전오픈 신청 버튼 비활성화: 1) 이미 신청한 경우 비활성화됩니다.
 function registerBtnDisable() {
   registerBtn.classList.replace("register-btn-abled", "register-btn-disabled");
   registerBtn.disabled = true;
 }
 
-// 사전오픈 신청 버튼 활성화/비활성화 여부 체크: 선택지 클릭 발생 시 매번 체크해줍니다.
-// function registerBtnActive() {
-//   if (answer[0] || answer[1] || answer[2]) {
-//     registerBtnAble();
-//   } else {
-//     registerBtnDisable();
-//   }
-// }
-
 // 선택지를 클릭할 때: 해당 선택지에 따라 저장한 answer값 변경하고, 선택지 컬러를 변경하며, 사전오픈 신청 버튼 활성화 여부를 체크해줍니다.
 function answerCheck(item, i) {
   if (answer[i]) {
     answer[i] = false;
     item.childNodes[1].src = "./check-unselect.svg";
-    // registerBtnActive();
-    console.log(answer);
   } else {
     answer[i] = true;
     item.childNodes[1].src = "./check-selected.svg";
-    // registerBtnActive();
-    console.log(answer);
   }
 }
 
@@ -147,24 +125,6 @@ async function submitVoting(token) {
       justFunChecked: justFun,
     }),
   });
-}
-
-// 현재 투표 인원 받아오기
-async function getVotingCount() {
-  const response = await fetch(`${BASE_URL}/api/v1/preopen/voting/count`, {
-    method: "GET",
-  });
-  if (response.ok) {
-    const resBody = await response.json();
-    if (!resBody || !resBody.data || !resBody.data.countOfVoting) {
-      return;
-    }
-    return resBody.data.countOfVoting;
-  }
-}
-
-function patchCountOfVoting(count) {
-  document.getElementById("registered").innerText = count;
 }
 
 // 모달창 열기: 신청버튼을 눌렀을 때, 전체 서버 통신이 안전하게 완료되고 난 다음 띄워줍니다.
