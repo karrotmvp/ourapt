@@ -14,10 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.GenericFilterBean;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity(debug = false)
@@ -52,8 +51,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(this.customFilter(), UsernamePasswordAuthenticationFilter.class)
+                .cors()
+                .and()
                 .authorizeRequests()
                 // Try to authenticate this pattern, but I don't check the authority.
+                .requestMatchers(CorsUtils::isPreFlightRequest)
+                .permitAll()
                 .antMatchers(
                         "/api/v1/app/**",
                         "/api/v1/oauth/karrot",
@@ -68,16 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             HttpStatus.UNAUTHORIZED.value(),
                             String.valueOf(request.getAttribute("firstExceptionMessage")));
                 });
-//                .accessDeniedHandler()
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); //to set allowed http methods
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.addAllowedOrigin("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
