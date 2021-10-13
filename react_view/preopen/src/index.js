@@ -8,6 +8,7 @@ URLform.addEventListener("submit", function (event) {
   event.preventDefault();
   BASE_URL = document.getElementById("BURL").value;
   console.log(`제이콥, 여기예요! ${BASE_URL}`);
+  alert(BASE_URL);
 });
 
 let backBtn = document.getElementById("back-btn");
