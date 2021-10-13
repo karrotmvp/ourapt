@@ -1,14 +1,14 @@
 # This is a basic workflow to help you get started with Actions
 
-name: SERVER-CI-FOR-ALPHA
+name: SERVER-CI-FOR-PRODUCTION
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [alpha]
+    branches: [production]
   # pull_request:
-  #   branches: [alpha]
+  #   branches: [production]
 
   # Allows you to run this workflow manually from the Actions tab
   # workflow_dispatch:
@@ -62,15 +62,15 @@ jobs:
 
       - name: Deploy to EB
         env:
-          SPRING_PROFILE_ACTIVE: alpha
-          RDB_HOST: ${{ secrets.RDB_HOST_ALPHA }}
-          RDB_USERNAME: ${{ secrets.RDB_USERNAME_ALPHA }}
-          RDB_PASSWORD: ${{ secrets.RDB_PASSWORD_ALPHA }}
-          KARROT_APP_ID: ${{ secrets.KARROT_APP_ID_ALPHA }}
-          KARROT_APP_SECRET: ${{ secrets.KARROT_APP_SECRET_ALPHA }}
-          KARROT_API_KEY: ${{ secrets.KARROT_API_KEY_ALPHA }}
-          KARROT_OPEN_API_BASE_URL: https://openapi.alpha.kr.karrotmarket.com
-          KARROT_O_API_BASE_URL: https://oapi.alpha.kr.karrotmarket.com
+          SPRING_PROFILE_ACTIVE: production
+          RDB_HOST: ${{ secrets.RDB_HOST_PRODUCTION }}
+          RDB_USERNAME: ${{ secrets.RDB_USERNAME_PRODUCTION }}
+          RDB_PASSWORD: ${{ secrets.RDB_PASSWORD_PRODUCTION }}
+          KARROT_APP_ID: ${{ secrets.KARROT_APP_ID_PRODUCTION }}
+          KARROT_APP_SECRET: ${{ secrets.KARROT_APP_SECRET_PRODUCTION }}
+          KARROT_API_KEY: ${{ secrets.KARROT_API_KEY_PRODUCTION }}
+          KARROT_OPEN_API_BASE_URL: https://openapi.kr.karrotmarket.com
+          KARROT_O_API_BASE_URL: https://oapi.kr.karrotmarket.com
         run: |
           echo "Installing EB - CLI..."
           cd ./common_api_server/deploy
@@ -79,7 +79,7 @@ jobs:
           eb --version
           echo "Initializing EB..."
           eb init --region ap-northeast-2 --platform "Corretto 11 running on 64bit Amazon Linux 2" ourapt-api
-          eb use ourapt-api-alpha
+          eb use ourapt-api-production
           echo "Setting environment variables..."
           eb setenv \
             SPRING_PROFILE_ACTIVE=${{ env.SPRING_PROFILE_ACTIVE }} \

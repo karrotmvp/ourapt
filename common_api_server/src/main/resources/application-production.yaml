@@ -1,3 +1,5 @@
+# This is profile for alpha & local
+# This setting apply for both local server and alpha server.
 server:
   port: 5000
   tomcat:
@@ -22,18 +24,18 @@ spring:
   jpa:
     open-in-view: false
     generate-ddl: true
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
-        format_sql: true
+        format_sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
   devtools:
     livereload:
-      enabled: true
+      enabled: false
     restart:
-      enabled: true
+      enabled: false
 
 karrot:
   api:
