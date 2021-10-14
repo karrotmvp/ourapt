@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/error",
                         "/favicon.ico",
                         "/swagger/**",
-                        "/swagger-ui**",
+                        "/swagger-ui.html",
                         "/swagger-ui/**",
                         "/swagger-resources/**"
                 );
