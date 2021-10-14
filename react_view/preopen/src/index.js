@@ -20,6 +20,9 @@ const answer = {
 // 맨 처음 페이지 렌더링 할 때: 이미 신청한 사람인지 확인해요
 let urlSearchParams = new URLSearchParams(window.location.search);
 
+//regionID 받아오기
+const regionId = urlSearchParams.get("region_id");
+
 checkIsAgreedOuraptPreopen();
 
 // 이미 신청한 사람이라면?
@@ -76,20 +79,21 @@ async function getMyVote(token) {
 
 function patchMyVote(vote) {
   if (vote.wantSupplyChecked) {
-    answerCheck(document.getElementById("wantSupply"), 0);
-    console.log(answer);
+    answerCheck(document.getElementById("wantSupply"), "wantSupply");
   }
   if (vote.wantDemandChecked) {
-    answerCheck(document.getElementById("wantDemand"), 1);
+    answerCheck(document.getElementById("wantDemand"), "wantDemand");
   }
   if (vote.justFunChecked) {
-    answerCheck(document.getElementById("justFun"), 2);
+    answerCheck(document.getElementById("justFun"), "justFun");
   }
 }
 
 // 선택지 체크 비활성화
 function checkDisable() {
-  document.getElementsByTagName("ul")[0].style.pointerEvents = "none";
+  console.log("들어가요");
+  document.getElementById("checkBoxes").style.pointerEvents = "none";
+  console.log("나가요");
 }
 
 // 사전오픈 신청 버튼 비활성화: 1) 이미 신청한 경우 비활성화됩니다.
@@ -102,10 +106,12 @@ function registerBtnDisable() {
 function answerCheck(item, field) {
   if (answer[field]) {
     answer[field] = false;
-    item.childNodes[1].src = "./check-unselect.svg";
+    document.getElementById(`${field}CheckImage`).style.display = "none";
+    document.getElementById(`${field}UnCheckImage`).style.display = "block";
   } else {
     answer[field] = true;
-    item.childNodes[1].src = "./check-selected.svg";
+    document.getElementById(`${field}CheckImage`).style.display = "block";
+    document.getElementById(`${field}UnCheckImage`).style.display = "none";
   }
 }
 
@@ -118,6 +124,7 @@ async function submitVoting(token) {
       Authorization: token,
     },
     body: JSON.stringify({
+      regionId: regionId,
       wantSupplyChecked: answer.wantSupply,
       wantDemandChecked: answer.wantDemand,
       justFunChecked: answer.justFun,
@@ -126,7 +133,6 @@ async function submitVoting(token) {
   if (response.ok) {
     const resBody = await response.json();
     if (!resBody || resBody.status !== "SUCCESS") {
-      alert(JSON.stringify(resBody, null, 2));
       throw new Error(resBody.devMessage);
     }
     return resBody.data;
@@ -134,7 +140,6 @@ async function submitVoting(token) {
 }
 
 function showAfterRegisteredInfo() {
-  console.log("문구 변경");
   document.getElementById("register-bubble").style.display = "none";
   document.getElementById("after-registered-info").style.display = "block";
 }
@@ -146,7 +151,7 @@ function afterIsAgreedOuraptPreopen() {
   showAfterRegisteredInfo();
 }
 
-// 모달창 열기: 신청버튼을 눌렀을 때, 전체 서버 통신이 안전하게 완료되고 난 다음 띄워줍니다.
+// 모달창 열기: 따로 하지 않기로 결심했어요!
 function openRegisteredModal() {
   document.getElementById("modal").style.display = "block";
 }
