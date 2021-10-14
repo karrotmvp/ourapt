@@ -16,6 +16,7 @@
 /* 전체 영역 UASS초기화 및 바디 스타일링 */
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -189,6 +190,18 @@ ul li a p {
   position: absolute;
   top: 100%;
   right: 50%;
+}
+
+.register-bubble span:first-child {
+  line-height: 0.8em;
+}
+
+.after-registered-info {
+  display: none;
+  color: #aaaaaa;
+  font-size: 15px;
+  letter-spacing: -0.03em;
+  text-align: center;
 }
 
 .register-btn {
