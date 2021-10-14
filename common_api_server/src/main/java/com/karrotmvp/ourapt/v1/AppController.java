@@ -17,7 +17,7 @@ public class AppController {
   public CommonResponseBody<Void> healthCheck() {
     return CommonResponseBody.<Void> builder()
         .result(ApiResult.SUCCESS)
-        .devMessage("I_AM_ALIVE")
+        .devMessage("I_AM_ALIVE: version_2021_10_14_1522")
         .build();
   }
 
