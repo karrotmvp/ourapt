@@ -17,6 +17,9 @@ public class PreopenVotingForm extends BaseEntity {
   @Id
   @Column(name = "karrot_id")
   private String karrotId;
+
+  @Column(name = "region_id", nullable = true, unique = false)
+  private String regionId;
   
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade type
   @JoinColumn(name = "karrot_id", referencedColumnName = "karrot_id")

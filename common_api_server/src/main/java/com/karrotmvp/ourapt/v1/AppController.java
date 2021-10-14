@@ -25,11 +25,4 @@ public class AppController {
   public String redirectToSwaggerUi() {
     return "redirect::/swagger-ui/index.html";
   }
-
-  @GetMapping("/token")
-  public String tempToken(@RequestParam("token") String token) {
-    System.out.println("token");
-    return "asdfasdf";
-  }
-  
 }
