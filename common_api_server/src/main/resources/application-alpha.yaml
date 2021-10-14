@@ -1,10 +1,5 @@
 server:
   port: 5000
-  tomcat:
-    accesslog:
-      enabled: true
-      buffered: false
-      directory: /var/log/tomcat8/
 spring:
   application:
     name: ourapt_api_server
