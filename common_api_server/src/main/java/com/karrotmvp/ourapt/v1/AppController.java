@@ -17,7 +17,7 @@ public class AppController {
   public CommonResponseBody<Void> healthCheck() {
     return CommonResponseBody.<Void> builder()
         .result(ApiResult.SUCCESS)
-        .devMessage("I_AM_ALIVE")
+        .devMessage("I_AM_ALIVE: version_2021_10_14_1522")
         .build();
   }
 
@@ -25,11 +25,4 @@ public class AppController {
   public String redirectToSwaggerUi() {
     return "redirect::/swagger-ui/index.html";
   }
-
-  @GetMapping("/token")
-  public String tempToken(@RequestParam("token") String token) {
-    System.out.println("token");
-    return "asdfasdf";
-  }
-  
 }

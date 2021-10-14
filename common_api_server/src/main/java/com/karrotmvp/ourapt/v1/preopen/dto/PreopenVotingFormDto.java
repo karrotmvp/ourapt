@@ -12,6 +12,9 @@ import javax.validation.constraints.NotNull;
 public class PreopenVotingFormDto {
 
   @NotNull
+  private String regionId;
+
+  @NotNull
   private Boolean wantSupplyChecked;
 
   @NotNull
@@ -22,6 +25,7 @@ public class PreopenVotingFormDto {
 
   public PreopenVotingForm toEntity() {
     PreopenVotingForm entity = new PreopenVotingForm();
+    entity.setRegionId(regionId);
     entity.setWantSupplyChecked(wantSupplyChecked);
     entity.setWantDemandChecked(wantDemandChecked);
     entity.setJustFunChecked(justFunChecked);
@@ -30,6 +34,7 @@ public class PreopenVotingFormDto {
 
   public static PreopenVotingFormDto fromEntity(PreopenVotingForm entity) {
     PreopenVotingFormDto dto = new PreopenVotingFormDto();
+    dto.setRegionId(entity.getRegionId());
     dto.setWantSupplyChecked(entity.getWantSupplyChecked());
     dto.setWantDemandChecked(entity.getWantDemandChecked());
     dto.setJustFunChecked(entity.getJustFunChecked());

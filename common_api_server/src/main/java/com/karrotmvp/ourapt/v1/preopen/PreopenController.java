@@ -3,7 +3,8 @@ package com.karrotmvp.ourapt.v1.preopen;
 import java.util.Date;
 import java.util.List;
 
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotAuthenticationToken;
+import com.karrotmvp.ourapt.v1.auth.CurrentUser;
+import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfileDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.DuplicatedRequestException;
@@ -14,7 +15,6 @@ import com.karrotmvp.ourapt.v1.user.User;
 import com.karrotmvp.ourapt.v1.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,8 +35,8 @@ public class PreopenController {
     private UserRepository userRepository;
 
     @GetMapping("/me/voting")
-    public CommonResponseBody<PreopenVotingFormDto> getMyVotedForm(KarrotAuthenticationToken authentication) {
-        String userId = String.valueOf(authentication.getPrincipal().getUserId());
+    public CommonResponseBody<PreopenVotingFormDto> getMyVotedForm(@CurrentUser KarrotUserProfileDto user) {
+        String userId = user.getUserId();
         PreopenVotingForm foundVotingForm = preopenRepository.findById(userId)
                 .orElseThrow(() -> new DataNotFoundFromDBException("Cannot find voting data matched with user", ""));
 
@@ -57,10 +57,12 @@ public class PreopenController {
 
     @PostMapping("/voting/submit")
     @Transactional
-    public CommonResponseBody<Void> submitVotingForm(@RequestBody(required = true) @Valid PreopenVotingFormDto dto, KarrotAuthenticationToken authentication) {
+    public CommonResponseBody<Void> submitVotingForm(@RequestBody(required = true) @Valid PreopenVotingFormDto dto, @CurrentUser KarrotUserProfileDto karrotUser) {
         PreopenVotingForm preOpenVotingForm = dto.toEntity();
-        User newUser = authentication.getPrincipal().toEntity();
+
+        User newUser = karrotUser.toEntity();
         newUser.setPushAgreedAt(new Date());
+
         // Check duplication
         PreopenVotingForm duplicatedData = preopenRepository.findById(newUser.getKarrotId()).orElse(null);
         if (duplicatedData != null) {
