@@ -2,10 +2,13 @@ package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.karrotmvp.ourapt.v1.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class KarrotUserProfileDto {
 

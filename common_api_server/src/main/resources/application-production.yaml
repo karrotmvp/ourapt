@@ -2,14 +2,6 @@
 # This setting apply for both local server and alpha server.
 server:
   port: 5000
-  tomcat:
-    accesslog:
-      enabled: true
-      buffered: false
-      directory: /dev
-      prefix: stdout
-      file-date-format:
-      suffix:
 spring:
   application:
     name: ourapt_api_server
