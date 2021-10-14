@@ -1,6 +1,6 @@
 const mini = new Mini();
 
-// let BASE_URL = "https://api-alpha.daangn-ourapt.com/";
+// let BASE_URL = "https://api-alpha.daangn-ourapt.com";
 let BASE_URL = "https://api.daangn-ourapt.com";
 let backBtn = document.getElementById("back-btn");
 let registerBtn = document.getElementById("register-btn");
@@ -11,10 +11,11 @@ backBtn.addEventListener("click", function (event) {
 });
 
 // 체크버튼 선택지:
-const wantSupply = false;
-const wantDemand = false;
-const justFun = false;
-const answer = [wantSupply, wantDemand, justFun];
+const answer = {
+  wantSupply: false,
+  wantDemand: false,
+  justFun: false,
+};
 
 // 맨 처음 페이지 렌더링 할 때: 이미 신청한 사람인지 확인해요
 let urlSearchParams = new URLSearchParams(window.location.search);
@@ -28,10 +29,10 @@ checkIsAgreedOuraptPreopen();
 // 3. 이미 신청했으므로, 선택지를 고르거나 신청 버튼을 누르는 등의 인터랙션을 막아줘요.
 async function checkIsAgreedOuraptPreopen() {
   if (urlSearchParams.has("code")) {
+    afterIsAgreedOuraptPreopen();
     const code = urlSearchParams.get("code");
     const accessToken = await getAccessToken(code);
     await getMyVote(accessToken);
-    afterIsAgreedOuraptPreopen();
   }
 }
 
@@ -47,14 +48,15 @@ async function getAccessToken(code) {
   });
   if (response.ok) {
     const resBody = await response.json();
-    if (!resBody || !resBody.data) {
-      return;
+    if (!resBody || !resBody.data || resBody.status !== "SUCCESS") {
+      throw new Error("accessToken 발급 실패");
     }
     return "Bearer " + resBody.data.access_token;
   }
 }
 
 async function getMyVote(token) {
+  console.log(`야호 ${token}`);
   const response = await fetch(`${BASE_URL}/api/v1/preopen/me/voting`, {
     method: "GET",
     headers: {
@@ -64,28 +66,25 @@ async function getMyVote(token) {
   });
   if (response.ok) {
     const resBody = await response.json();
-    if (!resBody || !resBody.data) {
-      return;
+    if (!resBody || !resBody.data || resBody.status !== "SUCCESS") {
+      alert("myVote 받기 실패");
+      throw new Error("myVote 받기 실패");
     }
+    patchMyVote(resBody.data);
   }
 }
 
-function patchMyVote() {
-  if (resBody.data.wantSupplyChecked) {
+function patchMyVote(vote) {
+  if (vote.wantSupplyChecked) {
     answerCheck(document.getElementById("wantSupply"), 0);
+    console.log(answer);
   }
-  if (resBody.data.wantDemandChecked) {
+  if (vote.wantDemandChecked) {
     answerCheck(document.getElementById("wantDemand"), 1);
   }
-  if (resBody.data.justFunChecked) {
+  if (vote.justFunChecked) {
     answerCheck(document.getElementById("justFun"), 2);
   }
-}
-
-function afterIsAgreedOuraptPreopen() {
-  document.getElementById("register-btn").innerText = "알림 받기 완료";
-  registerBtnDisable();
-  checkDisable();
 }
 
 // 선택지 체크 비활성화
@@ -100,12 +99,12 @@ function registerBtnDisable() {
 }
 
 // 선택지를 클릭할 때: 해당 선택지에 따라 저장한 answer값 변경하고, 선택지 컬러를 변경하며, 사전오픈 신청 버튼 활성화 여부를 체크해줍니다.
-function answerCheck(item, i) {
-  if (answer[i]) {
-    answer[i] = false;
+function answerCheck(item, field) {
+  if (answer[field]) {
+    answer[field] = false;
     item.childNodes[1].src = "./check-unselect.svg";
   } else {
-    answer[i] = true;
+    answer[field] = true;
     item.childNodes[1].src = "./check-selected.svg";
   }
 }
@@ -119,11 +118,32 @@ async function submitVoting(token) {
       Authorization: token,
     },
     body: JSON.stringify({
-      wantSupplyChecked: wantSupply,
-      wantDemandChecked: wantDemand,
-      justFunChecked: justFun,
+      wantSupplyChecked: answer.wantSupply,
+      wantDemandChecked: answer.wantDemand,
+      justFunChecked: answer.justFun,
     }),
   });
+  if (response.ok) {
+    const resBody = await response.json();
+    if (!resBody || resBody.status !== "SUCCESS") {
+      alert(JSON.stringify(resBody, null, 2));
+      throw new Error(resBody.devMessage);
+    }
+    return resBody.data;
+  }
+}
+
+function showAfterRegisteredInfo() {
+  console.log("문구 변경");
+  document.getElementById("register-bubble").style.display = "none";
+  document.getElementById("after-registered-info").style.display = "block";
+}
+
+function afterIsAgreedOuraptPreopen() {
+  document.getElementById("register-btn").innerText = "알림 받기 완료";
+  registerBtnDisable();
+  checkDisable();
+  showAfterRegisteredInfo();
 }
 
 // 모달창 열기: 신청버튼을 눌렀을 때, 전체 서버 통신이 안전하게 완료되고 난 다음 띄워줍니다.
@@ -140,15 +160,15 @@ function closeRegisteredModal() {
 document
   .getElementById("wantSupply")
   .addEventListener("click", function (event) {
-    answerCheck(this, 0);
+    answerCheck(this, "wantSupply");
   });
 document
   .getElementById("wantDemand")
   .addEventListener("click", function (event) {
-    answerCheck(this, 1);
+    answerCheck(this, "wantDemand");
   });
 document.getElementById("justFun").addEventListener("click", function (event) {
-  answerCheck(this, 2);
+  answerCheck(this, "justFun");
 });
 
 // 오픈시 알림받기 -> with API
@@ -172,8 +192,9 @@ document
           const accessToken = await getAccessToken(result.code);
           if (accessToken) {
             await submitVoting(accessToken);
+            // openRegisteredModal();
+            afterIsAgreedOuraptPreopen();
           }
-          openRegisteredModal();
         }
       },
       onError: function (error) {
@@ -183,9 +204,9 @@ document
   });
 
 // 모달 제어
-document
-  .getElementById("modal-close")
-  .addEventListener("click", function (event) {
-    closeRegisteredModal();
-    afterIsAgreedOuraptPreopen();
-  });
+// document
+//   .getElementById("modal-close")
+//   .addEventListener("click", function (event) {
+//     closeRegisteredModal();
+//     afterIsAgreedOuraptPreopen();
+//   });
