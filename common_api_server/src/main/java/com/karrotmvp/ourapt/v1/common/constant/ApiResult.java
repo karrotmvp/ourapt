@@ -1,7 +1,9 @@
 package com.karrotmvp.ourapt.v1.common.constant;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 
+@ApiModel
 public enum ApiResult {
     SUCCESS("SUCCESS"),
     INVALID_INPUT("INVALID_INPUT"),
