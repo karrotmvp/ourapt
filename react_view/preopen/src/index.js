@@ -23,6 +23,46 @@ let urlSearchParams = new URLSearchParams(window.location.search);
 //regionID 받아오기
 const regionId = urlSearchParams.get("region_id");
 
+// 슬랙 웹훅 핫픽스
+// 0. 접속시 region에 따라 분기하기
+// 1. 지역별 신규 접속 / 재접속 정보 확인하기 - 코드 유무
+// 2. regionId 통역해주기! 1) 주어진 인천 지역 2) 그 외 지역
+
+function parseNameFromRegionId(regionId) {
+  const regionName = {
+    "996bc98b6583": "송도1동 풍림아이원",
+    "2acd52800525": "송도1동 웰카운티",
+    fe82298e3c63: "송도3동 글로벌캠퍼스푸르지오",
+    "37ac0da953d5": "송도3동 센트럴시티",
+    f9ea71209dee: "송도1동 퍼스트월드",
+    df115ab931cb: "잠실3동 트리지움",
+    e020eb41d01b: "잠실2동 엘스",
+  };
+  return regionName[regionId] ?? "테스트";
+}
+
+sendWebhookToSlack(
+  ` :partying_face: ${parseNameFromRegionId(
+    regionId
+  )}에서 우리 페이지를 방문했어요!`,
+  ":partying_face:"
+);
+
+function sendWebhookToSlack(slackMessage, icon) {
+  fetch(
+    `https://hooks.slack.com/services/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`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        channel: "#_apartment_preopen",
+        username: "webhookbot",
+        text: new Date() + slackMessage,
+        icon_emoji: icon,
+      }),
+    }
+  );
+}
+
 checkIsAgreedOuraptPreopen();
 
 // 이미 신청한 사람이라면?
@@ -180,6 +220,10 @@ document.getElementById("justFun").addEventListener("click", function (event) {
 document
   .getElementById("register-btn")
   .addEventListener("click", function (event) {
+    sendWebhookToSlack(
+      ` :fire: ${parseNameFromRegionId(regionId)}에서 동의창을 열었어요!`,
+      ":fire:"
+    );
     mini.startPreset({
       preset:
         // 알파 앱
