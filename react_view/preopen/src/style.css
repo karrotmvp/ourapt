@@ -74,11 +74,32 @@ nav {
 
 /* 질문 및 보기 스타일링 */
 
-.logo {
-  margin: 24px 8px 8px;
+.logo-mvp {
+  margin: 8px 0px 0px;
 
   color: transparent;
-  font-size: 18px;
+  font-size: 36px;
+  line-height: 1em;
+}
+
+.logo-mvp::before {
+  content: "";
+
+  position: absolute;
+  top: 64px;
+  left: 24px;
+
+  width: 90px;
+  height: 36px;
+
+  background: url(./logo-mvp.svg) no-repeat;
+}
+
+.logo {
+  margin: 16px 0px 0px;
+
+  color: transparent;
+  font-size: 20px;
   line-height: 1em;
 }
 
@@ -86,17 +107,17 @@ nav {
   content: "";
 
   position: absolute;
-  top: 80px;
+  top: 116px;
   left: 24px;
 
-  width: 96px;
-  height: 26px;
+  width: 100px;
+  height: 20px;
 
   background: url(./logo.svg) no-repeat;
 }
 
 .title {
-  padding: 8px;
+  padding: 16px 8px 8px;
 
   font-size: 24px;
   font-weight: 700;
@@ -115,15 +136,15 @@ nav {
 }
 
 .multiple-selection-info {
-  padding-left: 8px;
+  padding: 8px;
 
   font-size: 15px;
   color: #cccccc;
-  text-align: right;
+  text-align: left;
 }
 
 ul {
-  margin-top: 32px;
+  margin-top: 36px;
 }
 
 ul li {

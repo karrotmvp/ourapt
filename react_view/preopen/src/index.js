@@ -22,6 +22,7 @@ let urlSearchParams = new URLSearchParams(window.location.search);
 
 //regionID 받아오기
 const regionId = urlSearchParams.get("region_id");
+const isPreload = urlSearchParams.get("preload");
 
 // 슬랙 웹훅 핫픽스
 // 0. 접속시 region에 따라 분기하기
@@ -35,8 +36,12 @@ function parseNameFromRegionId(regionId) {
     fe82298e3c63: "송도3동 글로벌캠퍼스푸르지오",
     "37ac0da953d5": "송도3동 센트럴시티",
     f9ea71209dee: "송도1동 퍼스트월드",
+    "1f0758ccde06": "송도 1동",
+    a87002cc41f1: "송도 2동",
+    "0b96cc858bf6": "송도 3동",
     df115ab931cb: "잠실3동 트리지움",
     e020eb41d01b: "잠실2동 엘스",
+    "6a7eefda7865": "잠실 2동",
   };
   return regionName[regionId] ?? "테스트";
 }
@@ -44,11 +49,13 @@ function parseNameFromRegionId(regionId) {
 sendWebhookToSlack(
   ` :partying_face: ${parseNameFromRegionId(
     regionId
-  )}에서 우리 페이지를 방문했어요!`,
-  ":partying_face:"
+  )}에서 우리 페이지를 방문했어요!`
 );
 
-function sendWebhookToSlack(slackMessage, icon) {
+function sendWebhookToSlack(slackMessage) {
+  if (isPreload === "true") {
+    return;
+  }
   fetch(
     `https://hooks.slack.com/services/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`,
     {
@@ -57,7 +64,7 @@ function sendWebhookToSlack(slackMessage, icon) {
         channel: "#_apartment_preopen",
         username: "webhookbot",
         text: new Date() + slackMessage,
-        icon_emoji: icon,
+        icon_emoji: ":rocket:",
       }),
     }
   );
@@ -221,8 +228,7 @@ document
   .getElementById("register-btn")
   .addEventListener("click", function (event) {
     sendWebhookToSlack(
-      ` :fire: ${parseNameFromRegionId(regionId)}에서 동의창을 열었어요!`,
-      ":fire:"
+      ` :fire: ${parseNameFromRegionId(regionId)}에서 동의창을 열었어요!`
     );
     mini.startPreset({
       preset:
