@@ -150,6 +150,12 @@ ul li a p {
   color: #555555;
 }
 
+#wantSupplyCheckImage,
+#wantDemandCheckImage,
+#justFunCheckImage {
+  display: none;
+}
+
 /* 버튼 관련 스타일링 */
 
 .register-area {
