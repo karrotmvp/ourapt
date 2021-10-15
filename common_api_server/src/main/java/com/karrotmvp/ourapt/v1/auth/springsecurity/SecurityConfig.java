@@ -35,9 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,
                         "/error",
                         "/favicon.ico",
-                        "/swagger/**",
-                        "/swagger-ui.html",
+                        "/v2/api-docs",
                         "/swagger-ui/**",
+                        "/swagger-resources**",
                         "/swagger-resources/**"
                 );
     }

@@ -11,9 +11,9 @@ server:
 spring:
   application:
     name: ourapt_api_server
-  # web:
-  #   resources:
-  #     static-locations: classpath:/static/
+#  web:
+#    resources:
+#      static-locations: classpath:/META_INF/resources/webjars/springfox-swagger-ui/
   datasource:
     url: jdbc:mariadb://${RDB_HOST}/ourapt
     driver-class-name: org.mariadb.jdbc.Driver

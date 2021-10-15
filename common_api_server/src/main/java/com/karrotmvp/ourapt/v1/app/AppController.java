@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1;
+package com.karrotmvp.ourapt.v1.app;
 
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.constant.ApiResult;
