@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.codec.CodecException;
 import org.springframework.core.env.Environment;
@@ -28,6 +29,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Component
+@Profile({"production"})
 @AllArgsConstructor
 public class KarrotOAuthProvider implements AuthenticationProvider {
     // Spring Security loads all the 'AuthenticationProvider Beans' when it initializes ProviderManager(AuthenticationManager)
@@ -44,11 +46,6 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public KarrotUserProfileDto asyncGetUserProfileFromKarrot(String accessToken) {
-        if (!Arrays.asList(env.getActiveProfiles()).contains("production")) {
-            if (accessToken.equals("Beaerer ")) {
-            }
-            return new KarrotUserProfileDto("userIdExample", "userNicknameExample");
-        }
         logger.info("KARROT_API_CALLED");
         Mono<KarrotResponseBody<KarrotUserProfileDto>> userProfileMono = webClient.mutate()
                 .defaultHeader(HttpHeaders.AUTHORIZATION, accessToken)
