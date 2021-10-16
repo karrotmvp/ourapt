@@ -1,14 +1,12 @@
 package com.karrotmvp.ourapt.v1.preopen;
 
 import java.util.Date;
-import java.util.List;
 
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfileDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.DuplicatedRequestException;
-import com.karrotmvp.ourapt.v1.preopen.dto.PreopenVotingCountDto;
 import com.karrotmvp.ourapt.v1.preopen.dto.PreopenVotingFormDto;
 import com.karrotmvp.ourapt.v1.user.User;
 
@@ -43,15 +41,6 @@ public class PreopenController {
         return CommonResponseBody.<PreopenVotingFormDto>builder()
                 .success()
                 .data(PreopenVotingFormDto.fromEntity(foundVotingForm))
-                .build();
-    }
-
-    @GetMapping("/voting/count")
-    public CommonResponseBody<PreopenVotingCountDto> getCurrentVotingCount() {
-        List<PreopenVotingForm> votings =  preopenRepository.findAll();
-        return CommonResponseBody.<PreopenVotingCountDto>builder()
-                .success()
-                .data(new PreopenVotingCountDto(votings.size()))
                 .build();
     }
 

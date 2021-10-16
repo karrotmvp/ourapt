@@ -1,6 +1,7 @@
 package com.karrotmvp.ourapt.v1.auth;
 
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotAccessTokenDto;
+import com.karrotmvp.ourapt.v1.auth.dto.KarrotOAuthResponseDto;
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotLoginDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import io.swagger.annotations.ApiOperation;
@@ -20,10 +21,14 @@ public class OAuthController {
     @PostMapping("/karrot")
     @ApiOperation(value = "당근마켓 OAuth 로그인")
     public CommonResponseBody<KarrotAccessTokenDto> karrotLogin(@RequestBody KarrotLoginDto body) {
-        KarrotAccessTokenDto accessToken = authService.getKarrotAccessToken(body.getAuthorizationCode());
+        KarrotOAuthResponseDto responseDto = authService.getKarrotAccessToken(body.getAuthorizationCode());
+        KarrotAccessTokenDto accessToken = new KarrotAccessTokenDto(responseDto);
+        // accessToken 받아오기
         return CommonResponseBody.<KarrotAccessTokenDto>builder()
                 .success()
                 .data(accessToken)
                 .build();
     }
+
+
 }

@@ -3,26 +3,30 @@ package com.karrotmvp.ourapt.v1.app;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.constant.ApiResult;
 
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping(value = "/api/v1/app")
 public class AppController {
 
   @GetMapping("/health-check")
+  @ApiOperation(value = "서버 HealthCheck")
   public CommonResponseBody<Void> healthCheck() {
     return CommonResponseBody.<Void> builder()
-        .result(ApiResult.SUCCESS)
+        .success()
         .devMessage("I_AM_ALIVE: version_2021_10_14_1522")
         .build();
   }
 
-  @GetMapping("/api-doc")
-  public String redirectToSwaggerUi() {
-    return "redirect::/swagger-ui/index.html";
+  @GetMapping("/docs")
+  @ApiIgnore
+  public RedirectView redirectToSwaggerUi() {
+    RedirectView targetView = new RedirectView();
+    targetView.setUrl("/swagger-ui/index.html");
+    return targetView;
   }
 }

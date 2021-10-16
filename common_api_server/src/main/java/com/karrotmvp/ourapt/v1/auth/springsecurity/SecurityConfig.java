@@ -23,6 +23,10 @@ import org.springframework.web.filter.GenericFilterBean;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+    public static final String[] AUTHORIZATION_CHECK_EXCLUSION_PATTERNS = new String[]{
+            "/api/v1/app/**",
+            "/api/v1/oauth/karrot",
+    };
 
     public GenericFilterBean customFilter() throws Exception {
         return new KarrotOAuthFilter(authenticationManagerBean());
@@ -35,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,
                         "/error",
                         "/favicon.ico",
+                        "/api/v1/docs",
                         "/v2/api-docs",
                         "/swagger-ui/**",
                         "/swagger-resources**",
@@ -57,11 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Try to authenticate this pattern, but I don't check the authority.
                 .requestMatchers(CorsUtils::isPreFlightRequest)
                 .permitAll()
-                .antMatchers(
-                        "/api/v1/app/**",
-                        "/api/v1/oauth/karrot",
-                        "/api/v1/preopen/voting/count"
-                )
+                .antMatchers(AUTHORIZATION_CHECK_EXCLUSION_PATTERNS)
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()

@@ -9,8 +9,10 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.codec.CodecException;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Component
@@ -35,9 +38,17 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
     @Autowired
     private KarrotProperty karrotProperty;
 
+    @Autowired
+    private Environment env;
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public KarrotUserProfileDto asyncGetUserProfileFromKarrot(String accessToken) {
+        if (!Arrays.asList(env.getActiveProfiles()).contains("production")) {
+            if (accessToken.equals("Beaerer ")) {
+            }
+            return new KarrotUserProfileDto("userIdExample", "userNicknameExample");
+        }
         logger.info("KARROT_API_CALLED");
         Mono<KarrotResponseBody<KarrotUserProfileDto>> userProfileMono = webClient.mutate()
                 .defaultHeader(HttpHeaders.AUTHORIZATION, accessToken)

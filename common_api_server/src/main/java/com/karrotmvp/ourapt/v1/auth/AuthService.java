@@ -2,7 +2,7 @@ package com.karrotmvp.ourapt.v1.auth;
 
 import java.util.Base64;
 
-import com.karrotmvp.ourapt.v1.auth.dto.KarrotAccessTokenDto;
+import com.karrotmvp.ourapt.v1.auth.dto.KarrotOAuthResponseDto;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnauthorizedCode;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
@@ -27,7 +27,7 @@ public class AuthService {
     @Autowired
     private KarrotProperty karrotProperty;
 
-    public KarrotAccessTokenDto getKarrotAccessToken(String authorizationCode) {
+    public KarrotOAuthResponseDto getKarrotAccessToken(String authorizationCode) {
         String karrotApiUrl = UriComponentsBuilder.fromUriString(karrotProperty.getOpenApiBaseUrl())
                 .path("/oauth/token")
                 .queryParam("code", authorizationCode)
@@ -35,7 +35,7 @@ public class AuthService {
                 .queryParam("grant_type", "authorization_code")
                 .queryParam("response_type", "code")
                 .build().toUriString();
-        Mono<KarrotAccessTokenDto> responseMono = webClient
+        Mono<KarrotOAuthResponseDto> responseMono = webClient
                 .mutate()
                 .build()
                 .get()
@@ -58,7 +58,7 @@ public class AuthService {
                 .onStatus((httpStatus) -> !httpStatus.equals(HttpStatus.OK), (response) -> {
                     throw new KarrotUnexpectedResponseException("KARROT 서버로 부터 정상적이지 않은 응답을 받았습니다.");
                 })
-                .bodyToMono(KarrotAccessTokenDto.class);
+                .bodyToMono(KarrotOAuthResponseDto.class);
         try {
             return responseMono.blockOptional()
                     .orElseThrow(() -> new KarrotUnexpectedResponseException("KARROT API 응답으로부터 엑세스 토큰을 찾을 수 없습니다."));
