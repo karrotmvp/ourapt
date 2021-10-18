@@ -8,6 +8,7 @@ import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.DuplicatedRequestException;
 import com.karrotmvp.ourapt.v1.preopen.dto.PreopenVotingFormDto;
+import com.karrotmvp.ourapt.v1.preopen.entity.PreopenVotingForm;
 import com.karrotmvp.ourapt.v1.user.User;
 
 import com.karrotmvp.ourapt.v1.user.UserRepository;
