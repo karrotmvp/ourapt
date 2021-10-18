@@ -21,40 +21,61 @@
         <img src="./back-arrow.png" alt="뒤로가기" />
       </div>
     </nav>
-    <h1 class="logo">
-      우리아파트
-    </h1>
+    <h1 class="logo-mvp">당근마켓 MVP 인턴십</h1>
+    <h1 class="logo">우리아파트</h1>
     <h2 class="title">
-      아파트 이웃들과 궁금한 걸 묻고 <br /> 답하는 공간을 준비 중이에요
+      아파트 이웃들과 궁금한 걸 묻고 <br />
+      답하는 공간을 준비 중이에요
     </h2>
-    <h3 class="question">
-      이웃들에게 우리 아파트에 대해 물어볼 게 있나요?
-    </h3>
-    <ul>
+    <h3 class="question">이웃들에게 우리 아파트에 대해 물어볼 게 있나요?</h3>
+    <p class="multiple-selection-info">(중복 선택 가능)</p>
+    <ul id="checkBoxes">
       <li>
         <a id="wantSupply" href="#">
-          <img src="./check-unselect.svg" alt="선택해제" />
+          <img
+            src="./check-selected.svg"
+            alt="선택"
+            id="wantSupplyCheckImage"
+          />
+          <img
+            src="./check-unselect.svg"
+            alt="선택해제"
+            id="wantSupplyUnCheckImage"
+          />
           <p>우리 이웃에게 <strong>묻고 싶은 게</strong> 있어요</p>
         </a>
       </li>
       <li>
         <a id="wantDemand" href="#">
-          <img src="./check-unselect.svg" alt="선택해제" />
+          <img
+            src="./check-selected.svg"
+            alt="선택"
+            id="wantDemandCheckImage"
+          />
+          <img
+            src="./check-unselect.svg"
+            alt="선택해제"
+            id="wantDemandUnCheckImage"
+          />
           <p>이웃의 물음에 대한 <strong>답을 골라줄 수</strong> 있어요</p>
         </a>
       </li>
       <li>
         <a id="justFun" href="#">
-          <img src="./check-unselect.svg" alt="선택해제" />
+          <img src="./check-selected.svg" alt="선택" id="justFunCheckImage" />
+          <img
+            src="./check-unselect.svg"
+            alt="선택해제"
+            id="justFunUnCheckImage"
+          />
           <p>이웃들이 묻고 답한 걸 구경하고 싶어요</p>
         </a>
       </li>
     </ul>
-    <p class="multiple-selection-info">(중복 선택 가능)</p>
     <div class="register-area">
       <p id="register-bubble" class="register-bubble">
         아파트 이웃들이 모이면 알림을 보내드릴게요 <span>😊</span>
-        <br>
+        <br />
         <span class="register-info">
           알림 신청하고 우리아파트 오픈 소식을 놓치지 마세요
         </span>
@@ -62,10 +83,7 @@
       <p id="after-registered-info" class="after-registered-info">
         아파트 이웃들이 모이면 알림을 보내드릴게요!
       </p>
-      <button
-        id="register-btn"
-        class="register-btn register-btn-abled"
-      >
+      <button id="register-btn" class="register-btn register-btn-abled">
         오픈 시 알림 받기
       </button>
     </div>
@@ -84,6 +102,5 @@
   <script src="https://mini-assets.kr.karrotmarket.com/js/0.11.1/index.js"></script>
 
   <!-- 스크립트 -->
-  <script src=“https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js”></script>
   <script src="./index.js"></script>
 </html>

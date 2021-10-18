@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.preopen;
+package com.karrotmvp.ourapt.v1.preopen.entity;
 
 import javax.persistence.*;
 

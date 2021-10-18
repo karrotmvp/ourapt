@@ -20,6 +20,56 @@ const answer = {
 // 맨 처음 페이지 렌더링 할 때: 이미 신청한 사람인지 확인해요
 let urlSearchParams = new URLSearchParams(window.location.search);
 
+//regionID 받아오기
+const regionId = urlSearchParams.get("region_id");
+const isPreload = urlSearchParams.get("preload");
+
+// 슬랙 웹훅 핫픽스
+// 0. 접속시 region에 따라 분기하기
+// 1. 지역별 신규 접속 / 재접속 정보 확인하기 - 코드 유무
+// 2. regionId 통역해주기! 1) 주어진 인천 지역 2) 그 외 지역
+
+function parseNameFromRegionId(regionId) {
+  const regionName = {
+    "996bc98b6583": "송도1동 풍림아이원",
+    "2acd52800525": "송도1동 웰카운티",
+    fe82298e3c63: "송도3동 글로벌캠퍼스푸르지오",
+    "37ac0da953d5": "송도3동 센트럴시티",
+    f9ea71209dee: "송도1동 퍼스트월드",
+    "1f0758ccde06": "송도 1동",
+    a87002cc41f1: "송도 2동",
+    "0b96cc858bf6": "송도 3동",
+    df115ab931cb: "잠실3동 트리지움",
+    e020eb41d01b: "잠실2동 엘스",
+    "6a7eefda7865": "잠실 2동",
+  };
+  return regionName[regionId] ?? "테스트";
+}
+
+sendWebhookToSlack(
+  ` :partying_face: ${parseNameFromRegionId(
+    regionId
+  )}에서 우리 페이지를 방문했어요!`
+);
+
+function sendWebhookToSlack(slackMessage) {
+  if (isPreload === "true") {
+    return;
+  }
+  fetch(
+    `https://hooks.slack.com/services/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`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        channel: "#_apartment_preopen",
+        username: "webhookbot",
+        text: new Date() + slackMessage,
+        icon_emoji: ":rocket:",
+      }),
+    }
+  );
+}
+
 checkIsAgreedOuraptPreopen();
 
 // 이미 신청한 사람이라면?
@@ -76,20 +126,21 @@ async function getMyVote(token) {
 
 function patchMyVote(vote) {
   if (vote.wantSupplyChecked) {
-    answerCheck(document.getElementById("wantSupply"), 0);
-    console.log(answer);
+    answerCheck(document.getElementById("wantSupply"), "wantSupply");
   }
   if (vote.wantDemandChecked) {
-    answerCheck(document.getElementById("wantDemand"), 1);
+    answerCheck(document.getElementById("wantDemand"), "wantDemand");
   }
   if (vote.justFunChecked) {
-    answerCheck(document.getElementById("justFun"), 2);
+    answerCheck(document.getElementById("justFun"), "justFun");
   }
 }
 
 // 선택지 체크 비활성화
 function checkDisable() {
-  document.getElementsByTagName("ul")[0].style.pointerEvents = "none";
+  console.log("들어가요");
+  document.getElementById("checkBoxes").style.pointerEvents = "none";
+  console.log("나가요");
 }
 
 // 사전오픈 신청 버튼 비활성화: 1) 이미 신청한 경우 비활성화됩니다.
@@ -102,10 +153,12 @@ function registerBtnDisable() {
 function answerCheck(item, field) {
   if (answer[field]) {
     answer[field] = false;
-    item.childNodes[1].src = "./check-unselect.svg";
+    document.getElementById(`${field}CheckImage`).style.display = "none";
+    document.getElementById(`${field}UnCheckImage`).style.display = "block";
   } else {
     answer[field] = true;
-    item.childNodes[1].src = "./check-selected.svg";
+    document.getElementById(`${field}CheckImage`).style.display = "block";
+    document.getElementById(`${field}UnCheckImage`).style.display = "none";
   }
 }
 
@@ -118,6 +171,7 @@ async function submitVoting(token) {
       Authorization: token,
     },
     body: JSON.stringify({
+      regionId: regionId,
       wantSupplyChecked: answer.wantSupply,
       wantDemandChecked: answer.wantDemand,
       justFunChecked: answer.justFun,
@@ -126,7 +180,6 @@ async function submitVoting(token) {
   if (response.ok) {
     const resBody = await response.json();
     if (!resBody || resBody.status !== "SUCCESS") {
-      alert(JSON.stringify(resBody, null, 2));
       throw new Error(resBody.devMessage);
     }
     return resBody.data;
@@ -134,7 +187,6 @@ async function submitVoting(token) {
 }
 
 function showAfterRegisteredInfo() {
-  console.log("문구 변경");
   document.getElementById("register-bubble").style.display = "none";
   document.getElementById("after-registered-info").style.display = "block";
 }
@@ -146,7 +198,7 @@ function afterIsAgreedOuraptPreopen() {
   showAfterRegisteredInfo();
 }
 
-// 모달창 열기: 신청버튼을 눌렀을 때, 전체 서버 통신이 안전하게 완료되고 난 다음 띄워줍니다.
+// 모달창 열기: 따로 하지 않기로 결심했어요!
 function openRegisteredModal() {
   document.getElementById("modal").style.display = "block";
 }
@@ -175,6 +227,9 @@ document.getElementById("justFun").addEventListener("click", function (event) {
 document
   .getElementById("register-btn")
   .addEventListener("click", function (event) {
+    sendWebhookToSlack(
+      ` :fire: ${parseNameFromRegionId(regionId)}에서 동의창을 열었어요!`
+    );
     mini.startPreset({
       preset:
         // 알파 앱

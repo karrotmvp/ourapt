@@ -9,8 +9,11 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.codec.CodecException;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,9 +25,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Component
+@Profile({"production"})
 @AllArgsConstructor
 public class KarrotOAuthProvider implements AuthenticationProvider {
     // Spring Security loads all the 'AuthenticationProvider Beans' when it initializes ProviderManager(AuthenticationManager)
@@ -34,6 +39,9 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
 
     @Autowired
     private KarrotProperty karrotProperty;
+
+    @Autowired
+    private Environment env;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

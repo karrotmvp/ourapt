@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.preopen.dto;
 
-import com.karrotmvp.ourapt.v1.preopen.PreopenVotingForm;
+import com.karrotmvp.ourapt.v1.preopen.entity.PreopenVotingForm;
 
 import lombok.Getter;
 import lombok.Setter;
