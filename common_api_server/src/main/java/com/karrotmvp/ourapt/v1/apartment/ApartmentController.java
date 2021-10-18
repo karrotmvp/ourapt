@@ -1,8 +1,6 @@
 package com.karrotmvp.ourapt.v1.apartment;
 
-import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentDto;
-import com.karrotmvp.ourapt.v1.auth.CurrentUser;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfileDto;
+import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentListDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
@@ -19,16 +17,16 @@ public class ApartmentController {
     ModelMapper modelMapper;
 
     @Autowired
-    ApartmentRepository apartmentRepository;
+    ApartmentFindService apartmentFindService;
 
     @GetMapping(value = "/")
     @ApiOperation(value = "region_id(리전 해시 값)들로 아파트 정보 가져오기")
-    public CommonResponseBody<ApartmentDto> getApartmentByRegionId(
-            @RequestParam(name = "regionIds") List<String> regionIds,
-            @CurrentUser KarrotUserProfileDto user
+    public CommonResponseBody<ApartmentListDto> getApartmentByRegionId(
+            @RequestParam(name = "regionIds") List<String> regionIds
     ) {
-        return CommonResponseBody.<ApartmentDto>builder()
+        return CommonResponseBody.<ApartmentListDto>builder()
                 .success()
+                .data(new ApartmentListDto())
                 .build();
     }
 }
