@@ -15,7 +15,7 @@ spring:
 #    resources:
 #      static-locations: classpath:/META_INF/resources/webjars/springfox-swagger-ui/
   datasource:
-    url: jdbc:mariadb://${RDB_HOST}/ourapt
+    url: jdbc:mariadb://${RDB_HOST}/ourapt?useUnicode=true&serverTimezone=Asia/Seoul
     driver-class-name: org.mariadb.jdbc.Driver
     username: ${RDB_USERNAME}
     password: ${RDB_PASSWORD}
