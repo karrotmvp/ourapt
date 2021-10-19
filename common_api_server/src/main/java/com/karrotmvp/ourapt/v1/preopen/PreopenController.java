@@ -3,7 +3,7 @@ package com.karrotmvp.ourapt.v1.preopen;
 import java.util.Date;
 
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfileDto;
+import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfile;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.DuplicatedRequestException;
@@ -34,7 +34,7 @@ public class PreopenController {
     private UserRepository userRepository;
 
     @GetMapping("/me/voting")
-    public CommonResponseBody<PreopenVotingFormDto> getMyVotedForm(@CurrentUser KarrotUserProfileDto user) {
+    public CommonResponseBody<PreopenVotingFormDto> getMyVotedForm(@CurrentUser KarrotUserProfile user) {
         String userId = user.getUserId();
         PreopenVotingForm foundVotingForm = preopenRepository.findById(userId)
                 .orElseThrow(() -> new DataNotFoundFromDBException("Cannot find voting data matched with user", ""));
@@ -47,7 +47,7 @@ public class PreopenController {
 
     @PostMapping("/voting/submit")
     @Transactional
-    public CommonResponseBody<Void> submitVotingForm(@RequestBody(required = true) @Valid PreopenVotingFormDto dto, @CurrentUser KarrotUserProfileDto karrotUser) {
+    public CommonResponseBody<Void> submitVotingForm(@RequestBody(required = true) @Valid PreopenVotingFormDto dto, @CurrentUser KarrotUserProfile karrotUser) {
         PreopenVotingForm preOpenVotingForm = dto.toEntity();
 
         User newUser = karrotUser.toEntity();

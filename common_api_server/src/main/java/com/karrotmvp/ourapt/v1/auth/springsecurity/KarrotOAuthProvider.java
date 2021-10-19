@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.codec.CodecException;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 @Component
@@ -45,9 +43,9 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public KarrotUserProfileDto asyncGetUserProfileFromKarrot(String accessToken) {
+    public KarrotUserProfile asyncGetUserProfileFromKarrot(String accessToken) {
         logger.info("KARROT_API_CALLED");
-        Mono<KarrotResponseBody<KarrotUserProfileDto>> userProfileMono = webClient.mutate()
+        Mono<KarrotResponseBody<KarrotUserProfile>> userProfileMono = webClient.mutate()
                 .defaultHeader(HttpHeaders.AUTHORIZATION, accessToken)
                 .build()
                 .get()
@@ -60,10 +58,10 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
                     throw new KarrotUnexpectedResponseException(
                             "KARROT API 호출 중 예상치 못한 오류");
                 })
-                .bodyToMono(new ParameterizedTypeReference<KarrotResponseBody<KarrotUserProfileDto>>() {
+                .bodyToMono(new ParameterizedTypeReference<KarrotResponseBody<KarrotUserProfile>>() {
                 });
         try {
-            Optional<KarrotResponseBody<KarrotUserProfileDto>> userProfileOptional = userProfileMono.blockOptional();
+            Optional<KarrotResponseBody<KarrotUserProfile>> userProfileOptional = userProfileMono.blockOptional();
             return userProfileOptional
                     .orElseThrow(() -> new KarrotUnexpectedResponseException("KARROT API 응답으로 부터 유저 프로필 찾을 수 없음"))
                     .getData();
@@ -75,7 +73,7 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         try {
-            KarrotUserProfileDto userProfileFromKarrot = asyncGetUserProfileFromKarrot(String.valueOf(authentication.getCredentials()));
+            KarrotUserProfile userProfileFromKarrot = asyncGetUserProfileFromKarrot(String.valueOf(authentication.getCredentials()));
             return createSuccessAuthentication(authentication, userProfileFromKarrot);
         } catch (KarrotInvalidAccessTokenException exception) {
             throw new BadCredentialsException(exception.getMessage());
@@ -90,7 +88,7 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
         return KarrotAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
-    private Authentication createSuccessAuthentication(Authentication authentication, KarrotUserProfileDto karrotUserProfile) {
+    private Authentication createSuccessAuthentication(Authentication authentication, KarrotUserProfile karrotUserProfile) {
         return new KarrotAuthenticationToken(String.valueOf(authentication.getCredentials()), karrotUserProfile);
     }
 

@@ -1,20 +1,25 @@
 package com.karrotmvp.ourapt.v1.apartment.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Date;
 
 
-
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
+@Setter
 public class ApartmentDto {
-    private Long id;
-    private String name;
-    private String friendlyName;
+    private String id;
+    private String keyName;
+    private String channelName;
+    private String nameDepth1;
     private String regionHashDepth1;
+    private String nameDepth2;
     private String regionHashDepth2;
+    private String nameDepth3;
     private String regionHashDepth3;
+    private String nameDepth4;
     private String regionHashDepth4;
+    private int channelDepthLevel;
+    private Date inactiveAt;
 }

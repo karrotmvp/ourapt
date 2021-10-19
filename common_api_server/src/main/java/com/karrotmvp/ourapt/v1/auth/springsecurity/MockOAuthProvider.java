@@ -16,9 +16,9 @@ public class MockOAuthProvider extends KarrotOAuthProvider {
     }
 
     @Override
-    public KarrotUserProfileDto asyncGetUserProfileFromKarrot(String accessToken) {
+    public KarrotUserProfile asyncGetUserProfileFromKarrot(String accessToken) {
         String mockSeed = accessToken.substring(7);
-        return new KarrotUserProfileDto(
+        return new KarrotUserProfile(
                 mockSeed + "_mock_user_id",
                 mockSeed + "_mock_nickname"
         );

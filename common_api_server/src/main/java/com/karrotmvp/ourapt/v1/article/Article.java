@@ -11,4 +11,7 @@ public abstract class Article extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "writer_id", referencedColumnName = "karrot_id")
     private User user;
+
+    @Column(name = "region_id")
+    private String regionId;
 }

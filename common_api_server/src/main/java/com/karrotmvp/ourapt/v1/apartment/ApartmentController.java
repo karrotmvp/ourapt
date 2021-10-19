@@ -1,16 +1,25 @@
 package com.karrotmvp.ourapt.v1.apartment;
 
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentListDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
-import io.swagger.annotations.*;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping(value = "/api/v1/apartment")
@@ -22,36 +31,42 @@ public class ApartmentController {
     @Autowired
     ApartmentFindService apartmentFindService;
 
-    @GetMapping(value = "/")
-    @ApiOperation(value = "region_id로 아파트 정보 가져오기")
+    @Autowired
+    ApartmentRepository repo;
+
+    @GetMapping(value = "")
+    @ApiOperation(value = "depth3 또는 depth4 region_id로 아파트 정보 가져오기")
     public CommonResponseBody<ApartmentListDto> getApartmentByRegionId(
             @RequestParam(name = "regionId") String regionId
     ) {
-        List<Apartment> apartments = apartmentFindService.getApartmentsInRegionId(regionId);
-
         return CommonResponseBody.<ApartmentListDto>builder()
                 .success()
-                .data(new ApartmentListDto(
-                        apartments.stream()
-                                .map((apartment) -> modelMapper.map(apartment, ApartmentDto.class))
-                                .collect(Collectors.toList())))
+                .data(apartmentFindService
+                        .findApartmentsInRegionId(regionId))
                 .build();
     }
 
-    @PostMapping
-    @ApiOperation(value = "아파트 추가")
+    @PostMapping(value = "")
+    @ApiOperation(value = "서비스 하는 아파트 추가 [관리자용]")
+    @Transactional
     public CommonResponseBody<Void> addApartment(
-            @RequestBody String name,
-            @RequestBody String regionHashDepth1,
-            @RequestBody String regionHashDepth2,
-            @RequestBody String regionHashDepth3,
-            @RequestBody String regionHashDepth4,
-            @RequestBody String channelName,
-            @RequestBody String channelDepthLevel
+            @RequestBody ApartmentDto apartment
     ) {
-        System.out.println(name + regionHashDepth1 + channelName);
+        Apartment newApartment = new Apartment();
+        newApartment.setKeyName(apartment.getKeyName());
+        newApartment.setNameDepth1(apartment.getNameDepth1());
+        newApartment.setRegionHashDepth1(apartment.getRegionHashDepth1());
+        newApartment.setNameDepth2(apartment.getNameDepth2());
+        newApartment.setRegionHashDepth2(apartment.getRegionHashDepth2());
+        newApartment.setNameDepth3(apartment.getNameDepth3());
+        newApartment.setRegionHashDepth3(apartment.getRegionHashDepth3());
+        newApartment.setNameDepth4(apartment.getNameDepth4());
+        newApartment.setRegionHashDepth4(apartment.getRegionHashDepth4());
+        newApartment.setInactiveAt(new Date());
+        repo.save(newApartment);
+
         return CommonResponseBody.<Void>builder()
-                    .success()
-                    .build();
+                .success()
+                .build();
     }
 }
