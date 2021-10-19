@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String[] AUTHORIZATION_CHECK_EXCLUSION_PATTERNS = new String[]{
             "/api/v1/app/**",
             "/api/v1/oauth/karrot",
-            "/api/v1/apartment**"
+            "/api/v1/apartment/**"
     };
 
     public GenericFilterBean customFilter() throws Exception {
