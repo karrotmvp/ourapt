@@ -18,7 +18,7 @@ public class PreopenVotingForm extends BaseEntity {
   @Column(name = "karrot_id")
   private String karrotId;
 
-  @Column(name = "region_id", nullable = true, unique = false)
+  @Column(name = "region_id")
   private String regionId;
   
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade type
@@ -38,6 +38,12 @@ public class PreopenVotingForm extends BaseEntity {
   public void setUser(User user) {
     this.karrotId = user.getKarrotId();
     this.user = user;
+  }
+
+  public void setResult(boolean supply, boolean demand, boolean fun) {
+    this.setWantSupplyChecked(supply);
+    this.setWantDemandChecked(demand);
+    this.setJustFunChecked(fun);
   }
   
 }
