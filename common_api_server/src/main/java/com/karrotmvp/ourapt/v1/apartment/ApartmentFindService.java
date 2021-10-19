@@ -24,6 +24,7 @@ public class ApartmentFindService {
         if (apartmentsMatchedByDepth4.size() > 0) {
             return new ApartmentListDto(4, apartmentsMatchedByDepth4
                     .stream()
+                    .filter(Apartment::isActive)
                     .map((apt) -> modelMapper.map(apt, ApartmentDto.class))
                     .collect(Collectors.toList())
             );
@@ -31,6 +32,7 @@ public class ApartmentFindService {
         List<Apartment> apartmentsMatchedByDepth3 = this.apartmentRepository.findByRegionHashDepth3(regionId);
         return new ApartmentListDto(3, apartmentsMatchedByDepth3
                 .stream()
+                .filter(Apartment::isActive)
                 .map((apt) -> modelMapper.map(apt, ApartmentDto.class))
                 .collect(Collectors.toList())
         );

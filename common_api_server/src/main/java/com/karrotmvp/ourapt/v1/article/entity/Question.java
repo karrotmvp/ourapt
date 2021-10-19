@@ -1,22 +1,20 @@
-package com.karrotmvp.ourapt.v1.article;
+package com.karrotmvp.ourapt.v1.article.entity;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Table(name = "aritcle_question")
 @Entity
 @Getter
+@Setter
 public class Question extends Article {
-
-    @Id
-    private String id;
 
     @Column(name = "main_text")
     private String mainText;
 
-    public Question() {
-        this.id = UUID.randomUUID().toString();
-    }
+    @Column(name = "region_id")
+    private String regionId;
+
 }

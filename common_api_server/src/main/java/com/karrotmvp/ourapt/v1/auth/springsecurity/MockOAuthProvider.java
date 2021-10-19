@@ -1,5 +1,6 @@
 package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
+import com.karrotmvp.ourapt.v1.auth.AuthService;
 import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
@@ -11,12 +12,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class MockOAuthProvider extends KarrotOAuthProvider {
     // MockOAuthProvider is a Bean that is injected instead of KarrotOAuthProvider when the Profile is not production
 
-    public MockOAuthProvider(WebClient webClient, KarrotProperty karrotProperty, Environment env) {
-        super(webClient, karrotProperty, env);
+    public MockOAuthProvider(WebClient webClient, KarrotProperty karrotProperty, AuthService authService, Environment env) {
+        super(webClient, karrotProperty, authService, env);
     }
 
     @Override
-    public KarrotUserProfile asyncGetUserProfileFromKarrot(String accessToken) {
+    public KarrotUserProfile checkAccessTokenToKarrotAuthServer(String accessToken) {
         String mockSeed = accessToken.substring(7);
         return new KarrotUserProfile(
                 mockSeed + "_mock_user_id",
