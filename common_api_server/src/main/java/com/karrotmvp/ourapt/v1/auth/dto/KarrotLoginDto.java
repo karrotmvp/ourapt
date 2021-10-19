@@ -6,6 +6,5 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class KarrotLoginDto {
-    private String regionId;
     private String authorizationCode;
 }

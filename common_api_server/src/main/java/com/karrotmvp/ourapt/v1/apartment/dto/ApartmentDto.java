@@ -3,8 +3,6 @@ package com.karrotmvp.ourapt.v1.apartment.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
 
 @Getter
 @Setter
@@ -21,5 +19,4 @@ public class ApartmentDto {
     private String nameDepth4;
     private String regionHashDepth4;
     private int channelDepthLevel;
-    private Date inactiveAt;
 }
