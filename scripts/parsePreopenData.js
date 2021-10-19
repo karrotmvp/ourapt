@@ -207,7 +207,7 @@ const data2 = [
   },
   {
     region_id: 'bf0ad88cdb07',
-    'count(*)': 1,
+    'count(*)': 2,
   },
   {
     region_id: 'bfe5ece31a26',
@@ -231,7 +231,7 @@ const data2 = [
   },
   {
     region_id: 'f9ea71209dee',
-    'count(*)': 1,
+    'count(*)': 3,
   },
   {
     region_id: 'fe82298e3c63',
