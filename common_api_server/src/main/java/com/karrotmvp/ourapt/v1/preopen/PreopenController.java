@@ -3,9 +3,8 @@ package com.karrotmvp.ourapt.v1.preopen;
 
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfile;
-import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.preopen.dto.PreopenReservationDto;
-import com.karrotmvp.ourapt.v1.preopen.dto.PreopenVotingFormDto;
 import com.karrotmvp.ourapt.v1.preopen.entity.PreopenVotingForm;
 import com.karrotmvp.ourapt.v1.user.User;
 import com.karrotmvp.ourapt.v1.user.UserRepository;

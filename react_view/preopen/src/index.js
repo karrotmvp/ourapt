@@ -23,6 +23,7 @@ let urlSearchParams = new URLSearchParams(window.location.search);
 //regionID 받아오기
 const regionId = urlSearchParams.get("region_id");
 const isPreload = urlSearchParams.get("preload");
+document.getElementById("temp").innerHTML = urlSearchParams.get("code");
 
 // 슬랙 웹훅 핫픽스
 // 0. 접속시 region에 따라 분기하기

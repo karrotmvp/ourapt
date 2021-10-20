@@ -1,5 +1,6 @@
 package com.karrotmvp.ourapt.v1.common;
 
+import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.AbstractWebApplicationContextException;
 
 import org.slf4j.Logger;

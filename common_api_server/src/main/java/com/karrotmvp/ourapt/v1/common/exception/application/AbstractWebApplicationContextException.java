@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.common.exception.application;
 
-import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.constant.ApiResult;
 
 import lombok.Getter;

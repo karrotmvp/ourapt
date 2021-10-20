@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotOAuthResponseDto;
 import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfile;
-import com.karrotmvp.ourapt.v1.common.KarrotResponseBody;
+import com.karrotmvp.ourapt.v1.common.dto.KarrotResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnauthorizedCode;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import com.karrotmvp.ourapt.v1.common.exception.security.KarrotInvalidAccessTokenException;
@@ -14,6 +14,7 @@ import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,8 @@ import reactor.core.publisher.Mono;
 public class AuthService {
 
     @Autowired
-    private WebClient webClient;
+    @Qualifier("karrotOpenApiClient")
+    private WebClient karrotOpenApiClient;
 
     @Autowired
     private KarrotProperty karrotProperty;
@@ -37,69 +39,59 @@ public class AuthService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public KarrotOAuthResponseDto getKarrotAccessToken(String authorizationCode) {
-        String karrotApiUrl = UriComponentsBuilder.fromUriString(karrotProperty.getOpenApiBaseUrl())
+        String karrotApiUrl = UriComponentsBuilder
+                .fromUriString(karrotProperty.getOpenApiBaseUrl())
                 .path("/oauth/token")
                 .queryParam("code", authorizationCode)
                 .queryParam("scope", "account/profile")
                 .queryParam("grant_type", "authorization_code")
                 .queryParam("response_type", "code")
                 .build().toUriString();
-        Mono<KarrotOAuthResponseDto> responseMono = webClient
-                .mutate()
-                .build()
+        return karrotOpenApiClient
                 .get()
                 .uri(karrotApiUrl)
-                .headers(headers -> {
-                            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-                            headers.add(HttpHeaders.AUTHORIZATION, assembleBasicToken(
-                                    karrotProperty.getAppId(),
-                                    karrotProperty.getAppSecret()
-                            ));
-                        }
-                )
+                .header(HttpHeaders.AUTHORIZATION, assembleBasicToken(
+                        karrotProperty.getAppId(),
+                        karrotProperty.getAppSecret()
+                ))
                 .retrieve()
                 .onStatus((httpStatus) -> httpStatus.equals(HttpStatus.UNAUTHORIZED), (response) -> {
                     throw new KarrotUnexpectedResponseException("잘못된 KARROT APP ID 입니다.");
                 })
                 .onStatus((httpStatus) -> httpStatus.equals(HttpStatus.BAD_REQUEST), (response) -> {
-                    throw new KarrotUnauthorizedCode("유효하지 않은 KARROT authorization code 입니다." , "");
+                    throw new KarrotUnauthorizedCode("유효하지 않은 KARROT authorization code 입니다.", "");
                 })
                 .onStatus((httpStatus) -> !httpStatus.equals(HttpStatus.OK), (response) -> {
                     throw new KarrotUnexpectedResponseException("KARROT 서버로 부터 정상적이지 않은 응답을 받았습니다.");
                 })
-                .bodyToMono(KarrotOAuthResponseDto.class);
-        try {
-            return responseMono.blockOptional()
-                    .orElseThrow(() -> new KarrotUnexpectedResponseException("KARROT API 응답으로부터 엑세스 토큰을 찾을 수 없습니다."));
-        } catch(CodecException ce) {
-            throw new KarrotUnexpectedResponseException("Karrot 서버의 응답을 역직렬화 할 수 없음", ce);
-        }
+                .bodyToMono(KarrotOAuthResponseDto.class)
+                .doOnError(CodecException.class, (ce) -> {
+                    throw new KarrotUnexpectedResponseException("Karrot 서버의 응답을 역직렬화 할 수 없음", ce);
+                })
+                .blockOptional()
+                .orElseThrow(() -> new KarrotUnexpectedResponseException("KARROT API 응답으로부터 엑세스 토큰을 찾을 수 없습니다."));
     }
 
     public KarrotUserProfile asyncGetUserProfileFromKarrot(String accessToken) {
-        Mono<KarrotResponseBody<KarrotUserProfile>> userProfileMono = webClient.mutate()
-                .defaultHeader(HttpHeaders.AUTHORIZATION, accessToken)
-                .build()
+        return karrotOpenApiClient
                 .get()
-                .uri(karrotProperty.getOpenApiBaseUrl() + "/api/v1/users/me")
+                .uri("/api/v1/users/me")
+                .header(HttpHeaders.AUTHORIZATION, accessToken)
                 .retrieve()
                 .onStatus((httpStatus) -> httpStatus.equals(HttpStatus.UNAUTHORIZED), (response) -> {
                     throw new KarrotInvalidAccessTokenException("유효하지 않은 Karrot AccessToken 입니다");
                 })
                 .onStatus((httpStatus) -> !httpStatus.equals(HttpStatus.OK), (response) -> {
-                    throw new KarrotUnexpectedResponseException(
-                            "KARROT API 호출 중 예상치 못한 오류");
+                    throw new KarrotUnexpectedResponseException("KARROT API 호출 중 예상치 못한 오류");
                 })
-                .bodyToMono(new ParameterizedTypeReference<>() {
-                });
-        try {
-            Optional<KarrotResponseBody<KarrotUserProfile>> userProfileOptional = userProfileMono.blockOptional();
-            return userProfileOptional
-                    .orElseThrow(() -> new KarrotUnexpectedResponseException("KARROT API 응답으로 부터 유저 프로필 찾을 수 없음"))
-                    .getData();
-        } catch (org.springframework.core.codec.CodecException e) {
-            throw new KarrotUnexpectedResponseException("Karrot 서버의 응답을 역직렬화 할 수 없음", e);
-        }
+                .bodyToMono(new ParameterizedTypeReference<KarrotResponseBody<KarrotUserProfile>>() {
+                })
+                .doOnError(org.springframework.core.codec.CodecException.class, (e) -> {
+                    throw new KarrotUnexpectedResponseException("Karrot 서버의 응답을 역직렬화 할 수 없음", e);
+                })
+                .blockOptional()
+                .orElseThrow(() -> new KarrotUnexpectedResponseException("KARROT API 응답으로 부터 유저 프로필 찾을 수 없음"))
+                .getData();
     }
 
     private String assembleBasicToken(String appId, String appSecret) {

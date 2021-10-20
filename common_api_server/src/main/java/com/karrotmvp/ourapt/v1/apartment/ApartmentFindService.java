@@ -29,6 +29,7 @@ public class ApartmentFindService {
                     .collect(Collectors.toList())
             );
         }
+
         List<Apartment> apartmentsMatchedByDepth3 = this.apartmentRepository.findByRegionHashDepth3(regionId);
         return new ApartmentListDto(3, apartmentsMatchedByDepth3
                 .stream()

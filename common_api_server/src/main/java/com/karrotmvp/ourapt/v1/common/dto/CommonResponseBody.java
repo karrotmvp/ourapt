@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.common;
+package com.karrotmvp.ourapt.v1.common.dto;
 
 import java.io.Serializable;
 

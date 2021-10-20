@@ -3,7 +3,7 @@ package com.karrotmvp.ourapt.v1.article;
 import com.karrotmvp.ourapt.v1.article.dto.QuestionDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfile;
-import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

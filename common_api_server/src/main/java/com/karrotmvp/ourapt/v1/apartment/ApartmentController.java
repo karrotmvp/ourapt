@@ -1,13 +1,11 @@
 package com.karrotmvp.ourapt.v1.apartment;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentListDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
-import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
