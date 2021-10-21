@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api/v1/oauth")
 public class OAuthController {
@@ -48,6 +50,7 @@ public class OAuthController {
         }
 
         User newUser = userProfile.toEntity();
+        newUser.setPushAgreedAt(new Date());
         userRepository.save(newUser);
 
         return CommonResponseBody.<KarrotAccessTokenDto>builder()
