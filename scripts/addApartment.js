@@ -1,67 +1,46 @@
-const axios = require('axios');
-const { dict } = require('./regionHashDict');
-require('dotenv').config();
+const utils = require('./libs/api');
+const converter = require('./libs/regionIdConverter');
 
-const API_KEY = process.env.API_KEY;
-const OAPI_KARROT_BASE_URL = 'https://oapi.kr.karrotmarket.com';
-const BASE_URL = 'http://localhost:5000';
-const DEBUG = false;
+// usage node ./addApartment.js startRegionId endRegionId;
+// 범위에 속한 리전 중, serviceArea로 정한 depth3에 속하는 폴리곤이 지정된 아파트들을 ourapt DB에 등록해줌
+function checkRegionInvalid(region) {
+  const serviceArea = [
+    '송도1동',
+    '송도2동',
+    '송도3동',
+    '잠실1동',
+    '잠실2동',
+    '잠실3동',
+  ];
+  return serviceArea.includes(region.name3) && region.id !== region.name3Id;
+}
 
-const commonHeader = {
-  'Content-Type': 'application/json',
-};
-
-axios
-  .get(OAPI_KARROT_BASE_URL + '/api/v2/regions/by_ids', {
-    headers: {
-      ...commonHeader,
-      'X-API-Key': API_KEY,
-    },
-    params: {
-      ids: Object.keys(dict).join(','),
-    },
-  })
-  .then((response) => {
-    const regions = response.data.data.regions.sort();
-
-    if (DEBUG) {
-      console.log(regions);
-      return;
-    }
-    regions.forEach((region) => {
-      axios
-        .post(
-          BASE_URL + '/api/v1/apartment',
-          {
-            id: null,
-            keyName: region.name,
-            channelName: null,
-            channelDepthLevel: 0,
-            nameDepth1: region.name1,
-            regionHashDepth1: region.name1Id,
-            nameDepth2: region.name2,
-            regionHashDepth2: region.name2Id,
-            nameDepth3: region.name3,
-            regionHashDepth3: region.name3Id,
-            nameDepth4: region.id !== region.name3Id ? region.name : null,
-            regionHashDepth4: region.id !== region.name3Id ? region.id : null,
-          },
-          {
-            headers: {
-              ...commonHeader,
-              Authorization: 'Bearer jacob',
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response.status);
+async function addApartmentsByRegionIdDepth4(depth4Ids) {
+  const regionHashes = depth4Ids.map(converter.convertToRegionHash);
+  const regions = await utils.getRegionByHashesFromKarrot(regionHashes);
+  regions
+    .filter((region) => checkRegionInvalid(region))
+    .forEach((region) => {
+      utils
+        .addApartmentRegionToService(region)
+        .then(() => {
+          console.log(200, 'SUCCESS', region.id, region.name);
         })
         .catch((err) => {
-          console.log(err);
-          process.exit(1);
+          console.log(err.response.status, 'FAIL', region.id, region.name);
         });
     });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+}
+
+const startNum = Number(process.argv[2]);
+const endNum = Number(process.argv[3]);
+if (endNum - startNum > 50) {
+  console.log('too many nums');
+  process.exit(1);
+}
+const regionIds = [];
+for (let i = startNum; i < endNum; i++) {
+  regionIds.push(i);
+}
+
+addApartmentsByRegionIdDepth4(regionIds);
