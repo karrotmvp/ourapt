@@ -50,7 +50,6 @@ public class OAuthController {
         }
 
         User newUser = userProfile.toEntity();
-        newUser.setPushAgreedAt(new Date());
         userRepository.save(newUser);
 
         return CommonResponseBody.<KarrotAccessTokenDto>builder()

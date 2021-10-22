@@ -5,16 +5,11 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Table(name = "article_question")
 @Entity
 @Getter
 @Setter
+@DiscriminatorValue(value = "Q")
 public class Question extends Article {
-
     @Column(name = "main_text")
     private String mainText;
-
-    @Column(name = "region_id")
-    private String regionId;
-
 }

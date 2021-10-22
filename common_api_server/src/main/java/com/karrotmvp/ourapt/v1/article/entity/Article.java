@@ -8,7 +8,10 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.UUID;
 
-@MappedSuperclass
+@Table(name = "article")
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "DTYPE")
 public abstract class Article extends BaseEntity {
 
     @Id
