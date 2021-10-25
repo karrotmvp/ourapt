@@ -23,6 +23,7 @@ import org.springframework.web.filter.GenericFilterBean;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
     public static final String[] AUTHORIZATION_CHECK_EXCLUSION_PATTERNS = new String[]{
             "/api/v1/app/**",
             "/api/v1/oauth/karrot",
@@ -44,7 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v2/api-docs",
                         "/swagger-ui/**",
                         "/swagger-resources**",
-                        "/swagger-resources/**"
+                        "/swagger-resources/**",
+                        "/admin**",
+                        "/admin/**"
                 );
     }
 

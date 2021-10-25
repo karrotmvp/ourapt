@@ -1,4 +1,5 @@
 const { dict, getNameByRegionId } = require('./regionHashDict');
+
 const data = [
   {
     region_id: '0601eb4940ba',
@@ -265,3 +266,5 @@ function toCSV2(sourceData) {
 }
 
 console.log(toCSV2(labelToPreopenData(data2)));
+
+module.exports = {};

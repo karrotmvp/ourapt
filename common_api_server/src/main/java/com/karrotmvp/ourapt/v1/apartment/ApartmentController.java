@@ -1,23 +1,16 @@
 package com.karrotmvp.ourapt.v1.apartment;
 
-import java.util.Date;
-
 import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentDto;
-import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentListDto;
+import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentsInRegionDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
-
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import io.swagger.annotations.ApiOperation;
+import java.util.Date;
 
 @RestController
 @RequestMapping(value = "/api/v1/apartment")
@@ -30,14 +23,15 @@ public class ApartmentController {
     ApartmentFindService apartmentFindService;
 
     @Autowired
-    ApartmentRepository repo;
+    ApartmentRepository apartmentRepository;
+
 
     @GetMapping(value = "")
     @ApiOperation(value = "depth3 또는 depth4 region_id로 아파트 정보 가져오기")
-    public CommonResponseBody<ApartmentListDto> getApartmentByRegionId(
+    public CommonResponseBody<ApartmentsInRegionDto> getApartmentByRegionId(
             @RequestParam(name = "regionId") String regionId
     ) {
-        return CommonResponseBody.<ApartmentListDto>builder()
+        return CommonResponseBody.<ApartmentsInRegionDto>builder()
                 .success()
                 .data(apartmentFindService
                         .findApartmentsInRegionId(regionId))
@@ -61,7 +55,7 @@ public class ApartmentController {
         newApartment.setNameDepth4(apartment.getNameDepth4());
         newApartment.setRegionHashDepth4(apartment.getRegionHashDepth4());
         newApartment.setInactiveAt(new Date());
-        repo.save(newApartment);
+        apartmentRepository.save(newApartment);
 
         return CommonResponseBody.<Void>builder()
                 .success()

@@ -32,6 +32,13 @@ spring:
       enabled: false
     restart:
       enabled: false
+  thymeleaf:
+    prefix: classpath:/thymeleaf/
+    check-template-location: true
+    suffix: .html
+    mode: HTML
+    cache: false
+    order: 0
 
 karrot:
   api:

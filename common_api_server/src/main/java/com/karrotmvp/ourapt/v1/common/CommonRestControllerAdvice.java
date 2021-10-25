@@ -3,6 +3,7 @@ package com.karrotmvp.ourapt.v1.common;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.AbstractWebApplicationContextException;
 
+import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class CommonRestControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler({Exception.class, RuntimeException.class})
+    @ExceptionHandler({Exception.class, RuntimeException.class, KarrotUnexpectedResponseException.class})
     public CommonResponseBody<Void> handleUnexpectedException(Exception exception) {
         logger.error(exception.getMessage());
         return CommonResponseBody.<Void>builder()

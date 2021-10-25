@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApartmentListDto {
+public class ApartmentsInRegionDto {
    @ApiModelProperty(value = "받은 region_id의 depth", notes = "depth3일 경우 apartments의 길이가 1이상, depth4일 경우 1")
    private int regionDepth;
 

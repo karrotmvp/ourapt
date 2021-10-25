@@ -22,7 +22,7 @@ public abstract class Article extends BaseEntity {
     @JoinColumn(name = "writer_id", referencedColumnName = "karrot_id")
     @Getter
     @Setter
-    private User user;
+    private User writer;
 
     @Column(name = "region_id")
     @Getter
