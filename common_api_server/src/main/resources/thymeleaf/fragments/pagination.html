@@ -1,0 +1,25 @@
+<nav th:fragment="pagination (currentPage, display, perPage, isLastPage, url, countOfAll)"
+     th:with="start=${display * ((currentPage - 1) / (display)) + 1}, end=${display * ((currentPage - 1) / display) + display}, last=${countOfAll / perPage + 1}"
+     style="text-align: center">
+    <ul class="pagination">
+        <li th:class="${start == 1 ? 'disabled' : ''}">
+            <a th:href="${#strings.concat(url, '?pageNum=', start - 1, '&perPage=', perPage)}"
+               th:style="${start == 1 ? 'pointer-events: none;' : ''}"
+               aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <th:block th:each="i : ${#numbers.sequence(start, start <= last && last <= end ? last : end )}">
+            <li th:class="${i == currentPage ? 'active' : ''}"><a
+                    th:href="${#strings.concat(url, '?pageNum=', i, '&perPage=', perPage)}" th:text="${i}"></a></li>
+        </th:block>
+        <li th:class="${start <= last && last <= end ? 'disabled' : ''}">
+            <a th:href="${#strings.concat(url, '?pageNum=', end + 1, '&perPage=', perPage)}"
+               th:style="${start <= last && last <= end ? 'pointer-events: none;' : ''}"
+               aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+    <script> console.log(window.location.search)</script>
+</nav>

@@ -1,18 +1,20 @@
 package com.karrotmvp.ourapt.v1.article.dto;
 
+import com.karrotmvp.ourapt.v1.user.dto.KarrotOApiUserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
+import java.util.Date;
 
-
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 public class QuestionDto {
-    @NotNull
+    private String id;
     private String mainText;
-    @NotNull
     private String regionId;
+    private KarrotOApiUserDto writer;
+    private Date createdAt;
+    private Date updatedAt;
 }

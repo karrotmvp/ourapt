@@ -1,16 +1,13 @@
 package com.karrotmvp.ourapt.v1.auth;
 
-import java.util.Base64;
-import java.util.Optional;
-
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotOAuthResponseDto;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfile;
-import com.karrotmvp.ourapt.v1.common.dto.KarrotResponseBody;
+import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserProfileDto;
+import com.karrotmvp.ourapt.v1.common.dto.KarrotOpenApiResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnauthorizedCode;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import com.karrotmvp.ourapt.v1.common.exception.security.KarrotInvalidAccessTokenException;
 import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
-
+import io.netty.handler.codec.CodecException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +15,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import io.netty.handler.codec.CodecException;
-import reactor.core.publisher.Mono;
+import java.util.Base64;
 
 @Service
 public class AuthService {
@@ -72,7 +67,7 @@ public class AuthService {
                 .orElseThrow(() -> new KarrotUnexpectedResponseException("KARROT API 응답으로부터 엑세스 토큰을 찾을 수 없습니다."));
     }
 
-    public KarrotUserProfile asyncGetUserProfileFromKarrot(String accessToken) {
+    public KarrotOpenApiUserProfileDto asyncGetUserProfileFromKarrot(String accessToken) {
         return karrotOpenApiClient
                 .get()
                 .uri("/api/v1/users/me")
@@ -84,7 +79,7 @@ public class AuthService {
                 .onStatus((httpStatus) -> !httpStatus.equals(HttpStatus.OK), (response) -> {
                     throw new KarrotUnexpectedResponseException("KARROT API 호출 중 예상치 못한 오류");
                 })
-                .bodyToMono(new ParameterizedTypeReference<KarrotResponseBody<KarrotUserProfile>>() {
+                .bodyToMono(new ParameterizedTypeReference<KarrotOpenApiResponseBody<KarrotOpenApiUserProfileDto>>() {
                 })
                 .doOnError(org.springframework.core.codec.CodecException.class, (e) -> {
                     throw new KarrotUnexpectedResponseException("Karrot 서버의 응답을 역직렬화 할 수 없음", e);

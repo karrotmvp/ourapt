@@ -1,9 +1,9 @@
 package com.karrotmvp.ourapt.v1.article;
 
-import com.karrotmvp.ourapt.v1.article.dto.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.dto.QuestionFormDto;
 import com.karrotmvp.ourapt.v1.article.dto.QuestionListDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfile;
+import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserProfileDto;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +36,8 @@ public class QuestionController {
     @PostMapping
     @ApiOperation(value = "새로운 질문 작성")
     public CommonResponseBody<Void> submitNewQuestion(
-            @RequestBody @Valid QuestionDto submitted,
-            @CurrentUser KarrotUserProfile userProfile
+            @RequestBody @Valid QuestionFormDto submitted,
+            @CurrentUser KarrotOpenApiUserProfileDto userProfile
     ) {
         this.questionService.writeNewQuestion(submitted, userProfile.toEntity());
         return CommonResponseBody.<Void>builder()

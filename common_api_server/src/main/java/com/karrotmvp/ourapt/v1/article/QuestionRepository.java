@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question, String> {
 
-
     @Query("SELECT q FROM Question q " +
             "WHERE q.createdAt < :dateCursor " +
             "ORDER BY q.createdAt DESC")
@@ -18,5 +17,9 @@ public interface QuestionRepository extends JpaRepository<Question, String> {
             Date dateCursor,
             Pageable pageable
     );
+
+    List<Question> findByOrderByCreatedAtDesc(Pageable pageable);
+
+    long countByMainTextNot(String mainText);
 
 }

@@ -2,7 +2,7 @@ package com.karrotmvp.ourapt.v1.preopen;
 
 
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfile;
+import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserProfileDto;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.preopen.dto.PreopenReservationDto;
 import com.karrotmvp.ourapt.v1.preopen.entity.PreopenVotingForm;
@@ -35,7 +35,7 @@ public class PreopenController {
     @Transactional
     public CommonResponseBody<Void> reservationNotification(
             @RequestBody @Valid PreopenReservationDto submit,
-            @CurrentUser KarrotUserProfile userProfile
+            @CurrentUser KarrotOpenApiUserProfileDto userProfile
     ) {
         User foundUser = userRepository
                 .findById(userProfile.getUserId())

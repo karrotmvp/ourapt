@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public class KarrotAuthenticationToken extends AbstractAuthenticationToken {
 
   private final String credentials;
-  private final KarrotUserProfile principal;
+  private final KarrotOpenApiUserProfileDto principal;
 
   public KarrotAuthenticationToken(String authorizationCode) {
     super(null);
@@ -17,7 +17,7 @@ public class KarrotAuthenticationToken extends AbstractAuthenticationToken {
     this.setAuthenticated(false);
   }
 
-  public KarrotAuthenticationToken(String bearerToken, KarrotUserProfile userProfile) {
+  public KarrotAuthenticationToken(String bearerToken, KarrotOpenApiUserProfileDto userProfile) {
     super(Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
     this.credentials = bearerToken;
     this.principal = userProfile;
@@ -30,7 +30,7 @@ public class KarrotAuthenticationToken extends AbstractAuthenticationToken {
   }
 
   @Override
-  public KarrotUserProfile getPrincipal() {
+  public KarrotOpenApiUserProfileDto getPrincipal() {
     return this.principal;
   }
   

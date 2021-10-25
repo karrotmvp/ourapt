@@ -2,7 +2,6 @@ package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
 import com.karrotmvp.ourapt.v1.auth.AuthService;
 import com.karrotmvp.ourapt.v1.common.exception.security.KarrotInvalidAccessTokenException;
-import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -16,7 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 @Profile({"production | alpha"})
@@ -32,14 +30,14 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public KarrotUserProfile checkAccessTokenToKarrotAuthServer(String accessToken) {
+    public KarrotOpenApiUserProfileDto checkAccessTokenToKarrotAuthServer(String accessToken) {
         return authService.asyncGetUserProfileFromKarrot(accessToken);
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         try {
-            KarrotUserProfile userProfileFromKarrot = checkAccessTokenToKarrotAuthServer(String.valueOf(authentication.getCredentials()));
+            KarrotOpenApiUserProfileDto userProfileFromKarrot = checkAccessTokenToKarrotAuthServer(String.valueOf(authentication.getCredentials()));
             return createSuccessAuthentication(authentication, userProfileFromKarrot);
         } catch (KarrotInvalidAccessTokenException exception) {
             throw new BadCredentialsException(exception.getMessage());
@@ -54,7 +52,7 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
         return KarrotAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
-    private Authentication createSuccessAuthentication(Authentication authentication, KarrotUserProfile karrotUserProfile) {
+    private Authentication createSuccessAuthentication(Authentication authentication, KarrotOpenApiUserProfileDto karrotUserProfile) {
         return new KarrotAuthenticationToken(String.valueOf(authentication.getCredentials()), karrotUserProfile);
     }
 

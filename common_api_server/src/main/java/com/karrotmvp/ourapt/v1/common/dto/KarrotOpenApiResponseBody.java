@@ -1,13 +1,12 @@
 package com.karrotmvp.ourapt.v1.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class KarrotResponseBody<T> {
+public class KarrotOpenApiResponseBody<T> {
 
     @JsonProperty("status")
     private int status;

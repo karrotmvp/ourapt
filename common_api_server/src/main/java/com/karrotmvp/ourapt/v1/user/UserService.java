@@ -1,14 +1,19 @@
 package com.karrotmvp.ourapt.v1.user;
 
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotUserProfile;
+import com.karrotmvp.ourapt.v1.common.dto.KarrotOApiError;
+import com.karrotmvp.ourapt.v1.common.dto.KarrotOApiResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
+import com.karrotmvp.ourapt.v1.user.dto.KarrotOApiUserDto;
+import com.karrotmvp.ourapt.v1.user.dto.KarrotOApiUserListDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -20,21 +25,23 @@ public class UserService {
     @Qualifier("karrotOApiClient")
     private WebClient karrotOApiClient;
 
-    public KarrotUserProfile getKarrotUserProfilesByIds(List<String> ids) {
-        Map response = this.karrotOApiClient
+    public List<KarrotOApiUserDto> getKarrotUserProfilesByIds(Set<String> ids) {
+        KarrotOApiResponseBody<KarrotOApiUserListDto> responseBody = this.karrotOApiClient
                 .get()
-                .uri("/api/v2/users/by_ids" + String.join(",", ids))
+                .uri("/api/v2/users/by_ids?ids=" + String.join(",", ids))
                 .retrieve()
                 .onStatus(status -> !status.is2xxSuccessful(), (resp) -> {
-                    throw new KarrotUnexpectedResponseException("got " + resp.statusCode() + "from karrot-opai");
+                    throw new KarrotUnexpectedResponseException("KARROT OAPI 호출 중에 " + resp.statusCode() + "응답을 받았습니다.");
                 })
-                .bodyToMono(Map.class)
+                .bodyToMono(new ParameterizedTypeReference<KarrotOApiResponseBody<KarrotOApiUserListDto>>() {})
                 .blockOptional()
-                .orElse(null);
-//    if (response.get("errors") != null) {
-//
-//    }
-        return null;
+                .orElseThrow(() -> new KarrotUnexpectedResponseException("정상적이지 않은 KarrotOAPI 응답입니다"));
+        if (responseBody.getErrors() != null) {
+            throw new KarrotUnexpectedResponseException(responseBody.getErrors().stream()
+                    .map(KarrotOApiError::getMessage)
+                    .collect(Collectors.joining(", ")));
+        }
+        return responseBody.getData().getUsers();
     }
 
 
