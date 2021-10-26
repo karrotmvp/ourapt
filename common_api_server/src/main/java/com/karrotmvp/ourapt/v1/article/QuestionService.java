@@ -78,6 +78,8 @@ public class QuestionService {
                 (q) -> q.getWriter().getId(),
                 KarrotOApiUserDto::getId,
                 QuestionDto::setWriter
-        );
+        ).stream()
+                .sorted((qd1, qd2) -> (int) (qd2.getCreatedAt().getTime() - qd1.getCreatedAt().getTime()))
+                .collect(Collectors.toList());
     }
 }

@@ -1,7 +1,6 @@
 package com.karrotmvp.ourapt.admin;
 
 import com.karrotmvp.ourapt.v1.apartment.ApartmentFindService;
-import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentsInRegionDto;
 import com.karrotmvp.ourapt.v1.article.QuestionService;
 import com.karrotmvp.ourapt.v1.article.dto.QuestionDto;
 import com.karrotmvp.ourapt.v1.common.Static;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
