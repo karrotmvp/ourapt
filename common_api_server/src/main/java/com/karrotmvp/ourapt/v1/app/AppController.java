@@ -1,5 +1,8 @@
 package com.karrotmvp.ourapt.v1.app;
 
+import java.text.SimpleDateFormat;
+
+import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +20,10 @@ public class AppController {
   @GetMapping("/health-check")
   @ApiOperation(value = "서버 HealthCheck")
   public CommonResponseBody<Void> healthCheck() {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_hhmmss");
     return CommonResponseBody.<Void> builder()
         .success()
-        .devMessage("I_AM_ALIVE: version_2021_10_26_1206")
+        .devMessage("I_AM_ALIVE: version_" + formatter.format(Static.serverStartTime))
         .build();
   }
 

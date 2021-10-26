@@ -1,10 +1,12 @@
 package com.karrotmvp.ourapt.v1.common;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Static {
     public static Map<String, String> apartmentDict = new HashMap<>();
+    public static Date serverStartTime;
 
     static {
         //depth3
