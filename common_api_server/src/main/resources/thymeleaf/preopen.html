@@ -1,47 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<div th:replace="fragments/head.html :: head(title = '우리아파트 관리자 페이지')"></div>
-<body>
-<div th:replace="fragments/navbar.html :: navbar(brand = '우리아파트', activeIndex = '2')"></div>
-<div>
-    <table class="table">
+  <div
+    th:replace="fragments/head.html :: head(title = '우리아파트 관리자 페이지')"
+  ></div>
+  <body>
+    <div
+      th:replace="fragments/navbar.html :: navbar(brand = '우리아파트', activeIndex = '2')"
+    ></div>
+    <div>
+      <div style="text-align: center">
+        <h1>사전예약 신청수 (지역별)</h1>
+        <h4 th:text="${#strings.concat('전체: ', countOfAll)}"></h4>
+      </div>
+      <table class="table">
         <thead>
-            <th>순번</th>
-            <th>서비스지역</th>
-            <th>지역해시</th>
+          <th>순번</th>
+          <th>서비스지역</th>
+          <th>지역ID(hash)</th>
+          <th>사전예약 수</th>
         </thead>
         <tbody>
-            <tr th:each="apt, index : ${apartments}">
-                <td th:text="${index.index}"></td>
-                <td th:text="${apt[0]}"></td>
-                <td th:text="${apt[1]}"></td>
-            </tr>
+          <tr th:each="apt, index : ${apartments}">
+            <td th:text="${index.index}"></td>
+            <td th:text="${apt[0]}"></td>
+            <td th:text="${apt[1]}"></td>
+            <td th:text="${apt[2]}"></td>
+          </tr>
         </tbody>
-<!--        <thead>-->
-<!--            <th>순번</th>-->
-<!--            <th>지역해시</th>-->
-<!--            <th>지역이름</th>-->
-<!--            <th>신청일</th>-->
-<!--        </thead>-->
-<!--        <thead>-->
-<!--            <th>순번</th>-->
-<!--            <th>신청자ID</th>-->
-<!--            <th></th>-->
-<!--            <th></th>-->
-<!--            <th></th>-->
-<!--            <th>신청일</th>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr th:each="">-->
-<!--            <td th:text></td>-->
-<!--            <td th:text></td>-->
-<!--            <td th:text></td>-->
-<!--            <td th:text></td>-->
-<!--            <td th:text></td>-->
-<!--            <td th:text></td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-    </table>
-</div>
-</body>
+      </table>
+    </div>
+  </body>
 </html>

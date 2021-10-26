@@ -1,18 +1,21 @@
 package com.karrotmvp.ourapt.admin;
 
+import com.karrotmvp.ourapt.v1.apartment.ApartmentFindService;
+import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentsInRegionDto;
 import com.karrotmvp.ourapt.v1.article.QuestionService;
 import com.karrotmvp.ourapt.v1.article.dto.QuestionDto;
 import com.karrotmvp.ourapt.v1.common.Static;
+import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
+import com.karrotmvp.ourapt.v1.preopen.entity.PreopenVotingForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -21,6 +24,13 @@ public class AdminPageController {
 
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private ApartmentFindService apartmentFindService;
+
+    @Autowired
+    private PreopenRepository preopenRepository;
+
 
     @GetMapping("")
     public String renderIndex() {
@@ -49,17 +59,31 @@ public class AdminPageController {
     }
 
     @GetMapping("/preopen")
-    public String renderPreopenOfLocal(
-            Model model
-//            @RequestParam(name = "regionId") String regionId
-    ) {
+    public String renderPreopenIndex(Model model) {
+
+        // Count of preopenData in each region
+        Map<String, Integer> preopenCountMap = new HashMap<String, Integer>();
+        Static.apartmentDict.forEach((key, value) -> preopenCountMap.put(key, 0));
+        List<PreopenVotingForm> preopenData = this.preopenRepository.findAll();
+        preopenData.forEach((pd) -> {
+            if (preopenCountMap.containsKey(pd.getRegionId())) {
+                preopenCountMap.replace(pd.getRegionId(), preopenCountMap.get(pd.getRegionId()) + 1);
+            }
+        });
+
+
+        // Count of preopenData
+        model.addAttribute("countOfAll", preopenData.size());
+
+        // Service area
+        // apartmentEntry = [0]: regionId, [1]: regionName, [2]: countOfPreopenData
         List<List<String>> apartmentEntries = Static.apartmentDict.entrySet()
                 .stream()
-                .map(e -> Arrays.asList(e.getKey(), e.getValue()))
-                .sorted()
+                .map(entry -> new ArrayList<>(Arrays.asList(entry.getKey(), entry.getValue())))
+                .peek(entryAsList -> entryAsList.add(preopenCountMap.get(entryAsList.get(0)) + ""))
+                .sorted(Comparator.comparing(entryA -> entryA.get(1)))
                 .collect(Collectors.toList());
         model.addAttribute("apartments", apartmentEntries);
         return "preopen";
     }
-
 }
