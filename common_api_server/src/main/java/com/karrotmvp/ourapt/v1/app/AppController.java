@@ -2,9 +2,12 @@ package com.karrotmvp.ourapt.v1.app;
 
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 
-import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
+
+import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
@@ -16,7 +19,7 @@ public class AppController {
   public CommonResponseBody<Void> healthCheck() {
     return CommonResponseBody.<Void> builder()
         .success()
-        .devMessage("I_AM_ALIVE: version_2021_10_21_1842")
+        .devMessage("I_AM_ALIVE: version_2021_10_26_1206")
         .build();
   }
 
