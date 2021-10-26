@@ -14,6 +14,7 @@ public class QuestionDto {
     private String id;
     private String mainText;
     private String regionId;
+    private String regionName;
     private KarrotOApiUserDto writer;
     private Date createdAt;
     private Date updatedAt;

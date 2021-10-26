@@ -4,6 +4,7 @@ package com.karrotmvp.ourapt.v1.preopen;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserProfileDto;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.common.exception.application.DuplicatedRequestException;
 import com.karrotmvp.ourapt.v1.preopen.dto.PreopenReservationDto;
 import com.karrotmvp.ourapt.v1.preopen.entity.PreopenVotingForm;
 import com.karrotmvp.ourapt.v1.user.User;
@@ -43,6 +44,10 @@ public class PreopenController {
 
         foundUser.setPushAgreedAt(new Date());
         userRepository.save(foundUser);
+
+        preopenRepository.findById(foundUser.getKarrotId()).ifPresent((p) -> {
+            throw new DuplicatedRequestException("이미 신청된 유저입니다.", "이미 알림신청하셨네요! 서비스가 오픈하면 알려드릴게요!");
+        });
 
         PreopenVotingForm newReservation = new PreopenVotingForm();
         newReservation.setUser(foundUser);

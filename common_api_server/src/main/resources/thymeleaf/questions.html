@@ -3,21 +3,22 @@
 <div th:replace="fragments/head.html :: head(title = '우리아파트 관리자 페이지')"></div>
 <body>
 <div th:replace="fragments/navbar.html :: navbar(brand = '우리아파트', activeIndex = '1')"></div>
-<div>
+<div style="text-align: center">
     <h1>사전예약 신청 하면서 남긴 한마디 목록</h1>
-    <h5 th:text="${#strings.concat('전체 :', countOfAll)}"></h5>
-    <h5 th:text="${#strings.concat('내용있음 :', countOfTextNotEmpty)}"></h5>
+    <h4 th:text="${#strings.concat('전체 :', countOfAll)}"></h4>
+    <h4 th:text="${#strings.concat('내용있음 :', countOfTextNotEmpty)}"></h4>
+    <h4 th:text="${#strings.concat('내용없음 :', countOfAll - countOfTextNotEmpty)}"></h4>
 </div>
 <div>
     <table class="table">
         <thead>
-            <td>순번</td>
+            <th>순번</th>
             <th>게시글ID</th>
             <th>작성자ID</th>
             <th>작성자닉네임</th>
             <th>내용</th>
-            <th>지역이름</th>
             <th>지역해시</th>
+            <th>지역이름</th>
             <th>작성시간</th>
         </thead>
         <tbody>
@@ -28,7 +29,7 @@
                 <td th:text="${question.writer.nickname}"></td>
                 <td th:text="${question.mainText}"></td>
                 <td th:text="${question.regionId}"></td>
-                <td th:text="${question.regionId}"></td>
+                <td th:text="${question.regionName}"></td>
                 <td th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
             </tr>
         </tbody>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<div th:replace="fragments/head.html :: head(title = '우리아파트 관리자 페이지')"></div>
+<body>
+<div th:replace="fragments/navbar.html :: navbar(brand = '우리아파트', activeIndex = '2')"></div>
+<div>
+    <table class="table">
+        <thead>
+            <th>순번</th>
+            <th>서비스지역</th>
+            <th>지역해시</th>
+        </thead>
+        <tbody>
+            <tr th:each="apt, index : ${apartments}">
+                <td th:text="${index.index}"></td>
+                <td th:text="${apt[0]}"></td>
+                <td th:text="${apt[1]}"></td>
+            </tr>
+        </tbody>
+<!--        <thead>-->
+<!--            <th>순번</th>-->
+<!--            <th>지역해시</th>-->
+<!--            <th>지역이름</th>-->
+<!--            <th>신청일</th>-->
+<!--        </thead>-->
+<!--        <thead>-->
+<!--            <th>순번</th>-->
+<!--            <th>신청자ID</th>-->
+<!--            <th></th>-->
+<!--            <th></th>-->
+<!--            <th></th>-->
+<!--            <th>신청일</th>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="">-->
+<!--            <td th:text></td>-->
+<!--            <td th:text></td>-->
+<!--            <td th:text></td>-->
+<!--            <td th:text></td>-->
+<!--            <td th:text></td>-->
+<!--            <td th:text></td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+    </table>
+</div>
+</body>
+</html>

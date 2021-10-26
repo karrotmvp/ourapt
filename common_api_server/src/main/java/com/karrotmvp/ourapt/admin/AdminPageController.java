@@ -2,6 +2,7 @@ package com.karrotmvp.ourapt.admin;
 
 import com.karrotmvp.ourapt.v1.article.QuestionService;
 import com.karrotmvp.ourapt.v1.article.dto.QuestionDto;
+import com.karrotmvp.ourapt.v1.common.Static;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -43,6 +46,20 @@ public class AdminPageController {
         model.addAttribute("countOfAll", countOfAll);
         model.addAttribute("countOfTextNotEmpty", countOfTextNotEmpty);
         return "questions";
+    }
+
+    @GetMapping("/preopen")
+    public String renderPreopenOfLocal(
+            Model model
+//            @RequestParam(name = "regionId") String regionId
+    ) {
+        List<List<String>> apartmentEntries = Static.apartmentDict.entrySet()
+                .stream()
+                .map(e -> Arrays.asList(e.getKey(), e.getValue()))
+                .sorted()
+                .collect(Collectors.toList());
+        model.addAttribute("apartments", apartmentEntries);
+        return "preopen";
     }
 
 }
