@@ -1,8 +1,7 @@
 package com.karrotmvp.ourapt.admin;
 
-import com.karrotmvp.ourapt.v1.apartment.ApartmentFindService;
-import com.karrotmvp.ourapt.v1.article.QuestionService;
-import com.karrotmvp.ourapt.v1.article.dto.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.QuestionService;
+import com.karrotmvp.ourapt.v1.article.question.dto.QuestionDto;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
 import com.karrotmvp.ourapt.v1.preopen.entity.PreopenVotingForm;
@@ -22,9 +21,6 @@ public class AdminPageController {
 
     @Autowired
     private QuestionService questionService;
-
-    @Autowired
-    private ApartmentFindService apartmentFindService;
 
     @Autowired
     private PreopenRepository preopenRepository;

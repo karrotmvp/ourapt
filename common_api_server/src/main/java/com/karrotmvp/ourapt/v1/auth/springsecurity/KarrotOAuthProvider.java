@@ -30,14 +30,14 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public KarrotOpenApiUserProfileDto checkAccessTokenToKarrotAuthServer(String accessToken) {
+    public KarrotOpenApiUserDto checkAccessTokenToKarrotAuthServer(String accessToken) {
         return authService.asyncGetUserProfileFromKarrot(accessToken);
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         try {
-            KarrotOpenApiUserProfileDto userProfileFromKarrot = checkAccessTokenToKarrotAuthServer(String.valueOf(authentication.getCredentials()));
+            KarrotOpenApiUserDto userProfileFromKarrot = checkAccessTokenToKarrotAuthServer(String.valueOf(authentication.getCredentials()));
             return createSuccessAuthentication(authentication, userProfileFromKarrot);
         } catch (KarrotInvalidAccessTokenException exception) {
             throw new BadCredentialsException(exception.getMessage());
@@ -52,7 +52,7 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
         return KarrotAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
-    private Authentication createSuccessAuthentication(Authentication authentication, KarrotOpenApiUserProfileDto karrotUserProfile) {
+    private Authentication createSuccessAuthentication(Authentication authentication, KarrotOpenApiUserDto karrotUserProfile) {
         return new KarrotAuthenticationToken(String.valueOf(authentication.getCredentials()), karrotUserProfile);
     }
 

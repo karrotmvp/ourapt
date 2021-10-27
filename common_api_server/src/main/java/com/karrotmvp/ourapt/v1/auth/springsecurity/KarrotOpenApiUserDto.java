@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class KarrotOpenApiUserProfileDto {
+public class KarrotOpenApiUserDto {
 
   @JsonProperty("user_id")
   private String userId;

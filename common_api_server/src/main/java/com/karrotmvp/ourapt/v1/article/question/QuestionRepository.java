@@ -1,6 +1,5 @@
-package com.karrotmvp.ourapt.v1.article;
+package com.karrotmvp.ourapt.v1.article.question;
 
-import com.karrotmvp.ourapt.v1.article.entity.Question;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

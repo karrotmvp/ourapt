@@ -1,8 +1,7 @@
-package com.karrotmvp.ourapt.v1.article;
+package com.karrotmvp.ourapt.v1.article.question;
 
-import com.karrotmvp.ourapt.v1.article.dto.QuestionDto;
-import com.karrotmvp.ourapt.v1.article.dto.QuestionFormDto;
-import com.karrotmvp.ourapt.v1.article.entity.Question;
+import com.karrotmvp.ourapt.v1.article.question.dto.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.QuestionSubmitDto;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.user.User;
@@ -31,7 +30,7 @@ public class QuestionService {
     private ModelMapper modelMapper;
 
     @Transactional
-    public void writeNewQuestion(QuestionFormDto questionInfo, User writer) {
+    public void writeNewQuestion(QuestionSubmitDto questionInfo, User writer) {
         Question question = modelMapper.map(questionInfo, Question.class);
         question.setWriter(writer);
         this.questionRepository.save(question);

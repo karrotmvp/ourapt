@@ -3,7 +3,7 @@ package com.karrotmvp.ourapt.v1.auth;
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotAccessTokenDto;
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotOAuthResponseDto;
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotLoginDto;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserProfileDto;
+import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserDto;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.user.User;
 import com.karrotmvp.ourapt.v1.user.UserRepository;
@@ -36,7 +36,7 @@ public class OAuthController {
         KarrotAccessTokenDto accessToken = new KarrotAccessTokenDto(responseDto);
 
         // accessToken 으로 유저데이터 받아서 저장
-        KarrotOpenApiUserProfileDto userProfile = authService
+        KarrotOpenApiUserDto userProfile = authService
                 .asyncGetUserProfileFromKarrot("Bearer " + accessToken.getAccessToken());
 
         User alreadySignedUpUser = userRepository.findById(userProfile.getUserId()).orElse(null);

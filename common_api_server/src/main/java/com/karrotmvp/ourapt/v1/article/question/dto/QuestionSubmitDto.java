@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.dto;
+package com.karrotmvp.ourapt.v1.article.question.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-public class QuestionFormDto {
+public class QuestionSubmitDto {
 
     @NotNull
     private String mainText;

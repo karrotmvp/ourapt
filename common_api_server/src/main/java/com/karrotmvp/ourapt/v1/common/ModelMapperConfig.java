@@ -1,7 +1,7 @@
 package com.karrotmvp.ourapt.v1.common;
 
-import com.karrotmvp.ourapt.v1.article.dto.QuestionDto;
-import com.karrotmvp.ourapt.v1.article.entity.Question;
+import com.karrotmvp.ourapt.v1.article.question.Question;
+import com.karrotmvp.ourapt.v1.article.question.dto.QuestionDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

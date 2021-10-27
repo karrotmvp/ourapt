@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.dto;
+package com.karrotmvp.ourapt.v1.article.question.dto;
 
 import com.karrotmvp.ourapt.v1.user.dto.KarrotOApiUserDto;
 import lombok.Getter;

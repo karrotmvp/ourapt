@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.entity;
+package com.karrotmvp.ourapt.v1.article;
 
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
 import com.karrotmvp.ourapt.v1.user.User;
