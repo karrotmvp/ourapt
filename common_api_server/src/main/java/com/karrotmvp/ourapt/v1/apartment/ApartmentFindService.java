@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.apartment;
 
-import com.karrotmvp.ourapt.v1.apartment.vo.ApartmentVo;
+import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentsInRegionDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import org.modelmapper.ModelMapper;
@@ -25,7 +25,7 @@ public class ApartmentFindService {
             return new ApartmentsInRegionDto(4, apartmentsMatchedByDepth4
                     .stream()
                     .filter(Apartment::isActive)
-                    .map((apt) -> modelMapper.map(apt, ApartmentVo.class))
+                    .map((apt) -> modelMapper.map(apt, ApartmentDto.class))
                     .collect(Collectors.toList())
             );
         }
@@ -34,7 +34,7 @@ public class ApartmentFindService {
         return new ApartmentsInRegionDto(3, apartmentsMatchedByDepth3
                 .stream()
                 .filter(Apartment::isActive)
-                .map((apt) -> modelMapper.map(apt, ApartmentVo.class))
+                .map((apt) -> modelMapper.map(apt, ApartmentDto.class))
                 .collect(Collectors.toList())
         );
     }

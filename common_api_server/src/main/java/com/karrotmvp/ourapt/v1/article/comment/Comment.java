@@ -9,16 +9,16 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
 @DiscriminatorValue(value = "C")
 public class Comment extends Article {
 
     @Column(name = "main_text")
+    @Getter
+    @Setter
     private String mainText;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    @Setter
     private Question parent;
-
 }

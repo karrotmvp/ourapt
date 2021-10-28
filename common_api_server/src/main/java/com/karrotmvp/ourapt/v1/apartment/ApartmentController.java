@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.apartment;
 
-import com.karrotmvp.ourapt.v1.apartment.vo.ApartmentVo;
+import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentsInRegionDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
@@ -42,7 +42,7 @@ public class ApartmentController {
     @ApiOperation(value = "서비스 하는 아파트 추가 [관리자용]")
     @Transactional
     public CommonResponseBody<Void> addApartment(
-            @RequestBody ApartmentVo apartment
+            @RequestBody ApartmentDto apartment
     ) {
         Apartment newApartment = new Apartment();
         newApartment.setKeyName(apartment.getKeyName());

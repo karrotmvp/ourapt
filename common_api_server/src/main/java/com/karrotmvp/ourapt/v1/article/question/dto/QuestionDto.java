@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.question.vo;
+package com.karrotmvp.ourapt.v1.article.question.dto;
 
 import com.karrotmvp.ourapt.v1.user.dto.KarrotOApiUserDto;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class QuestionVo {
+public class QuestionDto {
     private String id;
     private String mainText;
     private String regionId;
