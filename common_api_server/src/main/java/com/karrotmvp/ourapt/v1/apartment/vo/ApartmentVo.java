@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.apartment.dto;
+package com.karrotmvp.ourapt.v1.apartment.vo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ApartmentDto {
+public class ApartmentVo {
     private String id;
     private String keyName;
     private String channelName;

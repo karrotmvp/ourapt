@@ -1,5 +1,6 @@
 package com.karrotmvp.ourapt.v1.apartment.dto;
 
+import com.karrotmvp.ourapt.v1.apartment.vo.ApartmentVo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,5 +16,5 @@ public class ApartmentsInRegionDto {
    private int regionDepth;
 
    @ApiModelProperty(value = "받은 region_id에 속하는 아파트", notes = "regionDepth가 3 일 경우 한개이상, 4일 경우 한개")
-   private List<ApartmentDto> apartments;
+   private List<ApartmentVo> apartments;
 }

@@ -1,7 +1,7 @@
 package com.karrotmvp.ourapt.admin;
 
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
-import com.karrotmvp.ourapt.v1.article.question.dto.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.vo.QuestionVo;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
 import com.karrotmvp.ourapt.v1.preopen.entity.PreopenVotingForm;
@@ -40,7 +40,7 @@ public class AdminPageController {
         if (pageNum < 1) {
             throw new RuntimeException("pageNum must larger than 0");
         }
-        List<QuestionDto> questions = new ArrayList<>(this.questionService.getQuestionsWithOffsetPaging(perPage, pageNum - 1));
+        List<QuestionVo> questions = new ArrayList<>(this.questionService.getQuestionsWithOffsetPaging(perPage, pageNum - 1));
         long countOfAll = this.questionService.getCountOfAllQuestions();
         long countOfTextNotEmpty = this.questionService.getCountOfNotEmptyQuestions();
         model.addAttribute("questions", questions);

@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
-import com.karrotmvp.ourapt.v1.article.question.dto.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.vo.QuestionVo;
 import com.karrotmvp.ourapt.v1.article.question.dto.QuestionSubmitDto;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.Utils;
@@ -44,10 +44,10 @@ public class QuestionService {
         return this.questionRepository.countByMainTextNot("");
     }
 
-    public List<QuestionDto> getQuestionsWithCursorPaging(Date cursor, int perPage) {
-        List<QuestionDto> questions = questionRepository.findByDateCursorWithPaging(cursor, PageRequest.of(0, perPage))
+    public List<QuestionVo> getQuestionsWithCursorPaging(Date cursor, int perPage) {
+        List<QuestionVo> questions = questionRepository.findByDateCursorWithPaging(cursor, PageRequest.of(0, perPage))
                 .stream()
-                .map(q -> modelMapper.map(q, QuestionDto.class))
+                .map(q -> modelMapper.map(q, QuestionVo.class))
                 .peek(qd -> qd.setRegionName(Static.apartmentDict.get(qd.getRegionName())))
                 .collect(Collectors.toList());
         List<KarrotOApiUserDto> writers = this.userService.getKarrotUserProfilesByIds(
@@ -58,15 +58,15 @@ public class QuestionService {
                 writers,
                 (q) -> q.getWriter().getId(),
                 KarrotOApiUserDto::getId,
-                QuestionDto::setWriter
+                QuestionVo::setWriter
         );
     }
 
-    public List<QuestionDto> getQuestionsWithOffsetPaging(int perPage, int pageNum) {
-        List<QuestionDto> questions = questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(pageNum, perPage))
+    public List<QuestionVo> getQuestionsWithOffsetPaging(int perPage, int pageNum) {
+        List<QuestionVo> questions = questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(pageNum, perPage))
                 .stream()
-                .map(q -> modelMapper.map(q, QuestionDto.class))
-                .peek(qd -> qd.setRegionName(Static.apartmentDict.get(qd.getRegionId())))
+                .map(q -> modelMapper.map(q, QuestionVo.class))
+                .peek(qv -> qv.setRegionName(Static.apartmentDict.get(qv.getRegionId())))
                 .collect(Collectors.toList());
         List<KarrotOApiUserDto> writers = this.userService.getKarrotUserProfilesByIds(
                 questions.stream().map(q -> q.getWriter().getId()).collect(Collectors.toSet())
@@ -76,9 +76,9 @@ public class QuestionService {
                 writers,
                 (q) -> q.getWriter().getId(),
                 KarrotOApiUserDto::getId,
-                QuestionDto::setWriter
+                QuestionVo::setWriter
         ).stream()
-                .sorted((qd1, qd2) -> (int) (qd2.getCreatedAt().getTime() - qd1.getCreatedAt().getTime()))
+                .sorted((qv1, qv2) -> (int) (qv2.getCreatedAt().getTime() - qv1.getCreatedAt().getTime()))
                 .collect(Collectors.toList());
     }
 }
