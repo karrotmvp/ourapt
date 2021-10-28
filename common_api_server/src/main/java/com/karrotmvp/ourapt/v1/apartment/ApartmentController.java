@@ -3,6 +3,7 @@ package com.karrotmvp.ourapt.v1.apartment;
 import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentsInRegionDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
+import com.karrotmvp.ourapt.v1.apartment.entity.Region;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
@@ -27,7 +28,7 @@ public class ApartmentController {
 
 
     @GetMapping(value = "")
-    @ApiOperation(value = "depth3 또는 depth4 region_id로 아파트 정보 가져오기")
+    @ApiOperation(value = "depth3 또는 depth4 region_id로 아파트 정보 가져오기 (사전 오픈 용)")
     public CommonResponseBody<ApartmentsInRegionDto> getApartmentByRegionId(
             @RequestParam(name = "regionId") String regionId
     ) {
@@ -42,18 +43,14 @@ public class ApartmentController {
     @ApiOperation(value = "서비스 하는 아파트 추가 [관리자용]")
     @Transactional
     public CommonResponseBody<Void> addApartment(
-            @RequestBody ApartmentDto apartment
+            @RequestBody ApartmentDto apt
     ) {
         Apartment newApartment = new Apartment();
-        newApartment.setKeyName(apartment.getKeyName());
-        newApartment.setNameDepth1(apartment.getNameDepth1());
-        newApartment.setRegionHashDepth1(apartment.getRegionHashDepth1());
-        newApartment.setNameDepth2(apartment.getNameDepth2());
-        newApartment.setRegionHashDepth2(apartment.getRegionHashDepth2());
-        newApartment.setNameDepth3(apartment.getNameDepth3());
-        newApartment.setRegionHashDepth3(apartment.getRegionHashDepth3());
-        newApartment.setNameDepth4(apartment.getNameDepth4());
-        newApartment.setRegionHashDepth4(apartment.getRegionHashDepth4());
+        newApartment.setName(apt.getKeyName());
+        newApartment.setRegionDepth1(new Region(apt.getRegionHashDepth1(), apt.getNameDepth1()));
+        newApartment.setRegionDepth2(new Region(apt.getRegionHashDepth2(), apt.getNameDepth2()));
+        newApartment.setRegionDepth3(new Region(apt.getRegionHashDepth3(), apt.getNameDepth3()));
+        newApartment.setRegionDepth4(new Region(apt.getRegionHashDepth4(), apt.getNameDepth4()));
         newApartment.setInactiveAt(new Date());
         apartmentRepository.save(newApartment);
 

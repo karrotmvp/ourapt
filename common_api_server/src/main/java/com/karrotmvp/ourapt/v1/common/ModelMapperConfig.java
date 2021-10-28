@@ -14,7 +14,7 @@ public class ModelMapperConfig {
         ModelMapper modelMapper =  new ModelMapper();
         modelMapper.typeMap(Question.class, QuestionDto.class).addMappings(
                 mapper -> mapper.map(
-                        (question) -> question.getWriter().getKarrotId(),
+                        (question) -> question.getWriter().getId(),
                         (questionDto, karrotId)  -> questionDto.getWriter().setId(String.valueOf(karrotId))
                 )
         );

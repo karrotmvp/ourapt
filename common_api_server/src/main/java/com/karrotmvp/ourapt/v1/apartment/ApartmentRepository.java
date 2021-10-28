@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ApartmentRepository extends JpaRepository<Apartment, Long> {
 
-    List<Apartment> findByRegionHashDepth3(String regionHash);
-    List<Apartment> findByRegionHashDepth4(String regionHash);
+    List<Apartment> findByRegionDepth3Id(String regionId);
+    List<Apartment> findByRegionDepth4Id(String regionId);
 }

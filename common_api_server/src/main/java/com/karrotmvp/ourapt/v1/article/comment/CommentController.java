@@ -9,7 +9,7 @@ import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserDto;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
-import com.karrotmvp.ourapt.v1.user.User;
+import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +40,7 @@ public class CommentController {
             @CurrentUser KarrotOpenApiUserDto user
             ) {
         Comment newComment = modelMapper.map(submitted, Comment.class);
+
         User foundUser = userRepository.findById(user.getUserId())
                 .orElseThrow(RegisteredUserNotFoundException::new);
         newComment.setWriter(foundUser);

@@ -2,7 +2,6 @@ package com.karrotmvp.ourapt.v1.article.comment;
 
 
 import com.karrotmvp.ourapt.v1.article.Article;
-import com.karrotmvp.ourapt.v1.article.question.Question;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +19,5 @@ public class Comment extends Article {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     @Setter
-    private Question parent;
+    private Article parent;
 }

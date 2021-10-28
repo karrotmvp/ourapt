@@ -1,7 +1,7 @@
 package com.karrotmvp.ourapt.v1.preopen.entity;
 
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
-import com.karrotmvp.ourapt.v1.user.User;
+import com.karrotmvp.ourapt.v1.user.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class PreopenVotingForm extends BaseEntity {
+public class PreopenForm extends BaseEntity {
 
   @Id
   @Column(name = "karrot_id")
@@ -35,7 +35,7 @@ public class PreopenVotingForm extends BaseEntity {
   private Boolean justFunChecked;
 
   public void setUser(User user) {
-    this.userId = user.getKarrotId();
+    this.userId = user.getId();
     this.user = user;
   }
 

@@ -1,7 +1,7 @@
 package com.karrotmvp.ourapt.v1.article;
 
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
-import com.karrotmvp.ourapt.v1.user.User;
+import com.karrotmvp.ourapt.v1.user.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 

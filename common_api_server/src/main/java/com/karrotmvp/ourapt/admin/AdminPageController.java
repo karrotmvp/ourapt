@@ -4,7 +4,7 @@ import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.article.question.dto.QuestionDto;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
-import com.karrotmvp.ourapt.v1.preopen.entity.PreopenVotingForm;
+import com.karrotmvp.ourapt.v1.preopen.entity.PreopenForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,8 +57,8 @@ public class AdminPageController {
 
         // Count of preopenData in each region
         Map<String, Integer> preopenCountMap = new HashMap<String, Integer>();
-        Static.apartmentDict.forEach((key, value) -> preopenCountMap.put(key, 0));
-        List<PreopenVotingForm> preopenData = this.preopenRepository.findAll();
+        Static.regionDict.forEach((key, value) -> preopenCountMap.put(key, 0));
+        List<PreopenForm> preopenData = this.preopenRepository.findAll();
         preopenData.forEach((pd) -> {
             if (preopenCountMap.containsKey(pd.getRegionId())) {
                 preopenCountMap.replace(pd.getRegionId(), preopenCountMap.get(pd.getRegionId()) + 1);
@@ -71,7 +71,7 @@ public class AdminPageController {
 
         // Service area
         // apartmentEntry = [0]: regionId, [1]: regionName, [2]: countOfPreopenData
-        List<List<String>> apartmentEntries = Static.apartmentDict.entrySet()
+        List<List<String>> apartmentEntries = Static.regionDict.entrySet()
                 .stream()
                 .map(entry -> new ArrayList<>(Arrays.asList(entry.getKey(), entry.getValue())))
                 .peek(entryAsList -> entryAsList.add(preopenCountMap.get(entryAsList.get(0)) + ""))

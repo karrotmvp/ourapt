@@ -1,7 +1,8 @@
 package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.karrotmvp.ourapt.v1.user.User;
+import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
+import com.karrotmvp.ourapt.v1.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +12,17 @@ import lombok.NoArgsConstructor;
 @Getter
 public class KarrotOpenApiUserDto {
 
-  @JsonProperty("user_id")
-  private String userId;
+    @JsonProperty("user_id")
+    private String userId;
 
-  @JsonProperty("nickname")
-  private String nickname;
+    @JsonProperty("nickname")
+    private String nickname;
 
-  public User toEntity() {
-    User newUser = new User();
-    newUser.setKarrotId(userId);
-    return newUser;
-  }
+    public User toEntity() {
+        User newUser = new User(
+                this.userId,
+                new KarrotProfile(this.userId, this.nickname)
+        );
+        return newUser;
+    }
 }

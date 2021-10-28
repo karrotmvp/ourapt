@@ -20,7 +20,7 @@ public class ApartmentFindService {
     private ModelMapper modelMapper;
 
     public ApartmentsInRegionDto findApartmentsInRegionId(String regionId) {
-        List<Apartment> apartmentsMatchedByDepth4 = this.apartmentRepository.findByRegionHashDepth4(regionId);
+        List<Apartment> apartmentsMatchedByDepth4 = this.apartmentRepository.findByRegionDepth4Id(regionId);
         if (apartmentsMatchedByDepth4.size() > 0) {
             return new ApartmentsInRegionDto(4, apartmentsMatchedByDepth4
                     .stream()
@@ -30,7 +30,7 @@ public class ApartmentFindService {
             );
         }
 
-        List<Apartment> apartmentsMatchedByDepth3 = this.apartmentRepository.findByRegionHashDepth3(regionId);
+        List<Apartment> apartmentsMatchedByDepth3 = this.apartmentRepository.findByRegionDepth4Id(regionId);
         return new ApartmentsInRegionDto(3, apartmentsMatchedByDepth3
                 .stream()
                 .filter(Apartment::isActive)

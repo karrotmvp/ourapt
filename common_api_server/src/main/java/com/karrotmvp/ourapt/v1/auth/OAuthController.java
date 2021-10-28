@@ -5,7 +5,7 @@ import com.karrotmvp.ourapt.v1.auth.dto.KarrotOAuthResponseDto;
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotLoginDto;
 import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserDto;
 import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
-import com.karrotmvp.ourapt.v1.user.User;
+import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.UserRepository;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

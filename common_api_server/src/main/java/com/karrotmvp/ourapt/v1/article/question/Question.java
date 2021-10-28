@@ -9,11 +9,11 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@Getter
-@Setter
 @DiscriminatorValue(value = "Q")
 public class Question extends Article {
 
     @Column(name = "main_text")
+    @Getter
+    @Setter
     private String mainText;
 }

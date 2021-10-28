@@ -4,7 +4,7 @@ import com.karrotmvp.ourapt.v1.article.question.dto.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.QuestionSubmitDto;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.Utils;
-import com.karrotmvp.ourapt.v1.user.User;
+import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.KarrotOApiUserDto;
 import org.modelmapper.ModelMapper;
@@ -48,7 +48,7 @@ public class QuestionService {
         List<QuestionDto> questions = questionRepository.findByDateCursorWithPaging(cursor, PageRequest.of(0, perPage))
                 .stream()
                 .map(q -> modelMapper.map(q, QuestionDto.class))
-                .peek(qd -> qd.setRegionName(Static.apartmentDict.get(qd.getRegionName())))
+                .peek(qd -> qd.setRegionName(Static.regionDict.get(qd.getRegionName())))
                 .collect(Collectors.toList());
         List<KarrotOApiUserDto> writers = this.userService.getKarrotUserProfilesByIds(
                 questions.stream().map(q -> q.getWriter().getId()).collect(Collectors.toSet())
@@ -66,7 +66,7 @@ public class QuestionService {
         List<QuestionDto> questions = questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(pageNum, perPage))
                 .stream()
                 .map(q -> modelMapper.map(q, QuestionDto.class))
-                .peek(qv -> qv.setRegionName(Static.apartmentDict.get(qv.getRegionId())))
+                .peek(qv -> qv.setRegionName(Static.regionDict.get(qv.getRegionId())))
                 .collect(Collectors.toList());
         List<KarrotOApiUserDto> writers = this.userService.getKarrotUserProfilesByIds(
                 questions.stream().map(q -> q.getWriter().getId()).collect(Collectors.toSet())
