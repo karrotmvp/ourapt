@@ -4,10 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,9 +17,11 @@ import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.GenericFilterBean;
 
+@Order(1)
 @Configuration
-@EnableWebSecurity(debug = false)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity(debug = true)
+public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
+    // Apply Spring Security FilterChain for all API
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -31,36 +32,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/v1/apartment/**"
     };
 
-    public GenericFilterBean customFilter() throws Exception {
-        return new KarrotOAuthFilter(authenticationManagerBean());
-    }
-
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring()
-                // Never make SecurityFilterChain for this pattern.
-                .antMatchers(HttpMethod.GET,
-                        "/error",
-                        "/favicon.ico",
-                        "/api/v1/docs",
-                        "/v2/api-docs",
-                        "/swagger-ui/**",
-                        "/swagger-resources**",
-                        "/swagger-resources/**",
-                        "/admin**",
-                        "/admin/**"
-                );
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .antMatcher("/api/**")
                 .httpBasic().disable()
                 .csrf().disable()
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(this.customFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(this.karrotOAuthFilter(), UsernamePasswordAuthenticationFilter.class)
                 .cors()
                 .and()
                 .authorizeRequests()
@@ -79,6 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 });
     }
 
+    public GenericFilterBean karrotOAuthFilter() throws Exception {
+        return new KarrotOAuthFilter(authenticationManagerBean());
+    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -89,4 +74,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }

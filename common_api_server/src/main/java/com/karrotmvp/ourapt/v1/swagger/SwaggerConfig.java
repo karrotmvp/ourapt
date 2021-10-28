@@ -1,7 +1,7 @@
 package com.karrotmvp.ourapt.v1.swagger;
 
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.SecurityConfig;
+import com.karrotmvp.ourapt.v1.auth.springsecurity.ApiSecurityConfig;
 import io.swagger.models.auth.In;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +44,7 @@ public class SwaggerConfig {
         // Make SecurityContext including the below SecurityReference
         AntPathMatcher pathMatcher = new AntPathMatcher();
         Predicate<OperationContext> securityExclusionPathSelector = (oc) ->
-                Arrays.stream(SecurityConfig.AUTHORIZATION_CHECK_EXCLUSION_PATTERNS)
+                Arrays.stream(ApiSecurityConfig.AUTHORIZATION_CHECK_EXCLUSION_PATTERNS)
                         .noneMatch((pattern) -> pathMatcher.match(pattern, oc.requestMappingPattern()));
         return  SecurityContext.builder()
                         .securityReferences(defaultAuth())
