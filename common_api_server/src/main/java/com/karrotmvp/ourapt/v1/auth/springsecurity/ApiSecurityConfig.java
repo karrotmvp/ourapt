@@ -19,7 +19,7 @@ import org.springframework.web.filter.GenericFilterBean;
 
 @Order(1)
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     // Apply Spring Security FilterChain for all API
 

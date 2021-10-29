@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Order(2)
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
     // Apply Spring Security FilterChain for admin page
 

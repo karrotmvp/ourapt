@@ -1,5 +1,8 @@
 package com.karrotmvp.ourapt.v1.common;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +23,10 @@ public class Utils {
             Function<L, P> leftPKGetter,
             Function<R, P> rightPKGetter,
             TwoParameterConsumer<L, R> leftJoinFieldSetter
-            ) {
+    ) {
 
         Map<P, List<L>> hashTable = leftList.stream()
-                        .collect(Collectors.groupingBy(leftPKGetter));
+                .collect(Collectors.groupingBy(leftPKGetter));
         rightList.forEach((r) -> {
             Optional.ofNullable(hashTable.get(rightPKGetter.apply(r)))
                     .orElseGet(ArrayList::new)
@@ -33,5 +36,14 @@ public class Utils {
         List<L> resultList = new ArrayList<>();
         hashTable.values().forEach(resultList::addAll);
         return resultList;
+    }
+
+
+    public static <T> T parseJsonData(String json, TypeReference<T> t) {
+        return new ObjectMapper().convertValue(json, t);
+    }
+
+    public static <T> T parseJsonData(String json, Class<T> t) {
+        return new ObjectMapper().convertValue(json, t);
     }
 }

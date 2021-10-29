@@ -3,7 +3,7 @@ package com.karrotmvp.ourapt.v1.app;
 import java.text.SimpleDateFormat;
 
 import com.karrotmvp.ourapt.v1.common.Static;
-import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

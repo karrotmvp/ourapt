@@ -4,7 +4,7 @@ import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentsInRegionDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.apartment.entity.Region;
-import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

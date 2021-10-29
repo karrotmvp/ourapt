@@ -3,12 +3,12 @@ package com.karrotmvp.ourapt.v1.preopen;
 
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserDto;
-import com.karrotmvp.ourapt.v1.common.dto.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.DuplicatedRequestException;
 import com.karrotmvp.ourapt.v1.preopen.dto.PreopenReservationDto;
 import com.karrotmvp.ourapt.v1.preopen.entity.PreopenForm;
 import com.karrotmvp.ourapt.v1.user.entity.User;
-import com.karrotmvp.ourapt.v1.user.UserRepository;
+import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;

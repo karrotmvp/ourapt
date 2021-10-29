@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.common.dto;
+package com.karrotmvp.ourapt.v1.common.karrotopenapi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

@@ -28,21 +28,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.modelmapper:modelmapper:2.4.4'
-    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    implementation "io.springfox:springfox-boot-starter:3.0.0" // swagger
 
 
     // for m1
     developmentOnly 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 
-    implementation "io.springfox:springfox-boot-starter:3.0.0"
-
-
-
-
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 }

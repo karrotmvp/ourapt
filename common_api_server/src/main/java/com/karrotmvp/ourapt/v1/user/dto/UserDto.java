@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.question.dto;
+package com.karrotmvp.ourapt.v1.user.dto;
 
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import lombok.Getter;
@@ -10,12 +10,11 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class QuestionDto {
+public class UserDto {
     private String id;
-    private String mainText;
-    private String regionId;
-    private String regionName;
-    private KarrotProfile writer;
+    private KarrotProfile profile;
+    private Boolean isPushAgreed;
+    private Date bannedAt;
     private Date createdAt;
     private Date updatedAt;
 }

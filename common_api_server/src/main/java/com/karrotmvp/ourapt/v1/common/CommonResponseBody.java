@@ -1,12 +1,11 @@
-package com.karrotmvp.ourapt.v1.common.dto;
-
-import java.io.Serializable;
+package com.karrotmvp.ourapt.v1.common;
 
 import com.karrotmvp.ourapt.v1.common.constant.ApiResult;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 @Builder
 @Setter

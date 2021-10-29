@@ -19,10 +19,9 @@ public class KarrotOpenApiUserDto {
     private String nickname;
 
     public User toEntity() {
-        User newUser = new User(
+        return new User(
                 this.userId,
-                new KarrotProfile(this.userId, this.nickname)
+                new KarrotProfile(this.userId, this.userId, this.nickname)
         );
-        return newUser;
     }
 }

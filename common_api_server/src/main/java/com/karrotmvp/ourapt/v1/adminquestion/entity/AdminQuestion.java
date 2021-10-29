@@ -43,7 +43,9 @@ public class AdminQuestion extends BaseEntity {
         this.id = UUID.randomUUID().toString();
     }
 
-    public boolean isActive() {
-        return this.inactiveAt == null || this.inactiveAt.before(new Date());
+    public Boolean isActive() {
+        Date now = new Date();
+        return this.inactiveAt == null || this.inactiveAt.after(now);
+//        return this.inactiveAt != null && this.inactiveAt.after(now);
     }
 }
