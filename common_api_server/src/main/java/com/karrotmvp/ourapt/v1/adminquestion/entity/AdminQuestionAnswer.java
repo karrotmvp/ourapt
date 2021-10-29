@@ -26,12 +26,12 @@ public class AdminQuestionAnswer extends BaseEntity {
     @Setter
     private Region createdOn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     @Setter
     private AdminQuestion about;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "answerer_id", referencedColumnName = "karrot_id")
     @Setter
     private User answerer;

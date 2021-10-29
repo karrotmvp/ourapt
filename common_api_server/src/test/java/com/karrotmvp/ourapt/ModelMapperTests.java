@@ -23,22 +23,13 @@ public class ModelMapperTests {
     @Autowired
     private ModelMapper modelMapper;
 
-    private static Date yesterday;
-
-    static {
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date());
-        c.add(Calendar.DATE, -1);
-        ModelMapperTests.yesterday = c.getTime();
-    }
-
     @Test
     void adminQuestionMappingTest() {
         Date now = new Date();
         Region testRegion = new Region("regionId", "regionName");
         AdminQuestion adminQuestion = new AdminQuestion();
         adminQuestion.setDisplayOn(testRegion);
-        adminQuestion.setInactiveAt(yesterday);
+        adminQuestion.setInactiveAt(getYesterday());
         adminQuestion.setMainText("mainText");
         adminQuestion.setExpiredAt(now);
         adminQuestion.setCreatedAt(now);
@@ -63,7 +54,7 @@ public class ModelMapperTests {
         Date now = new Date();
         sourceUser.setCreatedAt(now);
         sourceUser.setUpdatedAt(now);
-        sourceUser.setPushAgreedAt(yesterday);
+        sourceUser.setPushAgreedAt(getYesterday());
         sourceUser.setBannedAt(now);
         UserDto result = modelMapper.map(sourceUser, UserDto.class);
         assertEquals(sourceUserId, result.getId());
@@ -74,5 +65,12 @@ public class ModelMapperTests {
         assertNotNull(result.getCreatedAt());
         assertNotNull(result.getUpdatedAt());
         assertNotNull(result.getBannedAt());
+    }
+
+    private Date getYesterday() {
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.DATE, -1);
+        return c.getTime();
     }
 }

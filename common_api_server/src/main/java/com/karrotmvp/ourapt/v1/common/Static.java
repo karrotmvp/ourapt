@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Static {
-    public static Map<String, String> regionDict = new HashMap<>();
+    public static Map<String, RegionDto> regionDict = new HashMap<>();
     public static Date serverStartTime;
 
     static {

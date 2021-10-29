@@ -37,13 +37,4 @@ public class Utils {
         hashTable.values().forEach(resultList::addAll);
         return resultList;
     }
-
-
-    public static <T> T parseJsonData(String json, TypeReference<T> t) {
-        return new ObjectMapper().convertValue(json, t);
-    }
-
-    public static <T> T parseJsonData(String json, Class<T> t) {
-        return new ObjectMapper().convertValue(json, t);
-    }
 }
