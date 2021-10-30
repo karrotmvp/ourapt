@@ -7,6 +7,7 @@ import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,7 +18,8 @@ public class AdminQuestionController {
   @GetMapping(value = "")
   @ApiOperation(value = "리전에 포함된, 대답한 적 없는 AdminQuestion 가져오기")
   public CommonResponseBody<GetAvailableAdminQuestionDto> getAvailableAdminQuestion(
-    @CurrentUser KarrotOpenApiUserDto profile
+    @CurrentUser KarrotOpenApiUserDto profile,
+    @RequestParam String regionId
   ) {
     return CommonResponseBody.<GetAvailableAdminQuestionDto>builder()
       .success()
