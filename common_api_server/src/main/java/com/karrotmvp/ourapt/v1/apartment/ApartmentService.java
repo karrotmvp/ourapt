@@ -1,42 +1,38 @@
 package com.karrotmvp.ourapt.v1.apartment;
 
-import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentDto;
-import com.karrotmvp.ourapt.v1.apartment.dto.ApartmentsInRegionDto;
+import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ApartmentFindService {
+public class ApartmentService {
 
-    @Autowired
-    private ApartmentRepository apartmentRepository;
+    private final ApartmentRepository apartmentRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    public ApartmentsInRegionDto findApartmentsInRegionId(String regionId) {
+    public ApartmentService(ApartmentRepository apartmentRepository, ModelMapper modelMapper) {
+        this.apartmentRepository = apartmentRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    public List<ApartmentDto> getApartmentsInRegionId(String regionId) {
         List<Apartment> apartmentsMatchedByDepth4 = this.apartmentRepository.findByRegionDepth4Id(regionId);
         if (apartmentsMatchedByDepth4.size() > 0) {
-            return new ApartmentsInRegionDto(4, apartmentsMatchedByDepth4
-                    .stream()
+            return apartmentsMatchedByDepth4.stream()
                     .filter(Apartment::isActive)
                     .map((apt) -> modelMapper.map(apt, ApartmentDto.class))
-                    .collect(Collectors.toList())
-            );
+                    .collect(Collectors.toList());
         }
 
         List<Apartment> apartmentsMatchedByDepth3 = this.apartmentRepository.findByRegionDepth4Id(regionId);
-        return new ApartmentsInRegionDto(3, apartmentsMatchedByDepth3
-                .stream()
+        return apartmentsMatchedByDepth3.stream()
                 .filter(Apartment::isActive)
                 .map((apt) -> modelMapper.map(apt, ApartmentDto.class))
-                .collect(Collectors.toList())
-        );
+                .collect(Collectors.toList());
     }
-
 }

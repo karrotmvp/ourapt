@@ -1,7 +1,6 @@
 package com.karrotmvp.ourapt.v1.common.webclient;
 
 import com.karrotmvp.ourapt.v1.common.property.KarrotProperty;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -11,11 +10,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebClientConfig {
 
-  @Autowired
-  private WebClient.Builder webClientBuilder;
+  private final WebClient.Builder webClientBuilder;
 
-  @Autowired
-  private KarrotProperty karrotProperty;
+  private final KarrotProperty karrotProperty;
+
+  public WebClientConfig(WebClient.Builder webClientBuilder, KarrotProperty karrotProperty) {
+    this.webClientBuilder = webClientBuilder;
+    this.karrotProperty = karrotProperty;
+  }
 
   @Bean
   public WebClient karrotOApiClient() {

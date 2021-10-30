@@ -4,9 +4,6 @@ import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResp
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import com.karrotmvp.ourapt.v1.user.karrotapidto.KarrotOApiUserListResponseDto;
 import com.karrotmvp.ourapt.v1.user.karrotapidto.KarrotOApiUserResponseDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
@@ -19,11 +16,11 @@ import java.util.Set;
 @Component
 public class KarrotOAPI {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final WebClient karrotOApiClient;
 
-    @Autowired
-    @Qualifier("karrotOApiClient")
-    private WebClient karrotOApiClient;
+    public KarrotOAPI(@Qualifier("karrotOApiClient") WebClient karrotOApiClient) {
+        this.karrotOApiClient = karrotOApiClient;
+    }
 
     public List<KarrotProfile> getKarrotUserProfilesByIds(Set<String> ids) {
         KarrotOApiResponseBody<KarrotOApiUserListResponseDto> responseBody = this.sendGet("/api/v2/users/by_ids?ids=" + String.join(",", ids))

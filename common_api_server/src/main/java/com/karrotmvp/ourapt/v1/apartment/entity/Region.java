@@ -15,7 +15,6 @@ import javax.persistence.Embeddable;
 public class Region {
     @Column(name = "region_id")
     private String id;
-
     @Column(name = "region_name")
     private String name;
 }

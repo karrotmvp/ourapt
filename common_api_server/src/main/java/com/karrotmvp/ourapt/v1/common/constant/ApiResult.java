@@ -14,7 +14,7 @@ public enum ApiResult {
     REGISTERED_USER_NOT_FOUND("REGISTERED_USER_NOT_FOUND");
 
     @Getter
-    private String result;
+    private final String result;
 
     ApiResult(String resultCode) {
         this.result = resultCode;

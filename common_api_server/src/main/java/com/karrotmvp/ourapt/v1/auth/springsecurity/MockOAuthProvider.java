@@ -4,7 +4,6 @@ import com.karrotmvp.ourapt.v1.auth.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,8 +12,8 @@ public class MockOAuthProvider extends KarrotOAuthProvider {
     // MockOAuthProvider is a Bean that is injected instead of KarrotOAuthProvider when the Profile is not production
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public MockOAuthProvider(AuthService authService, Environment env) {
-        super(authService, env);
+    public MockOAuthProvider(AuthService authService) {
+        super(authService);
     }
 
     @Override

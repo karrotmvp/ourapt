@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Builder
@@ -12,17 +13,19 @@ import java.io.Serializable;
 @Getter
 public class CommonResponseBody<T> implements Serializable {
 
+  @NotNull
   private ApiResult status;
 
   @Builder.Default
+  @NotNull
   private String devMessage = "";
 
   @Builder.Default
+  @NotNull
   private String displayMessage = "";
 
   @Builder.Default
   private T data = null;
-
 
   public static class CommonResponseBodyBuilder<T> {
     public CommonResponseBodyBuilder<T> success() {

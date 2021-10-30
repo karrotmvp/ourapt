@@ -15,11 +15,14 @@ import java.util.Optional;
 @Transactional
 public class UserCustomRepositoryImpl implements UserCustomRepository<User, String> {
 
-    @Autowired
-    private EntityManager em;
+    private final EntityManager em;
 
-    @Autowired
-    private KarrotOAPI karrotOAPI;
+    private final KarrotOAPI karrotOAPI;
+
+    public UserCustomRepositoryImpl(EntityManager em, KarrotOAPI karrotOAPI) {
+        this.em = em;
+        this.karrotOAPI = karrotOAPI;
+    }
 
     @Override
     public Optional<User> findById(String userId) {

@@ -14,6 +14,7 @@ public class QuestionSubmitDto {
 
     @NotNull
     private String mainText;
+
     @NotNull
     private String regionId;
 }

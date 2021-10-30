@@ -2,6 +2,7 @@ package com.karrotmvp.ourapt.v1.adminquestion.entity;
 
 import com.karrotmvp.ourapt.v1.apartment.entity.Region;
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
+import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,5 +39,9 @@ public class AdminQuestionAnswer extends BaseEntity {
 
     public AdminQuestionAnswer() {
         this.id = UUID.randomUUID().toString();
+    }
+
+    public KarrotProfile getAnswerer() {
+        return this.answerer.getProfile();
     }
 }

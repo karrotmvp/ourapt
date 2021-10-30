@@ -46,6 +46,5 @@ public class AdminQuestion extends BaseEntity {
     public Boolean isActive() {
         Date now = new Date();
         return this.inactiveAt == null || this.inactiveAt.after(now);
-//        return this.inactiveAt != null && this.inactiveAt.after(now);
     }
 }

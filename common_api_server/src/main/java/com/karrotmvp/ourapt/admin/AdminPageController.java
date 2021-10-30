@@ -4,7 +4,6 @@ import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
 import com.karrotmvp.ourapt.v1.preopen.entity.PreopenForm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +16,14 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/admin")
 public class AdminPageController {
 
-    @Autowired
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
-    @Autowired
-    private PreopenRepository preopenRepository;
+    private final PreopenRepository preopenRepository;
+
+    public AdminPageController(QuestionService questionService, PreopenRepository preopenRepository) {
+        this.questionService = questionService;
+        this.preopenRepository = preopenRepository;
+    }
 
 
     @GetMapping("")

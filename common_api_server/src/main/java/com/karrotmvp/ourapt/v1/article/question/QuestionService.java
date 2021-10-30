@@ -1,7 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
 import com.karrotmvp.ourapt.v1.article.question.dto.QuestionSubmitDto;
-import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,6 @@ public class QuestionService {
 
     @Autowired
     private QuestionRepository questionRepository;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private ModelMapper modelMapper;

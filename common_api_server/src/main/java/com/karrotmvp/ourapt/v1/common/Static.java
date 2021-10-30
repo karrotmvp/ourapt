@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Static {
-    public static Map<String, RegionDto> regionDict = new HashMap<>();
+    public static Map<String, String> regionDict = new HashMap<>();
     public static Date serverStartTime;
 
     static {
@@ -15,6 +15,7 @@ public class Static {
         Static.regionDict.put("0b96cc858bf6", "송도3동");
         Static.regionDict.put("6a7eefda7865", "잠실2동");
         Static.regionDict.put("ee1c4acc500b", "잠실3동");
+
         //depth4
         Static.regionDict.put("b7ca1e49757c", "송도1동 더샵하버뷰");
         Static.regionDict.put("2eba3a86bcce", "송도1동 롯데캐슬");
