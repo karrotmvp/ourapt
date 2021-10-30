@@ -3,7 +3,7 @@ package com.karrotmvp.ourapt.v1.article.question;
 import com.karrotmvp.ourapt.v1.article.question.dto.QuestionListDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.QuestionSubmitDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserDto;
+import com.karrotmvp.ourapt.v1.auth.dto.KarrotOpenApiUserDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
 import com.karrotmvp.ourapt.v1.user.entity.User;

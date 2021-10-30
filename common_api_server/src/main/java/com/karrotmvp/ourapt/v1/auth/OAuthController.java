@@ -3,7 +3,7 @@ package com.karrotmvp.ourapt.v1.auth;
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotAccessTokenDto;
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotLoginDto;
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotOAuthResponseDto;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserDto;
+import com.karrotmvp.ourapt.v1.auth.dto.KarrotOpenApiUserDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.repository.UserRepository;

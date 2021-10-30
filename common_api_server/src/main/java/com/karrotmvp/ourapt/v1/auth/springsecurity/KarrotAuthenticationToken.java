@@ -1,14 +1,15 @@
 package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
-import java.util.Arrays;
-
+import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Arrays;
 
 public class KarrotAuthenticationToken extends AbstractAuthenticationToken {
 
   private final String credentials;
-  private final KarrotOpenApiUserDto principal;
+  private final KarrotProfile principal;
 
   public KarrotAuthenticationToken(String authorizationCode) {
     super(null);
@@ -17,7 +18,7 @@ public class KarrotAuthenticationToken extends AbstractAuthenticationToken {
     this.setAuthenticated(false);
   }
 
-  public KarrotAuthenticationToken(String bearerToken, KarrotOpenApiUserDto userProfile) {
+  public KarrotAuthenticationToken(String bearerToken, KarrotProfile userProfile) {
     super(Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")));
     this.credentials = bearerToken;
     this.principal = userProfile;
@@ -30,7 +31,7 @@ public class KarrotAuthenticationToken extends AbstractAuthenticationToken {
   }
 
   @Override
-  public KarrotOpenApiUserDto getPrincipal() {
+  public KarrotProfile getPrincipal() {
     return this.principal;
   }
   

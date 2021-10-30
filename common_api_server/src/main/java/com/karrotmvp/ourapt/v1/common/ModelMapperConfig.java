@@ -8,6 +8,8 @@ import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.RegionDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.apartment.entity.Region;
+import com.karrotmvp.ourapt.v1.article.comment.Comment;
+import com.karrotmvp.ourapt.v1.article.comment.dto.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.Question;
 import com.karrotmvp.ourapt.v1.article.question.dto.QuestionDto;
 import com.karrotmvp.ourapt.v1.user.dto.UserDto;
@@ -45,23 +47,35 @@ public class ModelMapperConfig {
     );
 
     // AdminQuestion
-    modelMapper.typeMap(AdminQuestion.class, AdminQuestionDto.class).addMapping(
-      AdminQuestion::isActive,
-      AdminQuestionDto::setIsActive
+    modelMapper.typeMap(AdminQuestion.class, AdminQuestionDto.class).addMappings(
+      mapper -> {
+        mapper.map(
+          AdminQuestion::isActive,
+          AdminQuestionDto::setIsActive
+        );
+        mapper.map(
+          AdminQuestion::getDisplayOn,
+          AdminQuestionDto::setDisplayOn
+        );
+      }
     );
 
     // AdminQuestionAnswer
     modelMapper.typeMap(AdminQuestionAnswer.class, AdminQuestionAnswerDto.class).<KarrotProfile>addMapping(
       AdminQuestionAnswer::getAnswerer,
-      (aqdto, profile) -> aqdto.setAnswerer(profile)
+      AdminQuestionAnswerDto::setAnswerer
     );
 
     // Question
-    modelMapper.typeMap(Question.class, QuestionDto.class).addMappings(
-      mapper -> mapper.<String>map(
-        (question) -> question.getWriter().getId(),
-        (questionDto, karrotId) -> questionDto.getWriter().setId(karrotId)
-      )
+    modelMapper.typeMap(Question.class, QuestionDto.class).addMapping(
+      Question::getWriter,
+      QuestionDto::setWriter
+    );
+
+    // Comment
+    modelMapper.typeMap(Comment.class, CommentDto.class).addMapping(
+      Comment::getWriter,
+      CommentDto::setWriter
     );
 
     return modelMapper;

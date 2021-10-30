@@ -1,6 +1,5 @@
 package com.karrotmvp.ourapt.v1.adminquestion.entity;
 
-import com.karrotmvp.ourapt.v1.apartment.entity.Region;
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import com.karrotmvp.ourapt.v1.user.entity.User;
@@ -23,9 +22,9 @@ public class AdminQuestionAnswer extends BaseEntity {
     @Setter
     private String mainText;
 
-    @Embedded
+    @Column(name = "region_id")
     @Setter
-    private Region createdOn;
+    private String createdOn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", referencedColumnName = "id")

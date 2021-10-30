@@ -2,7 +2,7 @@ package com.karrotmvp.ourapt.v1.preopen;
 
 
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserDto;
+import com.karrotmvp.ourapt.v1.auth.dto.KarrotOpenApiUserDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.common.exception.application.DuplicatedRequestException;
 import com.karrotmvp.ourapt.v1.preopen.dto.PreopenReservationDto;

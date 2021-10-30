@@ -1,8 +1,8 @@
 package com.karrotmvp.ourapt.v1.auth;
 
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotOAuthResponseDto;
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotOpenApiUserDto;
-import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnauthorizedCode;
+import com.karrotmvp.ourapt.v1.auth.dto.KarrotOpenApiUserDto;
+import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnauthorizedCodeException;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import com.karrotmvp.ourapt.v1.common.exception.security.KarrotInvalidAccessTokenException;
 import com.karrotmvp.ourapt.v1.common.karrotopenapi.KarrotOpenApiResponseBody;
@@ -51,7 +51,7 @@ public class AuthService {
         throw new KarrotUnexpectedResponseException("잘못된 KARROT APP ID 입니다.");
       })
       .onStatus((httpStatus) -> httpStatus.equals(HttpStatus.BAD_REQUEST), (response) -> {
-        throw new KarrotUnauthorizedCode("유효하지 않은 KARROT authorization code 입니다.", "");
+        throw new KarrotUnauthorizedCodeException("유효하지 않은 KARROT authorization code 입니다.", "");
       })
       .onStatus((httpStatus) -> !httpStatus.equals(HttpStatus.OK), (response) -> {
         throw new KarrotUnexpectedResponseException();

@@ -73,7 +73,7 @@ public class AdminPageController {
         // apartmentEntry = [0]: regionId, [1]: regionName, [2]: countOfPreopenData
         List<List<String>> apartmentEntries = Static.regionDict.entrySet()
                 .stream()
-                .map(entry -> new ArrayList<>(Arrays.asList(entry.getKey(), entry.getValue())))
+                .map(entry -> new ArrayList<>(Arrays.asList(entry.getKey(), entry.getValue().getName())))
                 .peek(entryAsList -> entryAsList.add(preopenCountMap.get(entryAsList.get(0)) + ""))
                 .sorted(Comparator.comparing(entryA -> entryA.get(1)))
                 .collect(Collectors.toList());

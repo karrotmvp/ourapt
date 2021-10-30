@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Table(name = "apartment")
@@ -74,13 +72,5 @@ public class Apartment extends BaseEntity {
 
   public Boolean isActive() {
     return this.inactiveAt == null || this.inactiveAt.after(new Date());
-  }
-
-  public List<Region> getRegions() {
-    return Arrays.asList(
-      this.getRegionDepth1(),
-      this.getRegionDepth2(),
-      this.getRegionDepth3(),
-      this.getRegionDepth4());
   }
 }

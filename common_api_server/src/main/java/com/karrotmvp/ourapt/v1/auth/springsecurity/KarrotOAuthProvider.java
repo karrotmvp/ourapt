@@ -1,7 +1,9 @@
 package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
 import com.karrotmvp.ourapt.v1.auth.AuthService;
+import com.karrotmvp.ourapt.v1.auth.dto.KarrotOpenApiUserDto;
 import com.karrotmvp.ourapt.v1.common.exception.security.KarrotInvalidAccessTokenException;
+import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -44,7 +46,11 @@ public class KarrotOAuthProvider implements AuthenticationProvider {
     }
 
     private Authentication createSuccessAuthentication(Authentication authentication, KarrotOpenApiUserDto karrotUserProfile) {
-        return new KarrotAuthenticationToken(String.valueOf(authentication.getCredentials()), karrotUserProfile);
+        return new KarrotAuthenticationToken(String.valueOf(authentication.getCredentials()), new KarrotProfile(
+          karrotUserProfile.getUserId(),
+          karrotUserProfile.getNickname(),
+          null
+        ));
     }
 
 

@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.auth.springsecurity;
+package com.karrotmvp.ourapt.v1.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
