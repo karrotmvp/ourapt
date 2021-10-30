@@ -77,8 +77,8 @@ public class SwaggerConfig {
 
   private ApiInfo apiInfo() {
     return new ApiInfoBuilder()
-      .title("Our APT")
-      .description("Our APT common_api service")
+      .title("우리아파트 API 문서")
+      .description("")
       .version("1.0")
       .build();
   }

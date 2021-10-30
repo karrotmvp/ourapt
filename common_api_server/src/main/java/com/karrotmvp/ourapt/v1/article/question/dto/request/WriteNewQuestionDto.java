@@ -18,4 +18,8 @@ public class WriteNewQuestionDto {
     @NotNull
     @NotEmpty
     private String regionId;
+
+    @NotNull
+    @NotEmpty
+    private String apartmentId;
 }
