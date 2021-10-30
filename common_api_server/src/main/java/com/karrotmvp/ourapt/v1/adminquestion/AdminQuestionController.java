@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class AdminQuestionController {
 
   @GetMapping(value = "/admin-question")
-  @ApiOperation(value = "리전에 포함된, 대답한 적 없는 AdminQuestion 가져오기")
+  @ApiOperation(value = "아파트에 해당하는 대답한 적 없는 AdminQuestion 가져오기")
   public CommonResponseBody<GetAvailableAdminQuestionDto> getAvailableAdminQuestion(
     @CurrentUser KarrotProfile profile,
-    @RequestParam String regionId
+    @RequestParam String apartmentId
   ) {
     throw new UnsupportedOperationException();
 //    return CommonResponseBody.<GetAvailableAdminQuestionDto>builder()
