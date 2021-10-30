@@ -13,7 +13,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-@Api(tags = "질문피드")
+@Api(tags = "5. 질문피드")
 public class QuestionController {
 
   @GetMapping(value = "/questions")

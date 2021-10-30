@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-@Api(tags = "관리자질문(탑피드)")
+@Api(tags = "4. 관리자질문(탑피드)")
 public class AdminQuestionController {
 
   @GetMapping(value = "/admin-question")

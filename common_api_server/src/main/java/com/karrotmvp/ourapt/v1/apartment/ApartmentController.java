@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-@Api(tags = "아파트")
+@Api(tags = "2. 아파트")
 public class ApartmentController {
 
   private final ApartmentService apartmentService;

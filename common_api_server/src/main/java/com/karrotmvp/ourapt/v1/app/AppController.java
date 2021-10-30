@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 
 @RestController
 @RequestMapping(value = "/api/v1/app")
-@Api(tags = "서버 애플리케이션 공통 API")
+@Api(tags = "1. 서버 애플리케이션 공통 API")
 public class AppController {
 
   @GetMapping("/health-check")
