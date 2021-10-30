@@ -1,56 +1,42 @@
 package com.karrotmvp.ourapt.v1.article.comment;
 
 
-import com.karrotmvp.ourapt.v1.article.comment.dto.CommentSubmitDto;
-import com.karrotmvp.ourapt.v1.article.question.Question;
-import com.karrotmvp.ourapt.v1.article.question.QuestionRepository;
+import com.karrotmvp.ourapt.v1.article.comment.dto.request.WriteNewCommentDto;
+import com.karrotmvp.ourapt.v1.article.comment.dto.response.GetCommentsOfQuestionDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
-import com.karrotmvp.ourapt.v1.auth.dto.KarrotOpenApiUserDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
-import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
-import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
-import com.karrotmvp.ourapt.v1.user.entity.User;
-import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/api/v1/comment")
+@RequestMapping(value = "/api/v1")
+@Api(tags = "댓글")
 public class CommentController {
 
-    @Autowired
-    private CommentRepository commentRepository;
+  @GetMapping(value = "/question/{questionId}/comments")
+  @ApiOperation(value = "질문에 달린 게시글 보기")
+  public CommonResponseBody<GetCommentsOfQuestionDto> getCommentsOfQuestion(
+    @PathVariable String questionId
+  ) {
+    throw new UnsupportedOperationException();
+//    return CommonResponseBody.<GetCommentsOfQuestionDto>builder()
+//      .success()
+//      .build();
+  }
 
-    @Autowired
-    private QuestionRepository questionRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @PostMapping(value = "")
-    public CommonResponseBody<Void> submitComment(
-            @RequestBody CommentSubmitDto submitted,
-            @CurrentUser KarrotOpenApiUserDto user
-            ) {
-        Comment newComment = modelMapper.map(submitted, Comment.class);
-
-        User foundUser = userRepository.findById(user.getUserId())
-                .orElseThrow(RegisteredUserNotFoundException::new);
-        newComment.setWriter(foundUser);
-
-        Question parentQuestion = this.questionRepository.findById(submitted.getParentId())
-                .orElseThrow(() -> new DataNotFoundFromDBException("잘못된 게시글 ID, 게시글이 데이터 베이스에 없음", "이미 삭제된 게시글 이에요."));
-        newComment.setParent(parentQuestion);
-
-        commentRepository.save(newComment);
-        return CommonResponseBody.<Void>builder()
-                .success().build();
-    }
+  @PostMapping(value = "/question/{questionId}/comment")
+  @ApiOperation(value = "새로운 댓글 작성")
+  public CommonResponseBody<Void> writeNewComment(
+    @RequestBody @Valid WriteNewCommentDto commentContent,
+    @PathVariable String questionId,
+    @CurrentUser KarrotProfile profile
+  ) {
+    throw new UnsupportedOperationException();
+//    return CommonResponseBody.<Void>builder()
+//      .success().build();
+  }
 }

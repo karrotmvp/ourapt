@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
-import com.karrotmvp.ourapt.v1.article.question.dto.QuestionSubmitDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class QuestionService {
     private ModelMapper modelMapper;
 
     @Transactional
-    public void writeNewQuestion(QuestionSubmitDto questionInfo, User writer) {
+    public void writeNewQuestion(WriteNewQuestionDto questionInfo, User writer) {
         Question question = modelMapper.map(questionInfo, Question.class);
         question.setWriter(writer);
         this.questionRepository.save(question);

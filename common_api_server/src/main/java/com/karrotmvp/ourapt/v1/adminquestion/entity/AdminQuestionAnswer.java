@@ -13,34 +13,34 @@ import java.util.UUID;
 @Entity
 public class AdminQuestionAnswer extends BaseEntity {
 
-    @Id
-    @Getter
-    private String id;
+  @Id
+  @Getter
+  private String id;
 
-    @Column(name = "main_text")
-    @Getter
-    @Setter
-    private String mainText;
+  @Column(name = "main_text")
+  @Getter
+  @Setter
+  private String mainText;
 
-    @Column(name = "region_id")
-    @Setter
-    private String createdOn;
+  @Column(name = "region_id")
+  @Setter
+  private String createdOn;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id", referencedColumnName = "id")
-    @Setter
-    private AdminQuestion about;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "question_id", referencedColumnName = "id")
+  @Setter
+  private AdminQuestion about;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "answerer_id", referencedColumnName = "karrot_id")
-    @Setter
-    private User answerer;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "answerer_id", referencedColumnName = "karrot_id")
+  @Setter
+  private User answerer;
 
-    public AdminQuestionAnswer() {
-        this.id = UUID.randomUUID().toString();
-    }
+  public AdminQuestionAnswer() {
+    this.id = UUID.randomUUID().toString();
+  }
 
-    public KarrotProfile getAnswerer() {
-        return this.answerer.getProfile();
-    }
+  public KarrotProfile getAnswerer() {
+    return this.answerer.getProfile();
+  }
 }

@@ -9,20 +9,16 @@ import com.karrotmvp.ourapt.v1.preopen.dto.PreopenReservationDto;
 import com.karrotmvp.ourapt.v1.preopen.entity.PreopenForm;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.Date;
 
 
-@RestController
-@RequestMapping(value = "/api/v1/preopen")
+//@RestController
+//@RequestMapping(value = "/api/v1/preopen")
 public class PreopenController {
 
     @Autowired
@@ -31,8 +27,8 @@ public class PreopenController {
     @Autowired
     private PreopenRepository preopenRepository;
 
-    @PostMapping(value = "/reservation")
-    @ApiOperation(value = "사전예약 알림 신청")
+//    @PostMapping(value = "/reservation")
+//    @ApiOperation(value = "사전예약 알림 신청")
     @Transactional
     public CommonResponseBody<Void> reservationNotification(
             @RequestBody @Valid PreopenReservationDto submit,

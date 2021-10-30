@@ -1,20 +1,20 @@
 package com.karrotmvp.ourapt.v1.app;
 
-import java.text.SimpleDateFormat;
-
-import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
-
+import com.karrotmvp.ourapt.v1.common.Static;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
-
-import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.text.SimpleDateFormat;
 
 @RestController
 @RequestMapping(value = "/api/v1/app")
+@Api(tags = "서버 애플리케이션 공통 API")
 public class AppController {
 
   @GetMapping("/health-check")

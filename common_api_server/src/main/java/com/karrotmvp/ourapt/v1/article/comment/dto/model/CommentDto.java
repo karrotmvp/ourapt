@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.comment.dto;
+package com.karrotmvp.ourapt.v1.article.comment.dto.model;
 
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import lombok.AccessLevel;

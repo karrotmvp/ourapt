@@ -1,20 +1,21 @@
-package com.karrotmvp.ourapt.v1.article.question.dto;
+package com.karrotmvp.ourapt.v1.article.question.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 
-@Getter
-@Setter
 @NoArgsConstructor
-public class QuestionSubmitDto {
+@Getter
+public class WriteNewQuestionDto {
 
     @NotNull
+    @NotEmpty
     private String mainText;
 
     @NotNull
+    @NotEmpty
     private String regionId;
 }
