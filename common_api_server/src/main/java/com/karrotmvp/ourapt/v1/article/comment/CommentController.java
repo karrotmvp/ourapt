@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-@Api(tags = "6. 댓글")
+@Api(tags = "5. 댓글")
 public class CommentController {
 
   @GetMapping(value = "/question/{questionId}/comments")

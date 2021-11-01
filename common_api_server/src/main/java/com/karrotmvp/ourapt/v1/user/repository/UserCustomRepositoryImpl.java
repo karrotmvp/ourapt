@@ -3,7 +3,6 @@ package com.karrotmvp.ourapt.v1.user.repository;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import com.karrotmvp.ourapt.v1.user.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +29,12 @@ public class UserCustomRepositoryImpl implements UserCustomRepository<User, Stri
         if (foundUser == null) {
             return Optional.empty();
         }
-        KarrotProfile karrotOApiUserProfile = this.karrotOAPI.getKarrotUserProfileById(userId);
-        foundUser.setProfile(karrotOApiUserProfile);
+        if (!foundUser.isAdmin()) {
+            KarrotProfile karrotOApiUserProfile = this.karrotOAPI.getKarrotUserProfileById(userId);
+            foundUser.setProfile(karrotOApiUserProfile);
+        } else {
+            foundUser.setProfile(new KarrotProfile(foundUser.getId(), "우리아파트", ""));
+        }
         return Optional.of(foundUser);
     }
 }

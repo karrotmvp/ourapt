@@ -46,7 +46,7 @@ public abstract class Article extends BaseEntity {
   }
 
   public boolean isByAdmin() {
-    return writer.getIsAdmin();
+    return writer.isAdmin();
   }
 
 }

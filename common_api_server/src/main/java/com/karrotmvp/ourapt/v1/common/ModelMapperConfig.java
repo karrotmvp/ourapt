@@ -38,7 +38,7 @@ public class ModelMapperConfig {
     // Apartment
     modelMapper.typeMap(Apartment.class, ApartmentDto.class).addMapping(
       Apartment::isActive,
-      ApartmentDto::setIsActive
+      ApartmentDto::setActive
     );
 
     // Question

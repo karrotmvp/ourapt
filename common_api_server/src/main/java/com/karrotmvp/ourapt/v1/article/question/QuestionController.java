@@ -6,7 +6,6 @@ import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
-import com.karrotmvp.ourapt.v1.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-@Api(tags = "5. 질문피드")
+@Api(tags = "4. 질문피드")
 public class QuestionController {
 
   private final UserService userService;
@@ -47,8 +46,7 @@ public class QuestionController {
     @RequestBody @Valid WriteNewQuestionDto questionContent,
     @CurrentUser KarrotProfile userProfile
   ) {
-    User writer = this.userService.getUserByUserId(userProfile.getId());
-    this.questionService.writeNewQuestion(questionContent, writer);
+    this.questionService.writeNewQuestion(questionContent, userProfile.getId());
     return CommonResponseBody.<Void>builder()
       .success()
       .build();

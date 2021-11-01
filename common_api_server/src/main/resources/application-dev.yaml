@@ -32,7 +32,7 @@ spring:
           characterEncoding: TF-8
           useUnicode: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
   devtools:
     livereload:
       enabled: true

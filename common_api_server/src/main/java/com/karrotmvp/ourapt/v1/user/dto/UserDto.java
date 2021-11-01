@@ -1,5 +1,6 @@
 package com.karrotmvp.ourapt.v1.user.dto;
 
+import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class UserDto {
     private Date bannedAt;
     private Date createdAt;
     private Date updatedAt;
-    //private Boolean isAdmin;
+    private ApartmentDto checkedIn;
+    private boolean isAdmin;
 }

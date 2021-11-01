@@ -40,6 +40,14 @@ public class ModelMapperTests {
   @Test
   void userMappingTest() {
     String sourceUserId = "id";
+    Apartment sourceApt = new Apartment();
+    sourceApt.setName("test");
+    sourceApt.setRegionDepth1(getTestRegion());
+    sourceApt.setRegionDepth2(getTestRegion());
+    sourceApt.setRegionDepth3(getTestRegion());
+    sourceApt.setRegionDepth4(getTestRegion());
+    sourceApt.setInactiveAt(getYesterday());
+
     KarrotProfile sourceProfile = new KarrotProfile(
       sourceUserId, "nickname", "image");
     User sourceUser = new User(sourceUserId, sourceProfile);
@@ -48,7 +56,11 @@ public class ModelMapperTests {
     sourceUser.setUpdatedAt(now);
     sourceUser.setPushAgreedAt(getYesterday());
     sourceUser.setBannedAt(now);
+    sourceUser.setAdmin(true);
+    sourceUser.setCheckedIn(sourceApt);
     UserDto result = modelMapper.map(sourceUser, UserDto.class);
+
+    assertEquals(sourceUser.isAdmin(), result.isAdmin());
     assertEquals(sourceUserId, result.getId());
     assertEquals(sourceProfile.getId(), result.getProfile().getId());
     assertEquals(sourceProfile.getNickname(), result.getProfile().getNickname());
@@ -57,6 +69,10 @@ public class ModelMapperTests {
     assertNotNull(result.getCreatedAt());
     assertNotNull(result.getUpdatedAt());
     assertNotNull(result.getBannedAt());
+    assertEquals(sourceApt.getId(), result.getCheckedIn().getId());
+    assertEquals(sourceApt.getName(), result.getCheckedIn().getName());
+    assertEquals(sourceApt.getRegionDepth1().getId(), result.getCheckedIn().getRegionDepth1().getId());
+    assertEquals(sourceApt.getRegionDepth1().getName(), result.getCheckedIn().getRegionDepth1().getName());
   }
 
   @Test
@@ -67,17 +83,15 @@ public class ModelMapperTests {
     sourceApt.setInactiveAt(getYesterday());
     sourceApt.setCreatedAt(now);
     sourceApt.setUpdatedAt(now);
-    sourceApt.setDisplayName("displayName");
     sourceApt.setRegionDepth1(getTestRegion());
     sourceApt.setRegionDepth2(getTestRegion());
     sourceApt.setRegionDepth3(getTestRegion());
     sourceApt.setRegionDepth4(getTestRegion());
     ApartmentDto result = modelMapper.map(sourceApt, ApartmentDto.class);
     assertEquals(sourceApt.getName(), result.getName());
-    assertFalse(result.getIsActive());
+    assertFalse(result.isActive());
     assertNotNull(result.getCreatedAt());
     assertNotNull(result.getUpdatedAt());
-    assertEquals(result.getDisplayName(), sourceApt.getDisplayName());
     assertEquals(result.getRegionDepth1().getId(), sourceApt.getRegionDepth1().getId());
     assertEquals(result.getRegionDepth1().getName(), sourceApt.getRegionDepth1().getName());
     assertEquals(result.getRegionDepth2().getId(), sourceApt.getRegionDepth2().getId());

@@ -1,7 +1,9 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
 import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
+import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
 import com.karrotmvp.ourapt.v1.user.entity.User;
+import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,20 +12,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final UserRepository userRepository;
 
     private final ModelMapper modelMapper;
 
-    public QuestionService(QuestionRepository questionRepository, ModelMapper modelMapper) {
+    public QuestionService(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.questionRepository = questionRepository;
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
     @Transactional
-    public void writeNewQuestion(WriteNewQuestionDto content, User writer) {
+    public void writeNewQuestion(WriteNewQuestionDto content, String writerId) {
+        User writer = this.userRepository.findById(writerId)
+          .orElseThrow(RegisteredUserNotFoundException::new);
         Question question = modelMapper.map(content, Question.class);
         question.setWriter(writer);
         this.questionRepository.save(question);
     }
+
 
     public long getCountOfAllQuestions() {
         return this.questionRepository.count();

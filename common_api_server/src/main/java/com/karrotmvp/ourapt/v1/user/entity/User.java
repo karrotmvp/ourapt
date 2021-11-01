@@ -1,7 +1,11 @@
 package com.karrotmvp.ourapt.v1.user.entity;
 
+import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -40,7 +44,14 @@ public class User extends BaseEntity {
 
     @Column(name = "is_admin")
     @Getter
-    private Boolean isAdmin;
+    @Setter
+    private boolean isAdmin;
+
+    @OneToOne
+    @JoinColumn(name = "checked_in")
+    @Getter
+    @Setter
+    private Apartment checkedIn;
 
 
     public boolean isDeleted() {
@@ -58,7 +69,7 @@ public class User extends BaseEntity {
     }
 
     public User(String userId, KarrotProfile profile, boolean isAdmin) {
-        // TODO: 관리자의 경우 상속으로 리팩토링
+        // TODO: 관리자의 경우 상속을 이용하도록 리팩토링
         this.id = userId;
         this.profile = profile;
         this.isAdmin = true;

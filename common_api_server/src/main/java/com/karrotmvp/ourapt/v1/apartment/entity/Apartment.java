@@ -1,8 +1,7 @@
 package com.karrotmvp.ourapt.v1.apartment.entity;
 
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,14 +20,9 @@ public class Apartment extends BaseEntity {
   @Setter
   private String name;
 
-  @Column(name = "display_name")
-  @Getter
-  @Setter
-  private String displayName;
-
   @AttributeOverrides({
     @AttributeOverride(name = "id", column = @Column(name = "region_id_depth1")),
-    @AttributeOverride(name = "name", column = @Column(name = "name_depth1"))
+    @AttributeOverride(name = "name", column = @Column(name = "region_name_depth1"))
   })
   @Embedded
   @Column(name = "region_depth1")
@@ -38,7 +32,7 @@ public class Apartment extends BaseEntity {
 
   @AttributeOverrides({
     @AttributeOverride(name = "id", column = @Column(name = "region_id_depth2")),
-    @AttributeOverride(name = "name", column = @Column(name = "name_depth2")),
+    @AttributeOverride(name = "name", column = @Column(name = "region_name_depth2")),
   })
   @Embedded
   @Column(name = "region_depth2")
@@ -48,7 +42,7 @@ public class Apartment extends BaseEntity {
 
   @AttributeOverrides({
     @AttributeOverride(name = "id", column = @Column(name = "region_id_depth3")),
-    @AttributeOverride(name = "name", column = @Column(name = "name_depth3")),
+    @AttributeOverride(name = "name", column = @Column(name = "region_name_depth3")),
   })
   @Embedded
   @Column(name = "region_depth3")
@@ -58,7 +52,7 @@ public class Apartment extends BaseEntity {
 
   @AttributeOverrides({
     @AttributeOverride(name = "id", column = @Column(name = "region_id_depth4")),
-    @AttributeOverride(name = "name", column = @Column(name = "name_depth4")),
+    @AttributeOverride(name = "name", column = @Column(name = "region_name_depth4")),
   })
   @Embedded
   @Column(name = "region_depth4")

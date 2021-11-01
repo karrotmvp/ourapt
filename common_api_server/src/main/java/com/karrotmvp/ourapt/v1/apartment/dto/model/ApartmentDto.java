@@ -17,9 +17,6 @@ public class ApartmentDto {
     private String name;
 
     @NotNull
-    private String displayName;
-
-    @NotNull
     private RegionDto regionDepth1;
 
     @NotNull
@@ -31,7 +28,7 @@ public class ApartmentDto {
     private RegionDto regionDepth4;
 
     @NotNull
-    private Boolean isActive;
+    private boolean isActive;
 
     @NotNull
     private Date createdAt;
