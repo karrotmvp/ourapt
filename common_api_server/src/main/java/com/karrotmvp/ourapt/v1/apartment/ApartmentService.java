@@ -2,7 +2,9 @@ package com.karrotmvp.ourapt.v1.apartment;
 
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
+import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
+import com.karrotmvp.ourapt.v1.common.exception.application.NotServicedRegionException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,9 @@ public class ApartmentService {
     }
 
     public List<ApartmentDto> getApartmentsInRegionId(String regionId) {
+        if (!Static.regionDict.containsKey(regionId)) {
+            throw new NotServicedRegionException();
+        }
         List<Apartment> apartmentsMatchedByDepth4 = this.apartmentRepository.findByRegionDepth4Id(regionId);
         if (apartmentsMatchedByDepth4.size() > 0) {
             return apartmentsMatchedByDepth4.stream()
@@ -30,7 +35,7 @@ public class ApartmentService {
                     .collect(Collectors.toList());
         }
 
-        List<Apartment> apartmentsMatchedByDepth3 = this.apartmentRepository.findByRegionDepth4Id(regionId);
+        List<Apartment> apartmentsMatchedByDepth3 = this.apartmentRepository.findByRegionDepth3Id(regionId);
         return apartmentsMatchedByDepth3.stream()
                 .filter(Apartment::isActive)
                 .map((apt) -> mapper.map(apt, ApartmentDto.class))
