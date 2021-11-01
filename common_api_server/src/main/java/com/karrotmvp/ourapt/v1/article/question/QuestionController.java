@@ -4,7 +4,9 @@ import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.GetQuestionsDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
+import com.karrotmvp.ourapt.v1.user.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +18,22 @@ import javax.validation.Valid;
 @Api(tags = "5. 질문피드")
 public class QuestionController {
 
+  private final UserService userService;
+  private final QuestionService questionService;
+
+  public QuestionController(UserService userService, QuestionService questionService) {
+    this.userService = userService;
+    this.questionService = questionService;
+  }
+
+
   @GetMapping(value = "/questions")
   @ApiOperation(value = "질문목록 Date 커서기반 페이징으로 조회")
   public CommonResponseBody<GetQuestionsDto> getQuestions(
     @RequestParam(name = "perPage") int perPage,
     @RequestParam(name = "cursor") long cursorTimestamp
   ) {
+
     throw new UnsupportedOperationException();
 //    return CommonResponseBody.<GetQuestionsDto>builder()
 //      .success()
@@ -35,9 +47,10 @@ public class QuestionController {
     @RequestBody @Valid WriteNewQuestionDto questionContent,
     @CurrentUser KarrotProfile userProfile
   ) {
-    throw new UnsupportedOperationException();
-//    return CommonResponseBody.<Void>builder()
-//      .success()
-//      .build();
+    User writer = this.userService.getUserByUserId(userProfile.getId());
+    this.questionService.writeNewQuestion(questionContent, writer);
+    return CommonResponseBody.<Void>builder()
+      .success()
+      .build();
   }
 }

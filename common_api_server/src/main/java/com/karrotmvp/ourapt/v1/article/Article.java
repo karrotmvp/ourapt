@@ -44,4 +44,9 @@ public abstract class Article extends BaseEntity {
     return Optional.ofNullable(Static.regionDict.get(this.createdOn))
       .orElseThrow(() -> new NotFoundInRegionDictException(this.createdOn));
   }
+
+  public boolean isByAdmin() {
+    return writer.getIsAdmin();
+  }
+
 }

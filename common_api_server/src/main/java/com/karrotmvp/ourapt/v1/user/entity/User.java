@@ -38,6 +38,10 @@ public class User extends BaseEntity {
     @Getter
     private Date bannedAt;
 
+    @Column(name = "is_admin")
+    @Getter
+    private Boolean isAdmin;
+
 
     public boolean isDeleted() {
         return this.deletedAt != null && deletedAt.before(new Date());
@@ -50,6 +54,14 @@ public class User extends BaseEntity {
     public User(String userId, KarrotProfile profile) {
         this.id = userId;
         this.profile = profile;
+        this.isAdmin = false;
+    }
+
+    public User(String userId, KarrotProfile profile, boolean isAdmin) {
+        // TODO: 관리자의 경우 상속으로 리팩토링
+        this.id = userId;
+        this.profile = profile;
+        this.isAdmin = true;
     }
 }
 

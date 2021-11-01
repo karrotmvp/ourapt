@@ -17,4 +17,5 @@ public class UserDto {
     private Date bannedAt;
     private Date createdAt;
     private Date updatedAt;
+    //private Boolean isAdmin;
 }

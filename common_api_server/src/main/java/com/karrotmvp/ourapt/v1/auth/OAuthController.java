@@ -5,6 +5,7 @@ import com.karrotmvp.ourapt.v1.auth.dto.KarrotLoginDto;
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotOAuthResponseDto;
 import com.karrotmvp.ourapt.v1.auth.dto.KarrotOpenApiUserDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
 import io.swagger.annotations.Api;
@@ -51,7 +52,7 @@ public class OAuthController {
         .build();
     }
 
-    User newUser = userProfile.toEntity();
+    User newUser = new User(userProfile.getUserId(), new KarrotProfile(userProfile.getUserId(), userProfile.getNickname(), ""), false);
     userRepository.save(newUser);
 
     return CommonResponseBody.<KarrotAccessTokenDto>builder()

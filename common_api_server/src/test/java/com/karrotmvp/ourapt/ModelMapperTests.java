@@ -1,9 +1,5 @@
 package com.karrotmvp.ourapt;
 
-import com.karrotmvp.ourapt.v1.adminquestion.dto.model.AdminQuestionAnswerDto;
-import com.karrotmvp.ourapt.v1.adminquestion.dto.model.AdminQuestionDto;
-import com.karrotmvp.ourapt.v1.adminquestion.entity.AdminQuestion;
-import com.karrotmvp.ourapt.v1.adminquestion.entity.AdminQuestionAnswer;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.RegionDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
@@ -71,6 +67,7 @@ public class ModelMapperTests {
     sourceApt.setInactiveAt(getYesterday());
     sourceApt.setCreatedAt(now);
     sourceApt.setUpdatedAt(now);
+    sourceApt.setDisplayName("displayName");
     sourceApt.setRegionDepth1(getTestRegion());
     sourceApt.setRegionDepth2(getTestRegion());
     sourceApt.setRegionDepth3(getTestRegion());
@@ -80,6 +77,7 @@ public class ModelMapperTests {
     assertFalse(result.getIsActive());
     assertNotNull(result.getCreatedAt());
     assertNotNull(result.getUpdatedAt());
+    assertEquals(result.getDisplayName(), sourceApt.getDisplayName());
     assertEquals(result.getRegionDepth1().getId(), sourceApt.getRegionDepth1().getId());
     assertEquals(result.getRegionDepth1().getName(), sourceApt.getRegionDepth1().getName());
     assertEquals(result.getRegionDepth2().getId(), sourceApt.getRegionDepth2().getId());
@@ -92,62 +90,22 @@ public class ModelMapperTests {
   }
 
   @Test
-  void adminQuestionMappingTest() {
-    Date now = new Date();
-    Region testRegion = getTestRegion();
-    AdminQuestion adminQuestion = new AdminQuestion();
-    adminQuestion.setDisplayOn(testRegion.getId());
-    adminQuestion.setInactiveAt(getYesterday());
-    adminQuestion.setMainText("mainText");
-    adminQuestion.setExpiredAt(now);
-    adminQuestion.setCreatedAt(now);
-    adminQuestion.setUpdatedAt(now);
-    AdminQuestionDto result = modelMapper.map(adminQuestion, AdminQuestionDto.class);
-
-    assertEquals(testRegion.getId(), result.getDisplayOn().getId());
-    assertEquals(testRegion.getName(), result.getDisplayOn().getName());
-    assertFalse(result.getIsActive());
-    assertNotNull(result.getMainText());
-    assertNotNull(result.getExpiredAt());
-    assertNotNull(result.getCreatedAt());
-    assertNotNull(result.getUpdatedAt());
-  }
-
-  @Test
-  void adminQuestionAnswerMappingTest() {
-    Date now = new Date();
-    AdminQuestion adminQuestion = new AdminQuestion();
-    AdminQuestionAnswer source = new AdminQuestionAnswer();
-    User answerer = new User("id", new KarrotProfile("id", "nickname", "img"));
-    Region madeIn = getTestRegion();
-    source.setMainText("mainText");
-    source.setAbout(adminQuestion);
-    source.setAnswerer(answerer);
-    source.setCreatedOn(madeIn.getId());
-    source.setCreatedAt(now);
-    source.setUpdatedAt(now);
-    AdminQuestionAnswerDto result = modelMapper.map(source, AdminQuestionAnswerDto.class);
-    assertNotNull(result.getId());
-    assertNotNull(result.getAnswerer());
-    assertNotNull(result.getMainText());
-    assertNotNull(result.getCreatedAt());
-    assertNotNull(result.getUpdatedAt());
-  }
-
-  @Test
   void questionMappingTest() {
     Date now = new Date();
     Question source = new Question();
-    User testUser = new User("id", new KarrotProfile("id", "nick", "img"));
+    User testUser = new User("id", new KarrotProfile("id", "nick", "img"), true);
     Region testRegion = getTestRegion();
     source.setMainText("mainText");
     source.setWriter(testUser);
     source.setCreatedAt(now);
     source.setCreatedOn(testRegion.getId());
     source.setUpdatedAt(now);
+    source.setPinnedUntil(getTomorrow());
 
     QuestionDto result = modelMapper.map(source, QuestionDto.class);
     assertEquals(source.getId(), result.getId());
+    assertEquals(source.isByAdmin(), result.getByAdmin());
+    assertEquals(source.isPinned(), result.getIsPinned());
     assertEquals(source.getWriter().getId(), result.getWriter().getId());
     assertEquals(source.getWriter().getNickname(), result.getWriter().getNickname());
     assertEquals(source.getWriter().getProfileImageUrl(), result.getWriter().getProfileImageUrl());
@@ -182,6 +140,13 @@ public class ModelMapperTests {
     Calendar c = Calendar.getInstance();
     c.setTime(new Date());
     c.add(Calendar.DATE, -1);
+    return c.getTime();
+  }
+
+  private Date getTomorrow() {
+    Calendar c = Calendar.getInstance();
+    c.setTime(new Date());
+    c.add(Calendar.DATE, 1);
     return c.getTime();
   }
 

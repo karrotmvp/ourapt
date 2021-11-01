@@ -20,6 +20,10 @@ public class QuestionDto {
     @NotNull
     private String mainText;
     @NotNull
+    private Boolean isPinned;
+    @NotNull
+    private Boolean byAdmin;
+    @NotNull
     private Date createdAt;
     @NotNull
     private Date updatedAt;

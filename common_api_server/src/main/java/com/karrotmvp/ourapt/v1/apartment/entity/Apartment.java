@@ -21,6 +21,11 @@ public class Apartment extends BaseEntity {
   @Setter
   private String name;
 
+  @Column(name = "display_name")
+  @Getter
+  @Setter
+  private String displayName;
+
   @AttributeOverrides({
     @AttributeOverride(name = "id", column = @Column(name = "region_id_depth1")),
     @AttributeOverride(name = "name", column = @Column(name = "name_depth1"))

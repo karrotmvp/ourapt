@@ -5,9 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @DiscriminatorValue(value = "Q")
@@ -18,4 +17,15 @@ public class Question extends Article {
     @Getter
     @Setter
     private String mainText;
+
+    @Column(name = "is_pinned")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Getter
+    @Setter
+    private Date pinnedUntil;
+
+    public Boolean isPinned() {
+        return this.pinnedUntil != null && new Date().before(this.pinnedUntil);
+    }
 }
+
