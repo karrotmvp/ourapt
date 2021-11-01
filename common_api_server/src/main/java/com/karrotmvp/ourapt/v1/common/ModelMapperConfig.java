@@ -8,7 +8,7 @@ import com.karrotmvp.ourapt.v1.article.comment.Comment;
 import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.Question;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
-import com.karrotmvp.ourapt.v1.user.dto.UserDto;
+import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

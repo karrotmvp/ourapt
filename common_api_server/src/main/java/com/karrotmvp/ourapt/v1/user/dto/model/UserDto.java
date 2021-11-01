@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.user.dto;
+package com.karrotmvp.ourapt.v1.user.dto.model;
 
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;

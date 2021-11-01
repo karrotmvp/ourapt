@@ -13,20 +13,19 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
+    private final ModelMapper mapper;
 
-    private final ModelMapper modelMapper;
-
-    public QuestionService(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public QuestionService(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper mapper) {
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @Transactional
     public void writeNewQuestion(WriteNewQuestionDto content, String writerId) {
         User writer = this.userRepository.findById(writerId)
           .orElseThrow(RegisteredUserNotFoundException::new);
-        Question question = modelMapper.map(content, Question.class);
+        Question question = mapper.map(content, Question.class);
         question.setWriter(writer);
         this.questionRepository.save(question);
     }

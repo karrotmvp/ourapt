@@ -5,6 +5,9 @@ import com.karrotmvp.ourapt.v1.common.constant.ApiResult;
 public class DataNotFoundFromDBException extends AbstractWebApplicationContextException {
 
 
+  public DataNotFoundFromDBException(String message) {
+    super(message, "");
+  }
   public DataNotFoundFromDBException(String devMessage, String displayMessage) {
     super(devMessage, displayMessage);
   }
