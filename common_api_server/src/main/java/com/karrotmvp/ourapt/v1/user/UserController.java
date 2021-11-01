@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/app/v1/user")
+@RequestMapping("/api/v1/user")
 @Api(tags = "6. 사용자")
 public class UserController {
 

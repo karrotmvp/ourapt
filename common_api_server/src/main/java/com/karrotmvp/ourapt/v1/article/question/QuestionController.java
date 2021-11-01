@@ -4,7 +4,6 @@ import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.GetQuestionsDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
-import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,11 +16,9 @@ import javax.validation.Valid;
 @Api(tags = "4. 질문피드")
 public class QuestionController {
 
-  private final UserService userService;
   private final QuestionService questionService;
 
-  public QuestionController(UserService userService, QuestionService questionService) {
-    this.userService = userService;
+  public QuestionController(QuestionService questionService) {
     this.questionService = questionService;
   }
 

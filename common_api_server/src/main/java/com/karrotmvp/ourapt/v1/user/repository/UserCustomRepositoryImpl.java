@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 
@@ -25,7 +26,9 @@ public class UserCustomRepositoryImpl implements UserCustomRepository<User, Stri
 
     @Override
     public Optional<User> findById(String userId) {
-        User foundUser = em.find(User.class, userId);
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u LEFT JOIN FETCH u.checkedIn WHERE u.id = ?1", User.class);
+        query.setParameter(1, userId);
+        User foundUser =  query.getSingleResult();
         if (foundUser == null) {
             return Optional.empty();
         }

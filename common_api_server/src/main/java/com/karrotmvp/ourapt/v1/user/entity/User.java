@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     @Setter
     private boolean isAdmin;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "checked_in")
     @Getter
     @Setter
@@ -72,7 +72,7 @@ public class User extends BaseEntity {
         // TODO: 관리자의 경우 상속을 이용하도록 리팩토링
         this.id = userId;
         this.profile = profile;
-        this.isAdmin = true;
+        this.isAdmin = isAdmin;
     }
 }
 

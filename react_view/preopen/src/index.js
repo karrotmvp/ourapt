@@ -23,7 +23,7 @@ let urlSearchParams = new URLSearchParams(window.location.search);
 //regionID 받아오기
 const regionId = urlSearchParams.get("region_id");
 const isPreload = urlSearchParams.get("preload");
-document.getElementById("temp").innerHTML = urlSearchParams.get("code");
+document.getElementById("temp").value = urlSearchParams.get("code");
 
 // 슬랙 웹훅 핫픽스
 // 0. 접속시 region에 따라 분기하기
@@ -47,29 +47,29 @@ function parseNameFromRegionId(regionId) {
   return regionName[regionId] ?? "테스트";
 }
 
-sendWebhookToSlack(
-  ` :partying_face: ${parseNameFromRegionId(
-    regionId
-  )}에서 우리 페이지를 방문했어요!`
-);
+// sendWebhookToSlack(
+//   ` :partying_face: ${parseNameFromRegionId(
+//     regionId
+//   )}에서 우리 페이지를 방문했어요!`
+// );
 
-function sendWebhookToSlack(slackMessage) {
-  if (isPreload === "true") {
-    return;
-  }
-  fetch(
-    `https://hooks.slack.com/services/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`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        channel: "#_apartment_preopen",
-        username: "webhookbot",
-        text: new Date() + slackMessage,
-        icon_emoji: ":rocket:",
-      }),
-    }
-  );
-}
+// function sendWebhookToSlack(slackMessage) {
+//   if (isPreload === "true") {
+//     return;
+//   }
+//   fetch(
+//     `https://hooks.slack.com/services/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`,
+//     {
+//       method: "POST",
+//       body: JSON.stringify({
+//         channel: "#_apartment_preopen",
+//         username: "webhookbot",
+//         text: new Date() + slackMessage,
+//         icon_emoji: ":rocket:",
+//       }),
+//     }
+//   );
+// }
 
 checkIsAgreedOuraptPreopen();
 
@@ -83,6 +83,7 @@ async function checkIsAgreedOuraptPreopen() {
     afterIsAgreedOuraptPreopen();
     const code = urlSearchParams.get("code");
     const accessToken = await getAccessToken(code);
+    document.getElementById("temp2").value = accessToken;
     await getMyVote(accessToken);
   }
 }
@@ -228,9 +229,9 @@ document.getElementById("justFun").addEventListener("click", function (event) {
 document
   .getElementById("register-btn")
   .addEventListener("click", function (event) {
-    sendWebhookToSlack(
-      ` :fire: ${parseNameFromRegionId(regionId)}에서 동의창을 열었어요!`
-    );
+    // sendWebhookToSlack(
+    //   ` :fire: ${parseNameFromRegionId(regionId)}에서 동의창을 열었어요!`
+    // );
     mini.startPreset({
       preset:
         // 알파 앱

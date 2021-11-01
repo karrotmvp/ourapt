@@ -1,6 +1,7 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
 import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.repository.QuestionRepository;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
@@ -31,9 +32,7 @@ public class QuestionService {
     }
 
 
-    public long getCountOfAllQuestions() {
-        return this.questionRepository.count();
-    }
+//    public long getCountOfAllQuestions() {}
 
     public long getCountOfNotEmptyQuestions() {
         return this.questionRepository.countByMainTextNot("");

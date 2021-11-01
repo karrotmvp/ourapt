@@ -29,17 +29,22 @@ public class ModelMapperConfig {
       }
     );
 
-    // User
-    modelMapper.typeMap(User.class, UserDto.class).addMapping(
-      User::isPushAgreed,
-      UserDto::setIsPushAgreed
-    );
-
     // Apartment
     modelMapper.typeMap(Apartment.class, ApartmentDto.class).addMapping(
       Apartment::isActive,
       ApartmentDto::setActive
     );
+
+    // User
+    modelMapper.typeMap(User.class, UserDto.class).addMappings(
+      mapper -> {
+        mapper.map(
+          User::isPushAgreed,
+          UserDto::setIsPushAgreed
+        );
+      }
+    );
+
 
     // Question
     modelMapper.typeMap(Question.class, QuestionDto.class).addMappings(
