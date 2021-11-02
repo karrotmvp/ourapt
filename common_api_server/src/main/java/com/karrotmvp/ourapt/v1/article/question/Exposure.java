@@ -11,6 +11,7 @@ import java.util.Date;
 public class Exposure {
   @Id
   private String id;
+
   @ManyToOne
   @JoinColumn(name = "question_id")
   private Question question;
