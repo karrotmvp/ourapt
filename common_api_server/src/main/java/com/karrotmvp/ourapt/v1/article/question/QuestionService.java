@@ -28,7 +28,10 @@ public class QuestionService {
           .orElseThrow(RegisteredUserNotFoundException::new);
         Question question = mapper.map(content, Question.class);
         question.setWriter(writer);
+        question.setRegionWhereCreated(content.getRegionId());
+        question.setApartmentWhereCreated(writer.getCheckedIn());
         this.questionRepository.save(question);
+        // display
     }
 
 

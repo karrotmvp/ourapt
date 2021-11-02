@@ -1,16 +1,13 @@
 package com.karrotmvp.ourapt.v1.article;
 
-import com.karrotmvp.ourapt.v1.apartment.entity.Region;
+import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.common.BaseEntity;
-import com.karrotmvp.ourapt.v1.common.Static;
-import com.karrotmvp.ourapt.v1.common.exception.application.NotFoundInRegionDictException;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Optional;
 import java.util.UUID;
 
 @Table(name = "article")
@@ -28,9 +25,14 @@ public abstract class Article extends BaseEntity {
   @Setter
   private User writer;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "apartment_id", referencedColumnName = "id")
+  @Setter
+  private Apartment apartmentWhereCreated;
+
   @Column(name = "region_id")
   @Setter
-  private String createdOn;
+  private String regionWhereCreated;
 
   public Article() {
     this.id = UUID.randomUUID().toString();
@@ -38,11 +40,6 @@ public abstract class Article extends BaseEntity {
 
   public KarrotProfile getWriter() {
     return this.writer.getProfile();
-  }
-
-  public Region getCreatedOn() {
-    return Optional.ofNullable(Static.regionDict.get(this.createdOn))
-      .orElseThrow(() -> new NotFoundInRegionDictException(this.createdOn));
   }
 
   public boolean isByAdmin() {

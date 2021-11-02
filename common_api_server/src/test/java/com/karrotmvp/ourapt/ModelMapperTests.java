@@ -112,14 +112,12 @@ public class ModelMapperTests {
     source.setMainText("mainText");
     source.setWriter(testUser);
     source.setCreatedAt(now);
-    source.setCreatedOn(testRegion.getId());
+    source.setRegionWhereCreated(testRegion.getId());
     source.setUpdatedAt(now);
-    source.setPinnedUntil(getTomorrow());
 
     QuestionDto result = modelMapper.map(source, QuestionDto.class);
     assertEquals(source.getId(), result.getId());
     assertEquals(source.isByAdmin(), result.getByAdmin());
-    assertEquals(source.isPinned(), result.getIsPinned());
     assertEquals(source.getWriter().getId(), result.getWriter().getId());
     assertEquals(source.getWriter().getNickname(), result.getWriter().getNickname());
     assertEquals(source.getWriter().getProfileImageUrl(), result.getWriter().getProfileImageUrl());
@@ -136,7 +134,7 @@ public class ModelMapperTests {
     source.setMainText("mainText");
     source.setWriter(testUser);
     source.setCreatedAt(now);
-    source.setCreatedOn(testRegion.getId());
+    source.setRegionWhereCreated(testRegion.getId());
     source.setUpdatedAt(now);
 
     CommentDto result = modelMapper.map(source, CommentDto.class);

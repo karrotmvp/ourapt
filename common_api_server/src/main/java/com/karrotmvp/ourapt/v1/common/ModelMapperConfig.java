@@ -51,7 +51,6 @@ public class ModelMapperConfig {
       mapper -> {
         mapper.map(Question::getWriter, QuestionDto::setWriter);
         mapper.map(Question::isByAdmin, QuestionDto::setByAdmin);
-        mapper.map(Question::isPinned, QuestionDto::setIsPinned);
       }
     );
 

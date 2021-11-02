@@ -18,8 +18,4 @@ public class WriteNewCommentDto {
     @NotNull
     @NotEmpty
     private String regionId;
-
-    @NotNull
-    @NotEmpty
-    private String apartmentId;
 }

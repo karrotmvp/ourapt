@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     @Setter
     private boolean isAdmin;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "checked_in")
     @Getter
     @Setter
