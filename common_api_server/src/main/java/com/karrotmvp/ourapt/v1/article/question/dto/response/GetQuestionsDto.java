@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.question.dto.response;
 
-import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +13,5 @@ import java.util.List;
 @Getter
 public class GetQuestionsDto {
     @NotNull
-    List<WriteNewQuestionDto> questions;
+    List<QuestionDto> questions;
 }

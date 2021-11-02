@@ -18,6 +18,5 @@ public class Question extends Article {
     @Getter
     @Setter
     private String mainText;
-
 }
 

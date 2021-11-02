@@ -1,5 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.GetQuestionsDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
@@ -10,6 +11,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -23,19 +27,24 @@ public class QuestionController {
   }
 
 
-  @GetMapping(value = "/questions")
+  @GetMapping(value = "/apartment/{apartmentId}/questions")
   @ApiOperation(value = "질문목록 Date 커서기반 페이징으로 조회")
   public CommonResponseBody<GetQuestionsDto> getQuestions(
-    @RequestParam(name = "perPage") int perPage,
-    @RequestParam(name = "cursor") long cursorTimestamp
+    @RequestParam(name = "perPage") @Max(value = 10) int perPage,
+    @RequestParam(name = "cursor") long cursorTimestamp,
+    @PathVariable(name = "apartmentId") String apartmentId
   ) {
-
-    throw new UnsupportedOperationException();
-//    return CommonResponseBody.<GetQuestionsDto>builder()
-//      .success()
-//      .build();
+    List<QuestionDto> questions = this.questionService.getQuestionsExposedToApartment(
+      apartmentId,
+      new Date(cursorTimestamp),
+      perPage);
+    return CommonResponseBody.<GetQuestionsDto>builder()
+      .success()
+      .data(new GetQuestionsDto(questions))
+      .build();
   }
 
+//  public CommonResponseBody<Void> getPinnedQuestion
 
   @PostMapping(value = "/question")
   @ApiOperation(value = "새로운 질문 작성")

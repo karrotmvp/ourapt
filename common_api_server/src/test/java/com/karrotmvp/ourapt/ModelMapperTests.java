@@ -118,9 +118,9 @@ public class ModelMapperTests {
     QuestionDto result = modelMapper.map(source, QuestionDto.class);
     assertEquals(source.getId(), result.getId());
     assertEquals(source.isByAdmin(), result.getByAdmin());
-    assertEquals(source.getWriter().getId(), result.getWriter().getId());
-    assertEquals(source.getWriter().getNickname(), result.getWriter().getNickname());
-    assertEquals(source.getWriter().getProfileImageUrl(), result.getWriter().getProfileImageUrl());
+    assertEquals(source.getWriter().getProfile().getId(), result.getWriter().getId());
+    assertEquals(source.getWriter().getProfile().getNickname(), result.getWriter().getNickname());
+    assertEquals(source.getWriter().getProfile().getProfileImageUrl(), result.getWriter().getProfileImageUrl());
     assertNotNull(result.getMainText());
     assertNotNull(result.getCreatedAt());
     assertNotNull(result.getUpdatedAt());
@@ -139,9 +139,9 @@ public class ModelMapperTests {
 
     CommentDto result = modelMapper.map(source, CommentDto.class);
     assertEquals(source.getId(), result.getId());
-    assertEquals(source.getWriter().getId(), result.getWriter().getId());
-    assertEquals(source.getWriter().getNickname(), result.getWriter().getNickname());
-    assertEquals(source.getWriter().getProfileImageUrl(), result.getWriter().getProfileImageUrl());
+    assertEquals(source.getWriter().getProfile().getId(), result.getWriter().getId());
+    assertEquals(source.getWriter().getProfile().getNickname(), result.getWriter().getNickname());
+    assertEquals(source.getWriter().getProfile().getProfileImageUrl(), result.getWriter().getProfileImageUrl());
     assertNotNull(result.getMainText());
     assertNotNull(result.getCreatedAt());
     assertNotNull(result.getUpdatedAt());

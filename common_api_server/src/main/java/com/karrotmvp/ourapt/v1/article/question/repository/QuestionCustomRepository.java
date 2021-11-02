@@ -6,5 +6,5 @@ import java.util.Date;
 import java.util.List;
 
 public interface QuestionCustomRepository<T, ID> {
-  List<T> findFirstByDateCursorByOrderByDesc(Date dateCursor, Pageable pageable);
+  List<T> findFirstByExposedToAndDateCursorByOrderByDesc(String exposedTo, Date dateCursor, Pageable pageable);
 }

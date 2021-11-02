@@ -49,14 +49,14 @@ public class ModelMapperConfig {
     // Question
     modelMapper.typeMap(Question.class, QuestionDto.class).addMappings(
       mapper -> {
-        mapper.map(Question::getWriter, QuestionDto::setWriter);
+        mapper.map((q) -> q.getWriter().getProfile(), QuestionDto::setWriter);
         mapper.map(Question::isByAdmin, QuestionDto::setByAdmin);
       }
     );
 
     // Comment
     modelMapper.typeMap(Comment.class, CommentDto.class).addMapping(
-      Comment::getWriter,
+      (c) -> c.getWriter().getProfile(),
       CommentDto::setWriter
     );
 

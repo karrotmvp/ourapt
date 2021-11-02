@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 
@@ -26,18 +27,22 @@ public class UserCustomRepositoryImpl implements UserCustomRepository<User, Stri
 
     @Override
     public Optional<User> findById(String userId) {
-        TypedQuery<User> query = em.createQuery("SELECT u FROM User u LEFT JOIN FETCH u.checkedIn WHERE u.id = ?1", User.class);
+        TypedQuery<User> query = em.createQuery(
+          "SELECT u " +
+            "FROM User u LEFT JOIN FETCH u.checkedIn " +
+            "WHERE u.id = ?1", User.class);
         query.setParameter(1, userId);
-        User foundUser =  query.getSingleResult();
-        if (foundUser == null) {
+        try {
+            User foundUser =  query.getSingleResult();
+            if (!foundUser.isAdmin()) {
+                KarrotProfile karrotOApiUserProfile = this.karrotOAPI.getKarrotUserProfileById(userId);
+                foundUser.setProfile(karrotOApiUserProfile);
+            } else {
+                foundUser.setProfile(new KarrotProfile(foundUser.getId(), "우리아파트", ""));
+            }
+            return Optional.of(foundUser);
+        } catch (NoResultException ne) {
             return Optional.empty();
         }
-        if (!foundUser.isAdmin()) {
-            KarrotProfile karrotOApiUserProfile = this.karrotOAPI.getKarrotUserProfileById(userId);
-            foundUser.setProfile(karrotOApiUserProfile);
-        } else {
-            foundUser.setProfile(new KarrotProfile(foundUser.getId(), "우리아파트", ""));
-        }
-        return Optional.of(foundUser);
     }
 }
