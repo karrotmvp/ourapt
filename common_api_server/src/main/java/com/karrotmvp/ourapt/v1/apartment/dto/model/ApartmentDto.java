@@ -17,6 +17,12 @@ public class ApartmentDto {
     private String name;
 
     @NotNull
+    private String brandName;
+
+    @NotNull
+    private String bannerImage;
+
+    @NotNull
     private RegionDto regionDepth1;
 
     @NotNull
