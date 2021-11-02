@@ -5,7 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface QuestionRepository extends JpaRepository<Question, String>, QuestionCustomRepository<Question, String>{
 
-    // TODO: do custom
-//    List<Question> findByOrderByCreatedAtDesc(Pageable pageable);
     long countByMainTextNot(String mainText);
 }

@@ -39,6 +39,10 @@ public class Exposure {
   @Setter
   private Date pinnedUntil;
 
+  @Column(name = "priority")
+  @Setter
+  private int priority;
+
   public Exposure(Question question, Apartment toWhere) {
     this.id = UUID.randomUUID().toString();
     this.question = question;
