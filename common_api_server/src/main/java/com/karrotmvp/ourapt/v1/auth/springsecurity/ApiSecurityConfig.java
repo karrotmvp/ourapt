@@ -54,9 +54,11 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // Handle failure to authority check
                 .exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
+                    String firstException = String.valueOf(request.getAttribute("firstExceptionMessage"));
+                    logger.info("Authentication NOT PASSED: " + firstException);
                     response.sendError(
                             HttpStatus.UNAUTHORIZED.value(),
-                            String.valueOf(request.getAttribute("firstExceptionMessage")));
+                            firstException);
                 });
     }
 
