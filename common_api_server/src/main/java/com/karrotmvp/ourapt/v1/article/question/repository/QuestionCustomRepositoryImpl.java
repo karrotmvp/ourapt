@@ -1,6 +1,7 @@
 package com.karrotmvp.ourapt.v1.article.question.repository;
 
 import com.karrotmvp.ourapt.v1.article.question.Question;
+import com.karrotmvp.ourapt.v1.common.BaseEntityCreatedDateComparator;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
@@ -45,13 +46,13 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
     );
 
     return Utils.leftOuterHashJoin(
-      questions,
-      profiles,
-      (q) -> q.getWriter().getId(),
-      KarrotProfile::getId,
-      (a, kp) -> a.getWriter().setProfile(kp))
-        .stream()
-      .sorted((q1, q2) -> q2.getCreatedAt().after(q1.getCreatedAt()) ? 1 : (q2.getCreatedAt().equals(q1.getCreatedAt()) ? 0 : -1 ))
+        questions,
+        profiles,
+        (q) -> q.getWriter().getId(),
+        KarrotProfile::getId,
+        (a, kp) -> a.getWriter().setProfile(kp))
+      .stream()
+      .sorted(new BaseEntityCreatedDateComparator(BaseEntityCreatedDateComparator.Order.DESC))
       .collect(Collectors.toList());
   }
 }

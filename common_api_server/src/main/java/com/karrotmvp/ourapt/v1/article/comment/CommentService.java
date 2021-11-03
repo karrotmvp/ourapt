@@ -1,6 +1,7 @@
 package com.karrotmvp.ourapt.v1.article.comment;
 
 import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
+import com.karrotmvp.ourapt.v1.article.comment.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
