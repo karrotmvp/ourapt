@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,9 +57,10 @@ public class QuestionService {
           .collect(Collectors.toList());
     }
 
-    public List<QuestionDto> getUserNotCommentedPinnedQuestionOfApartment(String userId, String apartmentId) {
+    public QuestionDto getRandomPinnedQuestionOfApartment(String apartmentId) {
         List<Question> pinnedQuestionOfApt = this.questionRepository.findByExposurePinnedAndToWhere(apartmentId);
-
-        return null;
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+        return mapper.map(pinnedQuestionOfApt.get(random.nextInt(pinnedQuestionOfApt.size())), QuestionDto.class);
     }
 }

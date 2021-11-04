@@ -38,11 +38,15 @@ public class UserCustomRepositoryImpl implements UserCustomRepository<User, Stri
                 KarrotProfile karrotOApiUserProfile = this.karrotOAPI.getKarrotUserProfileById(userId);
                 foundUser.setProfile(karrotOApiUserProfile);
             } else {
-                foundUser.setProfile(new KarrotProfile(foundUser.getId(), "우리아파트", ""));
+                foundUser.setProfile(makeAdminKarrotProfile(foundUser.getId()));
             }
             return Optional.of(foundUser);
         } catch (NoResultException ne) {
             return Optional.empty();
         }
+    }
+
+    private KarrotProfile makeAdminKarrotProfile(String userId) {
+        return new KarrotProfile(userId, "우리아파트", "");
     }
 }

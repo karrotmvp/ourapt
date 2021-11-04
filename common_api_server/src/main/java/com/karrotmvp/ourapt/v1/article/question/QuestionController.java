@@ -27,14 +27,14 @@ public class QuestionController {
   }
 
   @GetMapping(value = "/apartment/{apartmentId}/questions/pinned")
-  @ApiOperation(value = "사용자에게 보여질 pinned_question (댓글 달지 않은 pinned_question중, priority가 가장 높은 question) 조회")
+  @ApiOperation(value = "사용자에게 보여질 pinned_question 랜덤 조회")
   public CommonResponseBody<QuestionDto> getPinnedQuestionOfApartment(
-    @PathVariable(name = "apartmentId") String apartmentId,
-    @CurrentUser KarrotProfile profile
+    @PathVariable(name = "apartmentId") String apartmentId
   ) {
-    this.questionService.getUserNotCommentedPinnedQuestionOfApartment(
-      profile.getId(), apartmentId);
-    throw new UnsupportedOperationException("");
+    return CommonResponseBody.<QuestionDto>builder()
+      .success()
+      .data(this.questionService.getRandomPinnedQuestionOfApartment(apartmentId))
+      .build();
   }
 
   @GetMapping(value = "/apartment/{apartmentId}/questions")

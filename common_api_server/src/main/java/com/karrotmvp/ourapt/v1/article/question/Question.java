@@ -18,5 +18,9 @@ public class Question extends Article {
     @Getter
     @Setter
     private String mainText;
+
+    public boolean isByAdmin() {
+        return this.getWriter().isAdmin();
+    }
 }
 

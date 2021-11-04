@@ -37,8 +37,4 @@ public abstract class Article extends BaseEntity {
   public Article() {
     this.id = UUID.randomUUID().toString();
   }
-
-  public boolean isByAdmin() {
-    return writer.isAdmin();
-  }
 }

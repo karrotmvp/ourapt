@@ -66,7 +66,13 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
     query.setParameter(1, toWhereApartmentId);
     query.setParameter(2, new Date());
     List<Question> questions = query.getResultList();
-    return questions;
+    List<KarrotProfile> profiles = karrotOAPI.getKarrotUserProfilesByIds(
+      questions.stream().map(q -> q.getWriter().getId()).collect(Collectors.toSet()));
+    return Utils.leftOuterHashJoin(
+      questions,
+      profiles,
+      (q) -> q.getWriter().getId(),
+      KarrotProfile::getId,
+      (p, profile) -> p.getWriter().setProfile(profile));
   }
-
 }
