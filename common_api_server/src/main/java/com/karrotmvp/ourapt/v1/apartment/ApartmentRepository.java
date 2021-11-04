@@ -9,4 +9,5 @@ public interface ApartmentRepository extends JpaRepository<Apartment, String> {
 
     List<Apartment> findByRegionDepth3Id(String regionId);
     List<Apartment> findByRegionDepth4Id(String regionId);
+    List<Apartment> findByInactiveAtIsNull();
 }

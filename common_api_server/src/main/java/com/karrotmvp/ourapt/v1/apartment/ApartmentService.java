@@ -43,6 +43,12 @@ public class ApartmentService {
       .collect(Collectors.toList());
   }
 
+  public List<ApartmentDto> getAvailableApartments() {
+    return this.apartmentRepository.findByInactiveAtIsNull().stream()
+      .map(apt -> mapper.map(apt, ApartmentDto.class))
+      .collect(Collectors.toList());
+  }
+
   public ApartmentDto getApartmentById(String apartmentId) {
     Apartment found = this.apartmentRepository.findById(apartmentId)
       .orElseThrow(() -> new DataNotFoundFromDBException("유효하지 않은 아파트ID 입니다."));

@@ -26,6 +26,16 @@ public class QuestionController {
     this.questionService = questionService;
   }
 
+  @GetMapping(value = "/apartment/{apartmentId}/questions/pinned")
+  @ApiOperation(value = "사용자에게 보여질 pinned_question (댓글 달지 않은 pinned_question중, priority가 가장 높은 question) 조회")
+  public CommonResponseBody<QuestionDto> getPinnedQuestionOfApartment(
+    @PathVariable(name = "apartmentId") String apartmentId,
+    @CurrentUser KarrotProfile profile
+  ) {
+    this.questionService.getUserNotCommentedPinnedQuestionOfApartment(
+      profile.getId(), apartmentId);
+    throw new UnsupportedOperationException("");
+  }
 
   @GetMapping(value = "/apartment/{apartmentId}/questions")
   @ApiOperation(value = "질문목록 Date 커서기반 페이징으로 조회")
@@ -44,7 +54,6 @@ public class QuestionController {
       .build();
   }
 
-//  public CommonResponseBody<Void> getPinnedQuestion
 
   @PostMapping(value = "/question")
   @ApiOperation(value = "새로운 질문 작성")

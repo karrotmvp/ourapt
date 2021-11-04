@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class GetApartmentInRegionDto {
+public class GetAvailableApartmentsDto {
     @NotNull
     private List<ApartmentDto> apartments;
 }

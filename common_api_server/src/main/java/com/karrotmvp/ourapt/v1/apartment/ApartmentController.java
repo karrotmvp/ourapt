@@ -1,7 +1,7 @@
 package com.karrotmvp.ourapt.v1.apartment;
 
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
-import com.karrotmvp.ourapt.v1.apartment.dto.response.GetApartmentInRegionDto;
+import com.karrotmvp.ourapt.v1.apartment.dto.response.GetAvailableApartmentsDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,16 +23,25 @@ public class ApartmentController {
     this.apartmentService = apartmentService;
   }
 
-  @GetMapping(value = "/apartments")
-  @ApiOperation(value = "해당 리전에 포함된 아파트들 가져오기")
-  public CommonResponseBody<GetApartmentInRegionDto> getApartmentInRegion(
+//  @GetMapping(value = "/apartments")
+//  @ApiOperation(value = "해당 리전에 포함된 아파트들 가져오기")
+  public CommonResponseBody<GetAvailableApartmentsDto> getApartmentInRegion(
     @RequestParam String regionId
   ) {
     List<ApartmentDto> apartmentsInRegion = this.apartmentService.getApartmentsInRegionId(regionId);
-
-    return CommonResponseBody.<GetApartmentInRegionDto>builder()
+    return CommonResponseBody.<GetAvailableApartmentsDto>builder()
       .success()
-      .data(new GetApartmentInRegionDto(apartmentsInRegion))
+      .data(new GetAvailableApartmentsDto(apartmentsInRegion))
+      .build();
+  }
+
+  @GetMapping(value = "/apartments")
+  @ApiOperation(value = "해당 리전에 포함된 아파트들 가져오기")
+  public CommonResponseBody<GetAvailableApartmentsDto> getAvailableApartments() {
+    List<ApartmentDto> apartments = this.apartmentService.getAvailableApartments();
+    return CommonResponseBody.<GetAvailableApartmentsDto>builder()
+      .success()
+      .data(new GetAvailableApartmentsDto(apartments))
       .build();
   }
 }

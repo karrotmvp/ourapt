@@ -56,29 +56,9 @@ public class QuestionService {
           .collect(Collectors.toList());
     }
 
-//    public long getCountOfAllQuestions() {}
+    public List<QuestionDto> getUserNotCommentedPinnedQuestionOfApartment(String userId, String apartmentId) {
+        List<Question> pinnedQuestionOfApt = this.questionRepository.findByExposurePinnedAndToWhere(apartmentId);
 
-    public long getCountOfNotEmptyQuestions() {
-        return this.questionRepository.countByMainTextNot("");
+        return null;
     }
-
-//    public List<QuestionDto> getQuestionsWithOffsetPaging(int perPage, int pageNum) {
-//        List<QuestionDto> questions = questionRepository.findByOrderByCreatedAtDesc(PageRequest.of(pageNum, perPage))
-//                .stream()
-//                .map(q -> modelMapper.map(q, QuestionDto.class))
-//                .peek(qv -> qv.setRegionName(Static.regionDict.get(qv.getRegionId())))
-//                .collect(Collectors.toList());
-//        List<KarrotOApiUserDto> writers = this.userService.getKarrotUserProfilesByIds(
-//                questions.stream().map(q -> q.getWriter().getId()).collect(Collectors.toSet())
-//        );
-//        return Utils.leftOuterHashJoin(
-//                questions,
-//                writers,
-//                (q) -> q.getWriter().getId(),
-//                KarrotOApiUserDto::getId,
-//                QuestionDto::setWriter
-//        ).stream()
-//                .sorted((qv1, qv2) -> (int) (qv2.getCreatedAt().getTime() - qv1.getCreatedAt().getTime()))
-//                .collect(Collectors.toList());
-//    }
 }

@@ -55,4 +55,18 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       .sorted(new BaseEntityCreatedDateComparator(BaseEntityCreatedDateComparator.Order.DESC))
       .collect(Collectors.toList());
   }
+
+  @Override
+  public List<Question> findByExposurePinnedAndToWhere(String toWhereApartmentId) {
+    TypedQuery<Question> query = em.createQuery(
+      "SELECT e.question " +
+        "FROM Exposure e " +
+        "LEFT JOIN FETCH e.question.writer " +
+        "WHERE e.toWhere.id = ?1 AND e.pinnedUntil >= ?2", Question.class);
+    query.setParameter(1, toWhereApartmentId);
+    query.setParameter(2, new Date());
+    List<Question> questions = query.getResultList();
+    return questions;
+  }
+
 }
