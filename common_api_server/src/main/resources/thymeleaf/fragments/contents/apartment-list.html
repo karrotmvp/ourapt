@@ -1,0 +1,63 @@
+<div th:fragment="apartment-list">
+    <div style="text-align: center;">
+        <h1>서비스(예정) 아파트 목록</h1>
+        <p th:text="${#strings.concat('총: ', countOfAll)}"></p>
+        <p th:text="${#strings.concat('활성화 된 아파트 수: ', countOfTheActive)}"></p>
+        <p th:text="${#strings.concat('비활성화 된 아파트 수: ', countOfAll - countOfTheActive)}"></p>
+    </div>
+    <br>
+    <table class="table">
+        <thead>
+        <th>순번</th>
+        <th>ID</th>
+        <th>노출이름</th>
+        <th>브랜드</th>
+        <th>이미지</th>
+        <th>depth_1_region</th>
+        <th>depth_2_region</th>
+        <th>depth_3_region</th>
+        <th>depth_4_region</th>
+        <th>활성화여부</th>
+        </thead>
+        <tbody>
+        <tr
+                th:each="apt, index : ${apartments}"
+        >
+            <td th:text="${index.index + 1}"></td>
+            <td th:text="${apt.id}"></td>
+            <td th:text="${apt.name}"></td>
+            <td th:text="${apt.brandName}"></td>
+            <td><a th:href="${apt.bannerImage}">이미지</a></td>
+            <td>
+                <p th:text="${apt.regionDepth1.id}"></p>
+                <p th:text="${apt.regionDepth1.name}"></p>
+            </td>
+            <td>
+                <p th:text="${apt.regionDepth2.id}"></p>
+                <p th:text="${apt.regionDepth2.name}"></p>
+            </td>
+            <td>
+                <p th:text="${apt.regionDepth3.id}"></p>
+                <p th:text="${apt.regionDepth3.name}"></p>
+            </td>
+            <td>
+                <p th:text="${apt.regionDepth4.id}"></p>
+                <p th:text="${apt.regionDepth4.name}"></p>
+            </td>
+            <td>
+                <form th:action="${apt.isActive
+                    ? '/admin/action/inactive-apartment.do'
+                    : '/admin/action/active-apartment.do'
+                    }" method="get">
+                    <input type="hidden" name="id" th:value="${apt.id}">
+                    <button
+                            type="submit"
+                            th:text="${apt.isActive ? 'ON': 'OFF'}"
+                            th:class="${apt.isActive ? 'btn btn-success': 'btn btn-secondary'}"
+                    ></button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

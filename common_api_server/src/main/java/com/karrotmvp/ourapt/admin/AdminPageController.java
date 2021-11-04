@@ -1,15 +1,18 @@
 package com.karrotmvp.ourapt.admin;
 
+import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
+import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
-import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
-import com.karrotmvp.ourapt.v1.preopen.entity.PreopenForm;
+import com.karrotmvp.ourapt.v1.user.UserService;
+import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -18,66 +21,56 @@ public class AdminPageController {
 
   private final QuestionService questionService;
 
+  private final ApartmentService apartmentService;
+
+  private final UserService userService;
+
   private final PreopenRepository preopenRepository;
 
-  public AdminPageController(QuestionService questionService, PreopenRepository preopenRepository) {
+  public AdminPageController(QuestionService questionService, PreopenRepository preopenRepository, ApartmentService apartmentService, UserService userService) {
     this.questionService = questionService;
     this.preopenRepository = preopenRepository;
+    this.apartmentService = apartmentService;
+    this.userService = userService;
   }
 
 
   @GetMapping("")
   public String renderIndex() {
-    return "index";
+    return "pages/index";
   }
 
-//    @GetMapping("/questions")
-//    public String renderQuestionsPage(
-//            Model model,
-//            @RequestParam(name = "perPage") int perPage,
-//            @RequestParam(name = "pageNum") int pageNum
-//    ) {
-//        if (pageNum < 1) {
-//            throw new RuntimeException("pageNum must larger than 0");
-//        }
-//        List<QuestionDto> questions = new ArrayList<>(this.questionService.getQuestionsWithOffsetPaging(perPage, pageNum - 1));
-//        long countOfAll = this.questionService.getCountOfAllQuestions();
-//        long countOfTextNotEmpty = this.questionService.getCountOfNotEmptyQuestions();
-//        model.addAttribute("questions", questions);
-//        model.addAttribute("perPage", perPage);
-//        model.addAttribute("pageNum", pageNum);
-//        model.addAttribute("isLastPage", questions.size() < perPage);
-//        model.addAttribute("countOfAll", countOfAll);
-//        model.addAttribute("countOfTextNotEmpty", countOfTextNotEmpty);
-//        return "questions";
-//    }
-
-  @GetMapping("/preopen")
-  public String renderPreopenIndex(Model model) {
-
-    // Count of preopenData in each region
-    Map<String, Integer> preopenCountMap = new HashMap<String, Integer>();
-    Static.regionDict.forEach((key, value) -> preopenCountMap.put(key, 0));
-    List<PreopenForm> preopenData = this.preopenRepository.findAll();
-    preopenData.forEach((pd) -> {
-      if (preopenCountMap.containsKey(pd.getRegionId())) {
-        preopenCountMap.replace(pd.getRegionId(), preopenCountMap.get(pd.getRegionId()) + 1);
-      }
-    });
-
-
-    // Count of preopenData
-    model.addAttribute("countOfAll", preopenData.size());
-
-    // Service area
-    // apartmentEntry = [0]: regionId, [1]: regionName, [2]: countOfPreopenData
-    List<List<String>> apartmentEntries = Static.regionDict.entrySet()
+  @GetMapping("/apartments")
+  public String renderApartmentList(
+    Model model
+  ) {
+    List<ApartmentDto> allApartments = this.apartmentService.getAllApartments();
+    int countOfTheActive = (int) allApartments.stream().filter(ApartmentDto::isActive).count();
+    model.addAttribute("apartments", allApartments
       .stream()
-      .map(entry -> new ArrayList<>(Arrays.asList(entry.getKey(), entry.getValue().getName())))
-      .peek(entryAsList -> entryAsList.add(preopenCountMap.get(entryAsList.get(0)) + ""))
-      .sorted(Comparator.comparing(entryA -> entryA.get(1)))
-      .collect(Collectors.toList());
-    model.addAttribute("apartments", apartmentEntries);
-    return "preopen";
+      .sorted((apt1, apt2) -> String.CASE_INSENSITIVE_ORDER.compare(apt1.getName(), apt2.getName()))
+      .collect(Collectors.toList()));
+
+    model.addAttribute("countOfAll", allApartments.size());
+    model.addAttribute("countOfTheActive", countOfTheActive);
+    return "pages/apartments";
+  }
+
+  @GetMapping("/users")
+  public String renderUserList(
+    Model model,
+    @RequestParam int perPage,
+    @RequestParam int pageNum
+  ) {
+    List<UserDto> allUsers = this.userService.getUsersWithPagination(perPage, pageNum - 1);
+    model.addAttribute("users", allUsers);
+    model.addAttribute("countOfAll", allUsers.size());
+    model.addAttribute("countOfTheBanned", allUsers
+      .stream().filter(u -> u.getBannedAt() != null).count());
+    model.addAttribute("pageNum", pageNum);
+    model.addAttribute("perPage", perPage);
+    model.addAttribute("isLastPage", allUsers.size() < perPage);
+
+    return "pages/users";
   }
 }

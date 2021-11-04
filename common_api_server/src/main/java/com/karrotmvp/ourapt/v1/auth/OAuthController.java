@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api/v1/oauth")
 @Api(tags = "3. 당근마켓 연동 인증")
@@ -53,6 +55,7 @@ public class OAuthController {
     }
 
     User newUser = new User(userProfile.getUserId(), new KarrotProfile(userProfile.getUserId(), userProfile.getNickname(), ""), false);
+    newUser.setPushAgreedAt(new Date());
     userRepository.save(newUser);
 
     return CommonResponseBody.<KarrotAccessTokenDto>builder()

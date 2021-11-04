@@ -62,6 +62,10 @@ public class User extends BaseEntity {
         return this.pushAgreedAt != null && new Date().after(this.pushAgreedAt);
     }
 
+    public boolean isBanned() {
+        return this.bannedAt != null && bannedAt.before(new Date());
+    }
+
     public User(String userId, KarrotProfile profile) {
         this.id = userId;
         this.profile = profile;

@@ -8,6 +8,7 @@ import com.karrotmvp.ourapt.v1.article.question.repository.QuestionRepository;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NotCheckedInUserException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
+import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -24,12 +25,14 @@ public class CommentService {
   private final CommentRepository commentRepository;
   private final UserRepository userRepository;
   private final ModelMapper mapper;
+  private final UserService userService;
 
-  public CommentService(QuestionRepository questionRepository, CommentRepository commentRepository, UserRepository userRepository, ModelMapper mapper) {
+  public CommentService(QuestionRepository questionRepository, CommentRepository commentRepository, UserRepository userRepository, ModelMapper mapper, UserService userService) {
     this.questionRepository = questionRepository;
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
     this.mapper = mapper;
+    this.userService = userService;
   }
 
   public List<CommentDto> getCommentsByQuestionId(String questionId) {
@@ -43,6 +46,7 @@ public class CommentService {
   public void writeNewComment(WriteNewCommentDto content, String questionId,  String writerId) {
     User writer = this.userRepository.findById(writerId)
       .orElseThrow(RegisteredUserNotFoundException::new);
+    this.userService.assertUserIsNotBanned(writer);
     Article parent = this.questionRepository.findById(questionId)
       .orElseThrow(() -> new DataNotFoundFromDBException("해당하는 Article이 없습니다."));
     Comment comment = mapper.map(content, Comment.class);

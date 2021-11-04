@@ -7,6 +7,7 @@ import com.karrotmvp.ourapt.v1.article.question.exposure.ExposureRepository;
 import com.karrotmvp.ourapt.v1.article.question.repository.QuestionRepository;
 import com.karrotmvp.ourapt.v1.common.exception.application.NotCheckedInUserException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
+import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -26,18 +27,21 @@ public class QuestionService {
     private final UserRepository userRepository;
     private final ModelMapper mapper;
     private final ExposureRepository exposureRepository;
+    private final UserService userService;
 
-    public QuestionService(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper mapper, ExposureRepository exposureRepository) {
+    public QuestionService(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper mapper, ExposureRepository exposureRepository, UserService userService) {
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
         this.mapper = mapper;
         this.exposureRepository = exposureRepository;
+        this.userService = userService;
     }
 
     @Transactional
     public void writeNewQuestion(WriteNewQuestionDto content, String writerId) {
         User writer = this.userRepository.findById(writerId)
           .orElseThrow(RegisteredUserNotFoundException::new);
+        this.userService.assertUserIsNotBanned(writer);
         Question question = mapper.map(content, Question.class);
         question.setWriter(writer);
         question.setRegionWhereCreated(content.getRegionId());

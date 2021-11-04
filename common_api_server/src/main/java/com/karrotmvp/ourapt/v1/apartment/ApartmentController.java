@@ -23,18 +23,6 @@ public class ApartmentController {
     this.apartmentService = apartmentService;
   }
 
-//  @GetMapping(value = "/apartments")
-//  @ApiOperation(value = "해당 리전에 포함된 아파트들 가져오기")
-  public CommonResponseBody<GetAvailableApartmentsDto> getApartmentInRegion(
-    @RequestParam String regionId
-  ) {
-    List<ApartmentDto> apartmentsInRegion = this.apartmentService.getApartmentsInRegionId(regionId);
-    return CommonResponseBody.<GetAvailableApartmentsDto>builder()
-      .success()
-      .data(new GetAvailableApartmentsDto(apartmentsInRegion))
-      .build();
-  }
-
   @GetMapping(value = "/apartments")
   @ApiOperation(value = "해당 리전에 포함된 아파트들 가져오기")
   public CommonResponseBody<GetAvailableApartmentsDto> getAvailableApartments() {

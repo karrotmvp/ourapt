@@ -1,0 +1,63 @@
+<div th:fragment="user-list">
+    <div style="text-align: center;">
+        <h1>이용자 목록</h1>
+        <p th:text="${#strings.concat('총: ', countOfAll)}"></p>
+        <p th:text="${#strings.concat('정지 된 유저 수: ', countOfTheBanned)}"></p>
+    </div>
+    <br>
+    <table class="table">
+        <thead>
+        <th>순번</th>
+        <th>ID</th>
+        <th>닉네임</th>
+        <th>프로필사진</th>
+        <th>알림동의여부</th>
+        <th>이용동의일자</th>
+        <th>이용정지일자</th>
+        <th>체크인된 아파트</th>
+        <th>관리자여부</th>
+        </thead>
+        <tbody>
+        <tr
+                th:each="user, index : ${users}"
+        >
+            <td th:text="${perPage * (pageNum - 1) + index.index + 1}"></td>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.profile.nickname}"></td>
+            <td><a th:href="${user.profile.profileImageUrl}">사진</a></td>
+            <td th:text="${user.isPushAgreed ? '동의' : '비동의'}"></td>
+            <td th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <form
+                        th:action="${ user.bannedAt == null ?
+                            '/admin/action/ban-user.do' :
+                            '/admin/action/cancel-ban-user.do' }"
+                        method="get"
+                >
+                    <p th:text="${
+                        user.bannedAt != null ?
+                        #dates.format(user.bannedAt, 'yyyy-MM-dd HH:mm:ss') + ' ~' :
+                        '-'}"></p>
+                    <input type="hidden" name="id"
+                           th:value="${user.id}"
+                    >
+                    <button type="submit"
+                            th:class="${user.bannedAt != null ? 'btn btn-grey' : 'btn btn-danger'}"
+                            th:text="${user.bannedAt != null ? '정지해제' : '이용정지'}">
+                    </button>
+                </form>
+            </td>
+            <td>
+<!--                <p th:text="${user.checkedIn.}"></p>-->
+                <a
+                        th:href="${user.checkedIn != null ? #strings.concat('/admin/apartments/detail?id=', user.checkedIn.id) : ''}"
+                        th:text="${user.checkedIn != null ? user.checkedIn.name : '-'}"></a>
+            </td>
+            <td
+                    style = "font-weight: bold; text-align: center;"
+                    th:styleappend="${user.isAdmin ? 'color: blue;' : 'color: red;'}"
+                    th:text="${user.isAdmin ? 'O' : 'X'}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
