@@ -70,6 +70,7 @@ public class SwaggerConfig {
     return List.of(new SecurityReference("KarrotAccessToken", authScopes));
   }
 
+
   private SecurityScheme apiKey() {
     // Make common API Key scheme named "KarrotAccessToken"
     return new ApiKey("KarrotAccessToken", HttpHeaders.AUTHORIZATION, In.HEADER.name());

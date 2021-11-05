@@ -63,6 +63,10 @@ public class QuestionService {
 
     public QuestionDto getRandomPinnedQuestionOfApartment(String apartmentId) {
         List<Question> pinnedQuestionOfApt = this.questionRepository.findByExposurePinnedAndToWhere(apartmentId);
+        if (pinnedQuestionOfApt.size() > 0) {
+
+        }
+
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
         return mapper.map(pinnedQuestionOfApt.get(random.nextInt(pinnedQuestionOfApt.size())), QuestionDto.class);

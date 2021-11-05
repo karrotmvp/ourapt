@@ -2,7 +2,7 @@ package com.karrotmvp.ourapt.v1.user;
 
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
-import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
+import com.karrotmvp.ourapt.v1.user.dto.GetOneUserDto;
 import com.karrotmvp.ourapt.v1.user.dto.request.ChangeMyCheckedInDto;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import io.swagger.annotations.Api;
@@ -22,12 +22,12 @@ public class UserController {
 
   @GetMapping("/me")
   @ApiOperation("자신의 정보 조회")
-  public CommonResponseBody<UserDto> getMyInfo(
+  public CommonResponseBody<GetOneUserDto> getMyInfo(
     @CurrentUser KarrotProfile profile
   ) {
-    return CommonResponseBody.<UserDto>builder()
+    return CommonResponseBody.<GetOneUserDto>builder()
       .success()
-      .data(this.userService.getUserById(profile.getId()))
+      .data(new GetOneUserDto(this.userService.getUserById(profile.getId())))
       .build();
   }
 
