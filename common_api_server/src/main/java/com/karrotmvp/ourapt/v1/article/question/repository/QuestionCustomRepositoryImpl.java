@@ -10,9 +10,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -26,6 +28,23 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
   public QuestionCustomRepositoryImpl(EntityManager em, KarrotOAPI karrotOAPI) {
     this.em = em;
     this.karrotOAPI = karrotOAPI;
+  }
+
+  @Override
+  public Optional<Question> findById(String questionId) {
+    TypedQuery<Question> query = em.createQuery(
+      "SELECT q FROM Question q " +
+        "LEFT JOIN FETCH q.writer " +
+        "WHERE q.id = ?1", Question.class);
+    query.setParameter(1, questionId);
+    try {
+      Question question = query.getSingleResult();
+      KarrotProfile profileOfWriter = karrotOAPI.getKarrotUserProfileById(question.getWriter().getId());
+      question.getWriter().setProfile(profileOfWriter);
+      return Optional.of(question);
+    } catch (NoResultException ne) {
+      return Optional.empty();
+    }
   }
 
   @Override
@@ -75,4 +94,9 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       KarrotProfile::getId,
       (p, profile) -> p.getWriter().setProfile(profile));
   }
+
+  private KarrotProfile makeAdminKarrotProfile(String userId) {
+    return new KarrotProfile(userId, "우리아파트", "");
+  }
+
 }

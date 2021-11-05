@@ -38,6 +38,17 @@ public class QuestionController {
       .build();
   }
 
+  @GetMapping(value = "/question/{questionId}")
+  @ApiOperation(value = "question_id 로 Question 조회")
+  public CommonResponseBody<GetOneQuestionDto> getQuestionById(
+    @PathVariable(name = "questionId") String questionId
+  ) {
+    return CommonResponseBody.<GetOneQuestionDto>builder()
+      .success()
+      .data(new GetOneQuestionDto(this.questionService.getQuestionById(questionId)))
+      .build();
+  }
+
   @GetMapping(value = "/apartment/{apartmentId}/questions")
   @ApiOperation(value = "질문목록 Date 커서기반 페이징으로 조회")
   public CommonResponseBody<GetQuestionsDto> getQuestions(

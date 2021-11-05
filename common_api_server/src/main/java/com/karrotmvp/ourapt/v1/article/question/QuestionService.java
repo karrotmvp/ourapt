@@ -5,6 +5,7 @@ import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.exposure.Exposure;
 import com.karrotmvp.ourapt.v1.article.question.exposure.ExposureRepository;
 import com.karrotmvp.ourapt.v1.article.question.repository.QuestionRepository;
+import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NotCheckedInUserException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
 import com.karrotmvp.ourapt.v1.user.UserService;
@@ -70,5 +71,14 @@ public class QuestionService {
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
         return mapper.map(pinnedQuestionOfApt.get(random.nextInt(pinnedQuestionOfApt.size())), QuestionDto.class);
+    }
+
+    public QuestionDto getQuestionById(String questionId) {
+        return mapper.map(this.safelyGetQuestionById(questionId), QuestionDto.class);
+    }
+
+    private Question safelyGetQuestionById(String questionId) {
+        return this.questionRepository.findById(questionId).orElseThrow(
+          () -> new DataNotFoundFromDBException("There is no question match with ID: " + questionId));
     }
 }
