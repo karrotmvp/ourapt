@@ -4,6 +4,7 @@ package com.karrotmvp.ourapt.v1.article.comment;
 import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.comment.dto.request.WriteNewCommentDto;
 import com.karrotmvp.ourapt.v1.article.comment.dto.response.GetCommentsOfQuestionDto;
+import com.karrotmvp.ourapt.v1.article.comment.dto.response.OneCommentDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
@@ -40,13 +41,14 @@ public class CommentController {
 
   @PostMapping(value = "/question/{questionId}/comment")
   @ApiOperation(value = "새로운 댓글 작성")
-  public CommonResponseBody<Void> writeNewComment(
+  public CommonResponseBody<OneCommentDto> writeNewComment(
     @RequestBody @Valid WriteNewCommentDto commentContent,
     @PathVariable String questionId,
     @CurrentUser KarrotProfile profile
   ) {
-    this.commentService.writeNewComment(commentContent, questionId, profile.getId());
-    return CommonResponseBody.<Void>builder()
+    CommentDto created = this.commentService.writeNewComment(commentContent, questionId, profile.getId());
+    return CommonResponseBody.<OneCommentDto>builder()
+      .data(new OneCommentDto(created))
       .success()
       .build();
   }

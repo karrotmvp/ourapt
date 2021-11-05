@@ -2,7 +2,7 @@ package com.karrotmvp.ourapt.v1.article.question;
 
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
-import com.karrotmvp.ourapt.v1.article.question.dto.response.GetOneQuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.response.OneQuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.GetQuestionsDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
@@ -29,23 +29,23 @@ public class QuestionController {
 
   @GetMapping(value = "/apartment/{apartmentId}/questions/pinned")
   @ApiOperation(value = "사용자에게 보여질 pinned_question 랜덤 조회")
-  public CommonResponseBody<GetOneQuestionDto> getPinnedQuestionOfApartment(
+  public CommonResponseBody<OneQuestionDto> getPinnedQuestionOfApartment(
     @PathVariable(name = "apartmentId") String apartmentId
   ) {
-    return CommonResponseBody.<GetOneQuestionDto>builder()
+    return CommonResponseBody.<OneQuestionDto>builder()
       .success()
-      .data(new GetOneQuestionDto(this.questionService.getRandomPinnedQuestionOfApartment(apartmentId)))
+      .data(new OneQuestionDto(this.questionService.getRandomPinnedQuestionOfApartment(apartmentId)))
       .build();
   }
 
   @GetMapping(value = "/question/{questionId}")
   @ApiOperation(value = "question_id 로 Question 조회")
-  public CommonResponseBody<GetOneQuestionDto> getQuestionById(
+  public CommonResponseBody<OneQuestionDto> getQuestionById(
     @PathVariable(name = "questionId") String questionId
   ) {
-    return CommonResponseBody.<GetOneQuestionDto>builder()
+    return CommonResponseBody.<OneQuestionDto>builder()
       .success()
-      .data(new GetOneQuestionDto(this.questionService.getQuestionById(questionId)))
+      .data(new OneQuestionDto(this.questionService.getQuestionById(questionId)))
       .build();
   }
 
@@ -69,12 +69,13 @@ public class QuestionController {
 
   @PostMapping(value = "/question")
   @ApiOperation(value = "새로운 질문 작성")
-  public CommonResponseBody<Void> writeNewQuestion(
+  public CommonResponseBody<OneQuestionDto> writeNewQuestion(
     @RequestBody @Valid WriteNewQuestionDto questionContent,
     @CurrentUser KarrotProfile userProfile
   ) {
-    this.questionService.writeNewQuestion(questionContent, userProfile.getId());
-    return CommonResponseBody.<Void>builder()
+    QuestionDto createdQuestion = this.questionService.writeNewQuestion(questionContent, userProfile.getId());
+    return CommonResponseBody.<OneQuestionDto>builder()
+      .data(new OneQuestionDto(createdQuestion))
       .success()
       .build();
   }

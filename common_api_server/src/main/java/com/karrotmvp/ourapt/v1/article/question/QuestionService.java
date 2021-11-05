@@ -39,7 +39,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public void writeNewQuestion(WriteNewQuestionDto content, String writerId) {
+    public QuestionDto writeNewQuestion(WriteNewQuestionDto content, String writerId) {
         User writer = this.userRepository.findById(writerId)
           .orElseThrow(RegisteredUserNotFoundException::new);
         this.userService.assertUserIsNotBanned(writer);
@@ -52,6 +52,7 @@ public class QuestionService {
         question.setApartmentWhereCreated(writer.getCheckedIn());
         this.questionRepository.save(question);
         this.exposureRepository.save(new Exposure(question, writer.getCheckedIn()));
+        return mapper.map(question, QuestionDto.class);
     }
 
     public List<QuestionDto> getQuestionsExposedToApartment(String apartmentId, Date cursor, int perPage) {

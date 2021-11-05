@@ -43,7 +43,7 @@ public class CommentService {
   }
 
   @Transactional
-  public void writeNewComment(WriteNewCommentDto content, String questionId,  String writerId) {
+  public CommentDto writeNewComment(WriteNewCommentDto content, String questionId,  String writerId) {
     User writer = this.userRepository.findById(writerId)
       .orElseThrow(RegisteredUserNotFoundException::new);
     this.userService.assertUserIsNotBanned(writer);
@@ -58,5 +58,6 @@ public class CommentService {
     }
     comment.setApartmentWhereCreated(writer.getCheckedIn());
     this.commentRepository.save(comment);
+    return mapper.map(comment, CommentDto.class);
   }
 }
