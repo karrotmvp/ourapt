@@ -1,7 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.comment.repository;
 
 import com.karrotmvp.ourapt.v1.article.comment.Comment;
-import com.karrotmvp.ourapt.v1.common.BaseEntityCreatedDateComparator;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
@@ -40,9 +39,6 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository<Comm
         profiles,
         (cmt) -> cmt.getWriter().getId(),
         KarrotProfile::getId,
-        (cmt, kp) -> cmt.getWriter().setProfile(kp))
-      .stream()
-      .sorted(new BaseEntityCreatedDateComparator(BaseEntityCreatedDateComparator.Order.ASC))
-      .collect(Collectors.toList());
+        (cmt, kp) -> cmt.getWriter().setProfile(kp));
   }
 }

@@ -14,10 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,29 +61,30 @@ public class UserCustomRepositoryImpl implements UserCustomRepository<User, Stri
         "ORDER BY u.createdAt DESC", User.class);
     query.setFirstResult((int) pageable.getOffset());
     query.setMaxResults(pageable.getPageSize());
-    List<User> resultUsers = query.getResultList();
-    Map<Boolean, List<User>> groupIsAdmin = resultUsers.stream()
-      .collect(Collectors.groupingBy(User::isAdmin));
-
-    List<User> admins = Optional.ofNullable(groupIsAdmin.get(true)).orElseGet(ArrayList::new)
-      .stream()
-      .peek(admin -> admin.setProfile(makeAdminKarrotProfile(admin.getId())))
+    List<User> adminUsers = new ArrayList<>();
+    Set<String> normalUserIds = new HashSet<>();
+    List<User> normalUsers = query.getResultList().stream()
+      .peek(u -> {
+        if (u.isAdmin()) {
+          u.setProfile(makeAdminKarrotProfile(u.getId()));
+          adminUsers.add(u);
+        }
+      })
+      .filter((u) -> !u.isAdmin())
+      .peek(nu -> normalUserIds.add(nu.getId()))
       .collect(Collectors.toList());
-    List<User> normalUsers = Optional.ofNullable(groupIsAdmin.get(false)).orElseGet(ArrayList::new);
+    List<KarrotProfile> normalUserProfiles = karrotOAPI.getKarrotUserProfilesByIds(normalUserIds);
 
-    List<KarrotProfile> normalUserProfiles = karrotOAPI.getKarrotUserProfilesByIds(
-      normalUsers.stream().map(User::getId).collect(Collectors.toSet()));
-
-
-    return new PageImpl<>(Utils.leftOuterHashJoin(
-        Stream.concat(admins.stream(), normalUsers.stream()).collect(Collectors.toList()),
-        normalUserProfiles,
-        User::getId,
-        KarrotProfile::getId,
-        User::setProfile
-      ).stream()
-      .sorted(new BaseEntityCreatedDateComparator(BaseEntityCreatedDateComparator.Order.DESC))
-      .collect(Collectors.toList()));
+    return new PageImpl<>(
+      Utils.leftOuterHashJoin(
+          Stream.concat(adminUsers.stream(), normalUsers.stream()).collect(Collectors.toList()),
+          normalUserProfiles,
+          User::getId,
+          KarrotProfile::getId,
+          User::setProfile
+        ).stream()
+        .sorted(new BaseEntityCreatedDateComparator(BaseEntityCreatedDateComparator.Order.DESC))
+        .collect(Collectors.toList()));
   }
 
   private KarrotProfile makeAdminKarrotProfile(String userId) {

@@ -1,7 +1,7 @@
 package com.karrotmvp.ourapt.v1.article.question.repository;
 
+import com.karrotmvp.ourapt.v1.article.comment.repository.projection.CommentCount;
 import com.karrotmvp.ourapt.v1.article.question.Question;
-import com.karrotmvp.ourapt.v1.common.BaseEntityCreatedDateComparator;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
@@ -12,9 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -41,6 +39,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       Question question = query.getSingleResult();
       KarrotProfile profileOfWriter = karrotOAPI.getKarrotUserProfileById(question.getWriter().getId());
       question.getWriter().setProfile(profileOfWriter);
+      question.setCountOfComments(Math.toIntExact(countByParentId(question.getId())));
       return Optional.of(question);
     } catch (NoResultException ne) {
       return Optional.empty();
@@ -59,20 +58,8 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
     query.setParameter(2, dateCursor);
     query.setFirstResult(0);
     query.setMaxResults(pageable.getPageSize());
-    List<Question> questions = query.getResultList();
-    List<KarrotProfile> profiles = karrotOAPI.getKarrotUserProfilesByIds(
-      questions.stream().map(q -> q.getWriter().getId()).collect(Collectors.toSet())
-    );
 
-    return Utils.leftOuterHashJoin(
-        questions,
-        profiles,
-        (q) -> q.getWriter().getId(),
-        KarrotProfile::getId,
-        (a, kp) -> a.getWriter().setProfile(kp))
-      .stream()
-      .sorted(new BaseEntityCreatedDateComparator(BaseEntityCreatedDateComparator.Order.DESC))
-      .collect(Collectors.toList());
+    return joinOnKarrotProfileAndCommentCount(query);
   }
 
   @Override
@@ -84,16 +71,49 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
         "WHERE e.toWhere.id = ?1 AND e.pinnedUntil >= ?2", Question.class);
     query.setParameter(1, toWhereApartmentId);
     query.setParameter(2, new Date());
-    List<Question> questions = query.getResultList();
-    List<KarrotProfile> profiles = karrotOAPI.getKarrotUserProfilesByIds(
-      questions.stream().map(q -> q.getWriter().getId()).collect(Collectors.toSet()));
-    return Utils.leftOuterHashJoin(
-      questions,
-      profiles,
+
+    return joinOnKarrotProfileAndCommentCount(query);
+  }
+
+  private List<Question> joinOnKarrotProfileAndCommentCount(TypedQuery<Question> query) {
+    Set<String> writerIds = new HashSet<>();
+    Set<String> questionIds = new HashSet<>();
+    List<Question> incompleteQuestions = query.getResultList()
+      .stream()
+      .peek(q -> writerIds.add(q.getWriter().getId()))
+      .peek(q -> questionIds.add(q.getId()))
+      .collect(Collectors.toList());
+
+    incompleteQuestions = Utils.leftOuterHashJoin(
+      incompleteQuestions,
+      karrotOAPI.getKarrotUserProfilesByIds(writerIds),
       (q) -> q.getWriter().getId(),
       KarrotProfile::getId,
       (p, profile) -> p.getWriter().setProfile(profile));
+
+    return Utils.leftOuterHashJoin(
+      incompleteQuestions,
+      this.findCountPerParentIdIn(questionIds),
+      Question::getId,
+      CommentCount::getParentId,
+      (q, cc) -> q.setCountOfComments(Math.toIntExact(cc.getCommentCount())));
   }
+
+  private List<CommentCount> findCountPerParentIdIn(Set<String> parentIds) {
+    TypedQuery<CommentCount> query = em.createQuery(
+      "SELECT new com.karrotmvp.ourapt.v1.article.comment.repository.projection.CommentCount(c.parent.id, COUNT(c)) " +
+        "FROM Comment c WHERE c.parent.id IN ?1 " +
+        "GROUP BY c.parent.id", CommentCount.class);
+    query.setParameter(1, parentIds);
+    return query.getResultList();
+  }
+
+  private long countByParentId(String parentId) {
+    TypedQuery<Long> query = em.createQuery("SELECT COUNT(c) FROM Comment c WHERE c.parent.id = ?1", Long.class);
+    query.setParameter(1, parentId);
+    return query.getSingleResult();
+  }
+
 
   private KarrotProfile makeAdminKarrotProfile(String userId) {
     return new KarrotProfile(userId, "우리아파트", "");

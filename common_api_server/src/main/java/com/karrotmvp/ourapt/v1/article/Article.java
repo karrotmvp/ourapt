@@ -9,7 +9,10 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.UUID;
 
-@Table(name = "article")
+@Table(name = "article", indexes = {
+  @Index(columnList = "writer_id"),
+  @Index(columnList = "parent_id")
+})
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DTYPE")
@@ -33,6 +36,11 @@ public abstract class Article extends BaseEntity {
   @Column(name = "region_id")
   @Setter
   private String regionWhereCreated;
+
+  @Transient
+  @Getter
+  @Setter
+  private int countOfComments = 0;
 
   public Article() {
     this.id = UUID.randomUUID().toString();

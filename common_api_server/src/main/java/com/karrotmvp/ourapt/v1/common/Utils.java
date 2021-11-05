@@ -18,9 +18,8 @@ public class Utils {
             Function<R, P> rightPKGetter,
             TwoParameterConsumer<L, R> leftJoinFieldSetter
     ) {
-
         Map<P, List<L>> hashTable = leftList.stream()
-                .collect(Collectors.groupingBy(leftPKGetter));
+                .collect(Collectors.groupingBy(leftPKGetter, LinkedHashMap::new, Collectors.toList()));
         rightList.forEach((r) -> {
             Optional.ofNullable(hashTable.get(rightPKGetter.apply(r)))
                     .orElseGet(ArrayList::new)

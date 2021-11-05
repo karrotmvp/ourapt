@@ -64,8 +64,8 @@ public class QuestionService {
 
     public QuestionDto getRandomPinnedQuestionOfApartment(String apartmentId) {
         List<Question> pinnedQuestionOfApt = this.questionRepository.findByExposurePinnedAndToWhere(apartmentId);
-        if (pinnedQuestionOfApt.size() > 0) {
-
+        if (pinnedQuestionOfApt.size() == 0) {
+          throw new DataNotFoundFromDBException("There is no available pinned question");
         }
 
         Random random = new Random();

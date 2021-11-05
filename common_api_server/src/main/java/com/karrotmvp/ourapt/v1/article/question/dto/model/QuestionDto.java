@@ -25,4 +25,6 @@ public class QuestionDto {
     private Date createdAt;
     @NotNull
     private Date updatedAt;
+    @NotNull
+    private int countOfComments;
 }

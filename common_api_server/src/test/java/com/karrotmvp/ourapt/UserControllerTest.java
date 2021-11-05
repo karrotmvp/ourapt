@@ -28,7 +28,7 @@ public class UserControllerTest {
   @Test
   void getMyInfoTest() {
     UserDto adminUser = getAdminUserDto();
-    UserDto result = userController.getMyInfo(adminUser.getProfile()).getData();
+    UserDto result = userController.getMyInfo(adminUser.getProfile()).getData().getUser();
     assertEquals(adminUser.getId(), result.getId());
     assertEquals(adminUser.getProfile().getId(), result.getProfile().getId());
   }
