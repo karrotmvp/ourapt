@@ -63,10 +63,25 @@ public class QuestionService {
         return mapper.map(this.safelyGetQuestionById(questionId), QuestionDto.class);
     }
 
+    @Transactional
+    public void pinQuestionUntil(String questionId, Date until) {
+        Question target = safelyGetQuestionById(questionId);
+        target.setPinnedUntil(until);
+        this.questionRepository.save(target);
+    }
+
+    @Transactional
+    public void unpinQuestion(String questionId) {
+        Question target = safelyGetQuestionById(questionId);
+        target.setPinnedUntil(null);
+        this.questionRepository.save(target);
+    }
+
     private Question safelyGetQuestionById(String questionId) {
         return this.questionRepository.findById(questionId).orElseThrow(
           () -> new DataNotFoundFromDBException("There is no question match with ID: " + questionId));
     }
+
 
     @Transactional
     public QuestionDto writeNewQuestion(WriteNewQuestionDto content, String writerId) {

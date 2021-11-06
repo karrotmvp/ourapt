@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.Calendar;
+import java.util.Date;
+
 @Controller
 @RequestMapping(value = "/admin/action")
 public class AdminActionController {
@@ -65,24 +68,37 @@ public class AdminActionController {
     return rd;
   }
 
-  @PostMapping("/new-question")
+  @PostMapping("/new-question.do")
   public RedirectView doCreateNewQuestionAction(
     RedirectView rd,
-    @RequestBody WriteNewQuestionDto content
+    @RequestParam WriteNewQuestionDto content
   ) {
     this.questionService.writeNewQuestion(content, "ADMIN");
     // TODO: set url for question detail
     return rd;
   }
 
-  @PostMapping("/pin-question")
-  public RedirectView doPinQuestionAction() {
-    throw new UnsupportedOperationException();
+  @PostMapping("/pin-question.do")
+  public RedirectView doPinQuestionAction(
+    RedirectView rd,
+    @RequestParam String id
+  ) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(new Date());
+    cal.add(Calendar.YEAR, 100); // Permanently
+    this.questionService.pinQuestionUntil(id, cal.getTime());
+    rd.setUrl("/admin/questions?perPage=20&pageNum=1");
+    return rd;
   }
 
-  @PostMapping("/unpin-question")
-  public RedirectView doUnpinQuestionAction() {
-    throw new UnsupportedOperationException();
+  @PostMapping("/unpin-question.do")
+  public RedirectView doUnpinQuestionAction(
+    RedirectView rd,
+    @RequestParam String id
+  ) {
+    this.questionService.unpinQuestion(id);
+    rd.setUrl("/admin/questions?perPage=20&pageNum=1");
+    return rd;
   }
 
 }

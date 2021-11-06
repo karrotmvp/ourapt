@@ -39,7 +39,11 @@
             <td th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td th:text="${#dates.format(question.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
-                <form>
+                <form
+                        th:action="${question.isPinned ? '/admin/action/unpin-question.do' : '/admin/action/pin-question.do'}"
+                        method="post"
+                >
+                    <input type="hidden" name="id" th:value="${question.id}">
                     <div th:replace="fragments/toggle-button :: toggle-button(predicate = ${question.isPinned}, onTrue='고정됨', onFalse='일반')" ></div>
                 </form>
             </td>
