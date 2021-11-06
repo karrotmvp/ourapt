@@ -77,9 +77,12 @@ public class AdminActionController {
 
   @PostMapping("/pin-question")
   public RedirectView doPinQuestionAction() {
+    throw new UnsupportedOperationException();
   }
 
   @PostMapping("/unpin-question")
-  public RedirectView doUnpinQuestionAction() {}
+  public RedirectView doUnpinQuestionAction() {
+    throw new UnsupportedOperationException();
+  }
 
 }
