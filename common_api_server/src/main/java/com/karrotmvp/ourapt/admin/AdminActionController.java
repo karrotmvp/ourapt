@@ -1,11 +1,12 @@
 package com.karrotmvp.ourapt.admin;
 
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
+import com.karrotmvp.ourapt.v1.article.comment.CommentService;
+import com.karrotmvp.ourapt.v1.article.question.QuestionService;
+import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -14,13 +15,17 @@ public class AdminActionController {
 
   private final UserService userService;
   private final ApartmentService apartmentService;
+  private final QuestionService questionService;
+  private final CommentService commentService;
 
-  public AdminActionController(ApartmentService apartmentService, UserService userService) {
+  public AdminActionController(ApartmentService apartmentService, UserService userService, QuestionService questionService, CommentService commentService) {
     this.apartmentService = apartmentService;
     this.userService = userService;
+    this.questionService = questionService;
+    this.commentService = commentService;
   }
 
-  @GetMapping(value ="/active-apartment.do")
+  @GetMapping(value = "/active-apartment.do")
   public RedirectView doTurnOnApartmentAction(
     @RequestParam String id,
     RedirectView rd
@@ -30,7 +35,7 @@ public class AdminActionController {
     return rd;
   }
 
-  @GetMapping(value ="/inactive-apartment.do")
+  @GetMapping(value = "/inactive-apartment.do")
   public RedirectView doTurnOffApartmentAction(
     @RequestParam String id,
     RedirectView rd
@@ -57,6 +62,15 @@ public class AdminActionController {
   ) {
     this.userService.cancelBanUserById(id);
     rd.setUrl("/admin/users?pageNum=1&perPage=20");
+    return rd;
+  }
+
+  @PostMapping("/new-question")
+  public RedirectView doCreateNewQuestionAction(
+    RedirectView rd,
+    @RequestBody WriteNewQuestionDto content
+  ) {
+    this.questionService.writeNewQuestion(content, "ADMIN");
     return rd;
   }
 

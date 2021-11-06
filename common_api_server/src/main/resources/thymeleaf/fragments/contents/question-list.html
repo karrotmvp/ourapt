@@ -1,6 +1,6 @@
-<div th:fragment="user-list">
+<div th:fragment="question-list">
     <div style="text-align: center;">
-        <h1>이용자 목록</h1>
+        <h1>질문 관리</h1>
         <p th:text="${#strings.concat('총: ', countOfAll)}"></p>
         <p th:text="${#strings.concat('정지 된 유저 수: ', countOfTheBanned)}"></p>
     </div>
@@ -10,16 +10,15 @@
         <th>순번</th>
         <th>ID</th>
         <th>닉네임</th>
-        <th>프로필사진</th>
-        <th>알림동의여부</th>
-        <th>이용동의일자</th>
-        <th>이용정지일자</th>
-        <th>체크인된 아파트</th>
-        <th>관리자여부</th>
+        <th>본문</th>
+        <th>관리자 여부</th>
+        <th>댓글 수</th>
+        <th>작성일</th>
+        <th>수정일</th>
         </thead>
         <tbody>
         <tr
-                th:each="user, index : ${users}"
+                th:each="question, index : ${questions}"
         >
             <td th:text="${perPage * (pageNum - 1) + index.index + 1}"></td>
             <td th:text="${user.id}"></td>

@@ -5,6 +5,7 @@ import com.karrotmvp.ourapt.v1.article.question.Question;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +38,10 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
     query.setParameter(1, questionId);
     try {
       Question question = query.getSingleResult();
-      KarrotProfile profileOfWriter = karrotOAPI.getKarrotUserProfileById(question.getWriter().getId());
+      KarrotProfile profileOfWriter =
+        question.getWriter().isAdmin() ?
+          makeAdminKarrotProfile(question.getWriter().getId()) :
+          karrotOAPI.getKarrotUserProfileById(question.getWriter().getId());
       question.getWriter().setProfile(profileOfWriter);
       question.setCountOfComments(Math.toIntExact(countByParentId(question.getId())));
       return Optional.of(question);
@@ -75,6 +79,19 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
     return joinOnKarrotProfileAndCommentCount(query);
   }
 
+  @Override
+  public List<Question> findByExposure(String apartmentId, Pageable pageable) {
+    TypedQuery<Question> query = em.createQuery(
+      "SELECT e.question " +
+        "FROM Exposure e " +
+        "LEFT JOIN FETCH e.question.writer " +
+        "WHERE e.toWhere.id = ?1", Question.class);
+    query.setParameter(1, apartmentId);
+    query.setFirstResult(Math.toIntExact(pageable.getOffset()));
+    query.setMaxResults(pageable.getPageSize());
+    return joinOnKarrotProfileAndCommentCount(query);
+  }
+
   private List<Question> joinOnKarrotProfileAndCommentCount(TypedQuery<Question> query) {
     Set<String> writerIds = new HashSet<>();
     Set<String> questionIds = new HashSet<>();
@@ -89,7 +106,10 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       karrotOAPI.getKarrotUserProfilesByIds(writerIds),
       (q) -> q.getWriter().getId(),
       KarrotProfile::getId,
-      (p, profile) -> p.getWriter().setProfile(profile));
+      (q, profile) -> q.getWriter().setProfile(
+        q.getWriter().isAdmin() ?
+          makeAdminKarrotProfile(q.getWriter().getId()) :
+          profile));
 
     return Utils.leftOuterHashJoin(
       incompleteQuestions,

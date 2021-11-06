@@ -59,7 +59,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository<User, Stri
       "SELECT u " +
         "FROM User u LEFT JOIN FETCH u.checkedIn " +
         "ORDER BY u.createdAt DESC", User.class);
-    query.setFirstResult((int) pageable.getOffset());
+    query.setFirstResult(Math.toIntExact(pageable.getOffset()));
     query.setMaxResults(pageable.getPageSize());
     List<User> adminUsers = new ArrayList<>();
     Set<String> normalUserIds = new HashSet<>();

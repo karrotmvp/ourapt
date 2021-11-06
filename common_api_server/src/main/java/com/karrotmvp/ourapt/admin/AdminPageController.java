@@ -3,6 +3,7 @@ package com.karrotmvp.ourapt.admin;
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
@@ -72,5 +73,16 @@ public class AdminPageController {
     model.addAttribute("isLastPage", allUsers.size() < perPage);
 
     return "pages/users";
+  }
+
+  @GetMapping("/questions")
+  public String renderQuestionList(
+    Model model,
+    @RequestParam int perPage,
+    @RequestParam int pageNum
+  ) {
+    List<QuestionDto> questions = this.questionService.get
+    model.addAttribute("", )
+    return "pages/questions";
   }
 }
