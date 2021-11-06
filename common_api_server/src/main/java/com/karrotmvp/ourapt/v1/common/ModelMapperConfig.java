@@ -8,6 +8,7 @@ import com.karrotmvp.ourapt.v1.article.comment.Comment;
 import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.Question;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import org.modelmapper.ModelMapper;
@@ -51,7 +52,12 @@ public class ModelMapperConfig {
       mapper -> {
         mapper.map((q) -> q.getWriter().getProfile(), QuestionDto::setWriter);
         mapper.map(Question::isByAdmin, QuestionDto::setByAdmin);
+        mapper.map(Question::isPinned, QuestionDto::setIsPinned);
       }
+    );
+    modelMapper.typeMap(Question.class, QuestionWithWhereCreatedDto.class).addMapping(
+      Question::isPinned,
+      QuestionWithWhereCreatedDto::setIsPinned
     );
 
     // Comment

@@ -3,7 +3,7 @@ package com.karrotmvp.ourapt.admin;
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
-import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
@@ -63,14 +63,14 @@ public class AdminPageController {
     @RequestParam int perPage,
     @RequestParam int pageNum
   ) {
-    List<UserDto> allUsers = this.userService.getUsersWithPagination(perPage, pageNum - 1);
-    model.addAttribute("users", allUsers);
-    model.addAttribute("countOfAll", allUsers.size());
-    model.addAttribute("countOfTheBanned", allUsers
+    List<UserDto> users = this.userService.getUsersWithPagination(perPage, pageNum - 1);
+    model.addAttribute("users", users);
+    model.addAttribute("countOfAll", users.size());
+    model.addAttribute("countOfTheBanned", users
       .stream().filter(u -> u.getBannedAt() != null).count());
     model.addAttribute("pageNum", pageNum);
     model.addAttribute("perPage", perPage);
-    model.addAttribute("isLastPage", allUsers.size() < perPage);
+    model.addAttribute("isLastPage", users.size() < perPage);
 
     return "pages/users";
   }
@@ -81,8 +81,12 @@ public class AdminPageController {
     @RequestParam int perPage,
     @RequestParam int pageNum
   ) {
-    List<QuestionDto> questions = this.questionService.get
-    model.addAttribute("", )
+    List<QuestionWithWhereCreatedDto> questions = this.questionService.getQuestionsAndOriginWithOffsetCursor(perPage, pageNum - 1);
+    model.addAttribute("questions", questions);
+    model.addAttribute("countOfAll", questions.size());
+    model.addAttribute("pageNum", pageNum);
+    model.addAttribute("perPage", perPage);
+    model.addAttribute("isLastPage", questions.size() < perPage);
     return "pages/questions";
   }
 }

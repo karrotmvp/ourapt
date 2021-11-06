@@ -31,6 +31,7 @@ public abstract class Article extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "apartment_id", referencedColumnName = "id")
   @Setter
+  @Getter
   private Apartment apartmentWhereCreated;
 
   @Column(name = "region_id")

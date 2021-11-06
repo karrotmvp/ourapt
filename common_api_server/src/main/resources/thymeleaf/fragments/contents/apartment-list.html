@@ -50,11 +50,11 @@
                     : '/admin/action/active-apartment.do'
                     }" method="get">
                     <input type="hidden" name="id" th:value="${apt.id}">
-                    <button
-                            type="submit"
-                            th:text="${apt.isActive ? 'ON': 'OFF'}"
-                            th:class="${apt.isActive ? 'btn btn-success': 'btn btn-secondary'}"
-                    ></button>
+                    <div
+                            th:replace="fragments/toggle-button ::
+                            toggle-button(predicate=${apt.isActive}, onTrue='ON', onFalse='OFF')" >
+
+                    </div>
                 </form>
             </td>
         </tr>

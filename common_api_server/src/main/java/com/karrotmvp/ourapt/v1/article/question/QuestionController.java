@@ -56,7 +56,7 @@ public class QuestionController {
     @RequestParam(name = "cursor") long cursorTimestamp,
     @PathVariable(name = "apartmentId") String apartmentId
   ) {
-    List<QuestionDto> questions = this.questionService.getQuestionsExposedToApartment(
+    List<QuestionDto> questions = this.questionService.getQuestionsOfApartmentWithDateCursor(
       apartmentId,
       new Date(cursorTimestamp),
       perPage);

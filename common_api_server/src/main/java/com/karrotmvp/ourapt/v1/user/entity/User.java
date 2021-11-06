@@ -42,7 +42,7 @@ public class User extends BaseEntity {
     @Getter
     private Date bannedAt;
 
-    @Column(name = "is_admin")
+    @Column(name = "is_admin", nullable = false)
     @Getter
     @Setter
     private boolean isAdmin;

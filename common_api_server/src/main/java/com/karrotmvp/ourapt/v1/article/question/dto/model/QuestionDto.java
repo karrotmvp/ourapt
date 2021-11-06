@@ -22,6 +22,8 @@ public class QuestionDto {
     @NotNull
     private Boolean byAdmin;
     @NotNull
+    private Boolean isPinned;
+    @NotNull
     private Date createdAt;
     @NotNull
     private Date updatedAt;

@@ -13,7 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({"production | alpha | dev"})
+@Profile({"production | alpha"})
 public class KarrotOAuthProvider implements AuthenticationProvider {
     // Spring Security loads all the 'AuthenticationProvider Beans' when it initializes ProviderManager(AuthenticationManager)
 

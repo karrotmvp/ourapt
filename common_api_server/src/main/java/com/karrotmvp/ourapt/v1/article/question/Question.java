@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.util.Date;
 
 @Entity
 @DiscriminatorValue(value = "Q")
@@ -19,8 +20,17 @@ public class Question extends Article {
     @Setter
     private String mainText;
 
+    @Column(name = "pinned_until")
+    @Setter
+    @Getter
+    private Date pinnedUntil;
+
+
     public boolean isByAdmin() {
         return this.getWriter().isAdmin();
+    }
+    public boolean isPinned() {
+        return this.pinnedUntil != null && new Date().before(this.pinnedUntil);
     }
 }
 

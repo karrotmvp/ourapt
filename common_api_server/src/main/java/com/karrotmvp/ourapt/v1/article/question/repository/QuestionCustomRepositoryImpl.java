@@ -5,7 +5,6 @@ import com.karrotmvp.ourapt.v1.article.question.Question;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,14 +50,15 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
   }
 
   @Override
-  public List<Question> findFirstByExposedToAndDateCursorByOrderByDesc(String apartmentIdToBeExposed, Date dateCursor, Pageable pageable) {
+  public List<Question> findFirstByApartmentIdToAndDateCursorByOrderByDesc(String apartmentId, Date dateCursor, Pageable pageable) {
     TypedQuery<Question> query = em.createQuery(
-      "SELECT e.question FROM Exposure e " +
-        "LEFT JOIN FETCH e.question.writer " +
-        "WHERE e.toWhere.id = ?1 AND e.question.createdAt < ?2 " +
-        "ORDER BY e.question.createdAt DESC", Question.class);
+      "SELECT q FROM Question q " +
+        "LEFT JOIN FETCH q.writer " +
+        "LEFT JOIN FETCH q.apartmentWhereCreated " +
+        "WHERE q.apartmentWhereCreated.id = ?1 AND q.createdAt < ?2 " +
+        "ORDER BY q.createdAt DESC", Question.class);
 
-    query.setParameter(1, apartmentIdToBeExposed);
+    query.setParameter(1, apartmentId);
     query.setParameter(2, dateCursor);
     query.setFirstResult(0);
     query.setMaxResults(pageable.getPageSize());
@@ -67,12 +67,13 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
   }
 
   @Override
-  public List<Question> findByExposurePinnedAndToWhere(String toWhereApartmentId) {
+  public List<Question> findByApartmentIdAndPinned(String toWhereApartmentId) {
     TypedQuery<Question> query = em.createQuery(
-      "SELECT e.question " +
-        "FROM Exposure e " +
-        "LEFT JOIN FETCH e.question.writer " +
-        "WHERE e.toWhere.id = ?1 AND e.pinnedUntil >= ?2", Question.class);
+      "SELECT q " +
+        "FROM Question q " +
+        "LEFT JOIN FETCH q.writer " +
+        "LEFT JOIN FETCH q.apartmentWhereCreated " +
+        "WHERE q.apartmentWhereCreated.id = ?1 AND q.pinnedUntil >= ?2", Question.class);
     query.setParameter(1, toWhereApartmentId);
     query.setParameter(2, new Date());
 
@@ -80,13 +81,12 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
   }
 
   @Override
-  public List<Question> findByExposure(String apartmentId, Pageable pageable) {
+  public List<Question> findByOffsetCursor(Pageable pageable) {
     TypedQuery<Question> query = em.createQuery(
-      "SELECT e.question " +
-        "FROM Exposure e " +
-        "LEFT JOIN FETCH e.question.writer " +
-        "WHERE e.toWhere.id = ?1", Question.class);
-    query.setParameter(1, apartmentId);
+      "SELECT q FROM Question q " +
+        "LEFT JOIN FETCH q.writer " +
+        "LEFT JOIN FETCH q.apartmentWhereCreated " +
+        "ORDER BY q.createdAt DESC", Question.class);
     query.setFirstResult(Math.toIntExact(pageable.getOffset()));
     query.setMaxResults(pageable.getPageSize());
     return joinOnKarrotProfileAndCommentCount(query);
@@ -106,10 +106,9 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       karrotOAPI.getKarrotUserProfilesByIds(writerIds),
       (q) -> q.getWriter().getId(),
       KarrotProfile::getId,
-      (q, profile) -> q.getWriter().setProfile(
-        q.getWriter().isAdmin() ?
-          makeAdminKarrotProfile(q.getWriter().getId()) :
-          profile));
+      (q, profile) -> q.getWriter().setProfile(profile));
+
+    // TODO:: writer가 관리자일때 체크해서 관리자 프로필 넣어주기
 
     return Utils.leftOuterHashJoin(
       incompleteQuestions,

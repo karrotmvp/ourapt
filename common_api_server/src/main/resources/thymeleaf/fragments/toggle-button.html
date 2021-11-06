@@ -1,0 +1,7 @@
+<button
+        th:fragment="toggle-button (predicate, onTrue, onFalse)"
+        type="submit"
+        th:text="${predicate ? onTrue : onFalse}"
+        th:class="${predicate ? 'btn btn-success': 'btn btn-grey'}"
+>
+</button>

@@ -71,8 +71,15 @@ public class AdminActionController {
     @RequestBody WriteNewQuestionDto content
   ) {
     this.questionService.writeNewQuestion(content, "ADMIN");
+    // TODO: set url for question detail
     return rd;
   }
 
+  @PostMapping("/pin-question")
+  public RedirectView doPinQuestionAction() {
+  }
+
+  @PostMapping("/unpin-question")
+  public RedirectView doUnpinQuestionAction() {}
 
 }

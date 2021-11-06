@@ -13,7 +13,7 @@
         <th>프로필사진</th>
         <th>알림동의여부</th>
         <th>이용동의일자</th>
-        <th>이용정지일자</th>
+        <th>이용정지여부</th>
         <th>체크인된 아파트</th>
         <th>관리자여부</th>
         </thead>
@@ -41,10 +41,10 @@
                     <input type="hidden" name="id"
                            th:value="${user.id}"
                     >
-                    <button type="submit"
-                            th:class="${user.bannedAt != null ? 'btn btn-grey' : 'btn btn-danger'}"
-                            th:text="${user.bannedAt != null ? '정지해제' : '이용정지'}">
-                    </button>
+                    <div th:replace="fragments/toggle-button ::
+                         toggle-button(predicate=${user.bannedAt == null}, onTrue='정상', onFalse='정지됨')"
+                    >
+                    </div>
                 </form>
             </td>
             <td>
