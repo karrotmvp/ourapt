@@ -1,16 +1,20 @@
 package com.karrotmvp.ourapt.admin;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.article.comment.CommentService;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.Calendar;
-import java.util.Date;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping(value = "/admin/action")
@@ -71,10 +75,16 @@ public class AdminActionController {
   @PostMapping("/new-question.do")
   public RedirectView doCreateNewQuestionAction(
     RedirectView rd,
-    @RequestParam WriteNewQuestionDto content
+    @RequestParam String apartmentId,
+    @RequestParam String regionId,
+    @RequestParam String mainText
   ) {
-    this.questionService.writeNewQuestion(content, "ADMIN");
-    // TODO: set url for question detail
+    final String ADMIN_USER_ID = "ADMIN";
+    this.userService.updateCheckedInUserById(ADMIN_USER_ID, apartmentId);
+    this.questionService.writeNewQuestion(
+        new WriteNewQuestionDto(mainText, regionId)
+        , ADMIN_USER_ID);
+    rd.setUrl("/admin/questions?perPage=20&pageNum=1");
     return rd;
   }
 

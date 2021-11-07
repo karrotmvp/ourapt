@@ -1,0 +1,36 @@
+<div th:fragment="question-form(apartments)">
+  <div class="container" style="border: 2px dotted">
+    <form action="/admin/action/new-question.do" method="post">
+      <div class="row">
+        <h1 class="card-title" style="text-align: center">관리자 질문 작성</h1>
+      </div>
+      <br />
+      <div class="row">
+        <label class="col-sm-3">
+          <h4 style="font-weight: bold">대상 아파트 선택</h4>
+          <select name="apartmentId" class="form-select">
+            <option
+              th:each="apt : ${apartments}"
+              th:value="${apt.id}"
+              th:text="${apt.name}"
+            ></option>
+          </select>
+          <input type="hidden" name="regionId" th:value="ADMIN" />
+        </label>
+        <label class="col-sm-9">
+          <h4 style="font-weight: bold">본문 입력</h4>
+          <textarea
+            class="form-control"
+            aria-label="With textarea"
+            name="mainText"
+            style="resize: none; min-height: 100px"
+          ></textarea>
+          <br />
+          <button class="btn btn-primary" type="submit">작성</button>
+        </label>
+        <!-- card body -->
+      </div>
+    </form>
+  </div>
+  <br />
+</div>

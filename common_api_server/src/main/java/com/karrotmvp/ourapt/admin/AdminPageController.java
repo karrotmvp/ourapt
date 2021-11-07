@@ -1,5 +1,8 @@
 package com.karrotmvp.ourapt.admin;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
@@ -7,14 +10,12 @@ import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreat
 import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -87,6 +88,8 @@ public class AdminPageController {
     model.addAttribute("pageNum", pageNum);
     model.addAttribute("perPage", perPage);
     model.addAttribute("isLastPage", questions.size() < perPage);
+    List<ApartmentDto> apartments = this.apartmentService.getAvailableApartments();
+    model.addAttribute("apartments", apartments);
     return "pages/questions";
   }
 }

@@ -1,56 +1,62 @@
 <div th:fragment="question-list">
-    <div style="text-align: center;">
-        <h1>질문 관리</h1>
-        <p th:text="${#strings.concat('총: ', countOfAll)}"></p>
-    </div>
-    <br>
-    <table class="table">
-        <thead>
-        <th>순번</th>
-        <th>ID</th>
-        <th>닉네임</th>
-        <th>본문</th>
-        <th>관리자 작성여부</th>
-        <th>작성아파트</th>
-        <th>댓글 수</th>
-        <th>작성일</th>
-        <th>수정일</th>
-        <th>핀 여부</th>
-        </thead>
-        <tbody>
-        <tr
-                th:each="question, index : ${questions}"
-        >
-            <td th:text="${perPage * (pageNum - 1) + index.index + 1}"></td>
-            <td th:text="${question.id}"></td>
-            <td th:text="${question.writer.nickname}"></td>
-            <td
-                    th:with="mainTextLength=${#strings.length(question.mainText)}"
-                    th:text="${#strings.substring(question.mainText, 0,
-                        mainTextLength <= 20 ? mainTextLength : 20)}"></td>
-            <td th:text="${question.byAdmin ? 'O' : 'X'}"></td>
-            <td>
-                <a
-                        th:text="${question.apartmentWhereCreated.name}"
-                        th:href="'#'">
-                </a>
-            </td>
-            <td th:text="${question.countOfComments}"></td>
-            <td th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            <td th:text="${#dates.format(question.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            <td>
-                <form
-                        th:action="${question.isPinned ? '/admin/action/unpin-question.do' : '/admin/action/pin-question.do'}"
-                        method="post"
-                >
-                    <input type="hidden" name="id" th:value="${question.id}">
-                    <div th:replace="fragments/toggle-button :: toggle-button(predicate = ${question.isPinned}, onTrue='고정됨', onFalse='일반')" ></div>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <div
-            th:replace="fragments/pagination.html :: pagination(currentPage=${pageNum}, display=5, perPage=${perPage}, isLastPage=${isLastPage}, url='/admin/questions', countOfAll=${countOfAll} )"
-    ></div>
+  <div
+    th:replace="fragments/contents/question-form.html :: question-form(apartments=${apartments})"
+  ></div>
+  <div style="text-align: center">
+    <h1>질문 관리</h1>
+    <p th:text="${#strings.concat('총: ', countOfAll)}"></p>
+  </div>
+  <br />
+  <table class="table">
+    <thead>
+      <th>순번</th>
+      <th>ID</th>
+      <th>닉네임</th>
+      <th>본문</th>
+      <th>관리자 작성여부</th>
+      <th>작성아파트</th>
+      <th>댓글 수</th>
+      <th>작성일</th>
+      <th>수정일</th>
+      <th>핀 여부</th>
+    </thead>
+    <tbody>
+      <tr th:each="question, index : ${questions}">
+        <td th:text="${perPage * (pageNum - 1) + index.index + 1}"></td>
+        <td th:text="${question.id}"></td>
+        <td th:text="${question.writer.nickname}"></td>
+        <td
+          th:with="mainTextLength=${#strings.length(question.mainText)}"
+          th:text="${#strings.substring(question.mainText, 0,
+                        mainTextLength <= 20 ? mainTextLength : 20)}"
+        ></td>
+        <td th:text="${question.byAdmin ? 'O' : 'X'}"></td>
+        <td>
+          <a th:text="${question.apartmentWhereCreated.name}" th:href="'#'">
+          </a>
+        </td>
+        <td th:text="${question.countOfComments}"></td>
+        <td
+          th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd HH:mm:ss')}"
+        ></td>
+        <td
+          th:text="${#dates.format(question.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"
+        ></td>
+        <td>
+          <form
+            th:action="${question.isPinned ? '/admin/action/unpin-question.do' : '/admin/action/pin-question.do'}"
+            method="post"
+          >
+            <input type="hidden" name="id" th:value="${question.id}" />
+            <div
+              th:replace="fragments/toggle-button :: toggle-button(predicate = ${question.isPinned}, onTrue='고정됨', onFalse='일반')"
+            ></div>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div
+    th:replace="fragments/pagination.html :: pagination(currentPage=${pageNum}, display=5, perPage=${perPage}, isLastPage=${isLastPage}, url='/admin/questions', countOfAll=${countOfAll} )"
+  ></div>
 </div>
