@@ -1,8 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko" th:fragment="layout (navIdx, filename, frgmnt)">
-<div th:replace="fragments/head.html :: head(title = '우리아파트 관리자 페이지')"></div>
-<body>
-<div th:replace="fragments/navbar.html :: navbar(brand = '우리아파트', activeIndex = ${navIdx})"></div>
-<div th:replace="${#strings.concat('fragments/contents/', filename)} :: ${frgmnt}"></div>
-</body>
+  <div
+    th:replace="fragments/head.html :: head(title = '우리아파트 관리자 페이지')"
+  ></div>
+  <body>
+    <div
+      th:replace="fragments/navbar.html :: navbar(brand = '우리아파트', activeIndex = ${navIdx})"
+    ></div>
+    <div
+      th:replace="${#strings.concat('fragments/contents/', filename)} :: ${frgmnt}"
+    ></div>
+  </body>
 </html>

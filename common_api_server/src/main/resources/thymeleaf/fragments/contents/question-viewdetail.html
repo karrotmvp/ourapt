@@ -1,0 +1,133 @@
+<div th:fragment="question-viewdetail">
+  <div class="container">
+    <p class="h1" style="text-align: center">질문 상세</p>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h2">ID</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.id}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">작성자 ID</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.writer.id}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">작성자 닉네임</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.writer.nickname}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">관리자 글 여부</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.byAdmin ? 'O' : 'X'}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">본문</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" style="color: blue;" th:text="${question.mainText}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">작성 아파트 ID</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.apartmentWhereCreated.id}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">작성 아파트 브랜드</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.apartmentWhereCreated.brandName}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">작성 아파트 이름</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.apartmentWhereCreated.name}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">생성일</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.createdAt}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">최근 수정일</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.updatedAt}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">핀 여부</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.isPinned ? 'O' : 'X'}"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <p class="h3">댓글 수</p>
+      </div>
+      <div class="col-sm-10">
+        <p class="h3" th:text="${question.countOfComments}"></p>
+      </div>
+    </div>
+    <h2 style="text-align: center;">댓글 목록</h1>
+    <div>
+        <table class="table">
+            <thead>
+                <th>순번</th>
+                <th>ID</th>
+                <th>작성자 ID</th>
+                <th>작성자 이름</th>
+                <th>내용</th>
+                <th>작성일</th>
+                <th>최근수정일</th>
+            </thead>
+            <tbody>
+                <tr th:each="comment, index : ${comments}">
+                    <td th:text="${index.index + 1}"></td>
+                    <td th:text="${comment.id}"></td>
+                    <td th:text="${comment.writer.id}"></td>
+                    <td th:text="${comment.writer.nickname}"></td>
+                    <td style="color: blue;" th:text="${comment.mainText}"></td>
+                    <td
+                    th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}"
+                    ></td>
+                    <td
+                    th:text="${#dates.format(comment.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"
+                    ></td>
+                </tr>
+            </tbody>
+        </table>
+
+        
+
+    </div>
+  </div>
+</div>

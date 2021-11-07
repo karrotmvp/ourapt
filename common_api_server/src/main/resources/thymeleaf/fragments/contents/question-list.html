@@ -25,15 +25,16 @@
         <td th:text="${perPage * (pageNum - 1) + index.index + 1}"></td>
         <td th:text="${question.id}"></td>
         <td th:text="${question.writer.nickname}"></td>
-        <td
-          th:with="mainTextLength=${#strings.length(question.mainText)}"
-          th:text="${#strings.substring(question.mainText, 0,
+        <td th:with="mainTextLength=${#strings.length(question.mainText)}">
+          <a
+            th:href="${#strings.concat('/admin/question/detail?id=', question.id)}"
+            th:text="${#strings.substring(question.mainText, 0,
                         mainTextLength <= 20 ? mainTextLength : 20)}"
-        ></td>
+          ></a>
+        </td>
         <td th:text="${question.byAdmin ? 'O' : 'X'}"></td>
         <td>
-          <a th:text="${question.apartmentWhereCreated.name}" th:href="'#'">
-          </a>
+          <a th:text="${question.apartmentWhereCreated.name}" href="#"> </a>
         </td>
         <td th:text="${question.countOfComments}"></td>
         <td

@@ -1,19 +1,25 @@
 package com.karrotmvp.ourapt.v1.article.question.repository;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+
 import com.karrotmvp.ourapt.v1.article.comment.repository.projection.CommentCount;
 import com.karrotmvp.ourapt.v1.article.question.Question;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -33,6 +39,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
     TypedQuery<Question> query = em.createQuery(
       "SELECT q FROM Question q " +
         "LEFT JOIN FETCH q.writer " +
+        "LEFT JOIN FETCH q.apartmentWhereCreated " +
         "WHERE q.id = ?1", Question.class);
     query.setParameter(1, questionId);
     try {
@@ -44,7 +51,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       question.getWriter().setProfile(profileOfWriter);
       question.setCountOfComments(Math.toIntExact(countByParentId(question.getId())));
       return Optional.of(question);
-    } catch (NoResultException ne) {
+} catch (NoResultException ne) {
       return Optional.empty();
     }
   }
@@ -99,6 +106,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       .stream()
       .peek(q -> writerIds.add(q.getWriter().getId()))
       .peek(q -> questionIds.add(q.getId()))
+      .peek(q -> q.getWriter().setProfile( q.isByAdmin() ? makeAdminKarrotProfile(q.getId()) : null))
       .collect(Collectors.toList());
 
     incompleteQuestions = Utils.leftOuterHashJoin(
@@ -107,8 +115,6 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       (q) -> q.getWriter().getId(),
       KarrotProfile::getId,
       (q, profile) -> q.getWriter().setProfile(profile));
-
-    // TODO:: writer가 관리자일때 체크해서 관리자 프로필 넣어주기
 
     return Utils.leftOuterHashJoin(
       incompleteQuestions,

@@ -29,6 +29,7 @@ public class Question extends Article {
     public boolean isByAdmin() {
         return this.getWriter().isAdmin();
     }
+
     public boolean isPinned() {
         return this.pinnedUntil != null && new Date().before(this.pinnedUntil);
     }

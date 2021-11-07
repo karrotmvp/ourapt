@@ -31,7 +31,11 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository<Comm
         "LEFT JOIN FETCH c.writer " +
         "WHERE c.parent.id = ?1 ", Comment.class);
     query.setParameter(1, parentId);
-    List<Comment> commentResults = query.getResultList();
+    List<Comment> commentResults = query.getResultList()
+      .stream()
+      .peek(c -> c.getWriter().setProfile( c.getWriter().isAdmin() ? makeAdminKarrotProfile(c.getId()) : null))
+      .collect(Collectors.toList());
+
     List<KarrotProfile> profiles = karrotOAPI.getKarrotUserProfilesByIds(
       commentResults.stream().map(cmt -> cmt.getWriter().getId()).collect(Collectors.toSet()));
     return Utils.leftOuterHashJoin(
@@ -40,5 +44,9 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository<Comm
         (cmt) -> cmt.getWriter().getId(),
         KarrotProfile::getId,
         (cmt, kp) -> cmt.getWriter().setProfile(kp));
+  }
+
+  private KarrotProfile makeAdminKarrotProfile(String userId) {
+    return new KarrotProfile(userId, "우리아파트", "");
   }
 }

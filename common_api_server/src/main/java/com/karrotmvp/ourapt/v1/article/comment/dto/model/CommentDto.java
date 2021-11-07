@@ -1,13 +1,15 @@
 package com.karrotmvp.ourapt.v1.article.comment.dto.model;
 
+import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter

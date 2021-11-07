@@ -1,21 +1,22 @@
 package com.karrotmvp.ourapt.admin;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
+import com.karrotmvp.ourapt.v1.article.comment.CommentService;
+import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -25,13 +26,17 @@ public class AdminPageController {
 
   private final ApartmentService apartmentService;
 
+  private final CommentService commentService;
+
   private final UserService userService;
 
   private final PreopenRepository preopenRepository;
 
-  public AdminPageController(QuestionService questionService, PreopenRepository preopenRepository, ApartmentService apartmentService, UserService userService) {
+
+  public AdminPageController(QuestionService questionService, PreopenRepository preopenRepository, ApartmentService apartmentService, UserService userService, CommentService commentService) {
     this.questionService = questionService;
     this.preopenRepository = preopenRepository;
+    this.commentService =commentService;
     this.apartmentService = apartmentService;
     this.userService = userService;
   }
@@ -91,5 +96,17 @@ public class AdminPageController {
     List<ApartmentDto> apartments = this.apartmentService.getAvailableApartments();
     model.addAttribute("apartments", apartments);
     return "pages/questions";
+  }
+
+  @GetMapping("/question/detail")
+  public String renderQuestionDetail(
+      Model model, 
+      @RequestParam String id
+  ) {
+    QuestionWithWhereCreatedDto question = this.questionService.getQuestionsAndOriginById(id);
+    List<CommentDto> comments = this.commentService.getCommentsByQuestionId(id);
+    model.addAttribute("question", question);
+    model.addAttribute("comments", comments);
+    return "pages/question-detail";
   }
 }

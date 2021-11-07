@@ -1,5 +1,10 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
@@ -10,15 +15,11 @@ import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFou
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -59,9 +60,15 @@ public class QuestionService {
         return mapper.map(pinnedQuestionOfApt.get(random.nextInt(pinnedQuestionOfApt.size())), QuestionDto.class);
     }
 
+    public QuestionWithWhereCreatedDto getQuestionsAndOriginById(String questionId) {
+        Question a = this.safelyGetQuestionById(questionId);
+        return mapper.map(a, QuestionWithWhereCreatedDto.class);
+    }
+
     public QuestionDto getQuestionById(String questionId) {
         return mapper.map(this.safelyGetQuestionById(questionId), QuestionDto.class);
     }
+    
 
     @Transactional
     public void pinQuestionUntil(String questionId, Date until) {

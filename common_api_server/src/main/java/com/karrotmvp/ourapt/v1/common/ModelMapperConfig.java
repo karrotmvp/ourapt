@@ -11,6 +11,7 @@ import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import com.karrotmvp.ourapt.v1.user.entity.User;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,9 +56,12 @@ public class ModelMapperConfig {
         mapper.map(Question::isPinned, QuestionDto::setIsPinned);
       }
     );
-    modelMapper.typeMap(Question.class, QuestionWithWhereCreatedDto.class).addMapping(
-      Question::isPinned,
-      QuestionWithWhereCreatedDto::setIsPinned
+    modelMapper.typeMap(Question.class, QuestionWithWhereCreatedDto.class).addMappings(
+      mapper -> {
+        mapper.map((q) -> q.getWriter().getProfile(), QuestionWithWhereCreatedDto::setWriter);
+        mapper.map(Question::isByAdmin, QuestionWithWhereCreatedDto::setByAdmin);
+        mapper.map(Question::isPinned, QuestionWithWhereCreatedDto::setIsPinned);
+      }
     );
 
     // Comment
