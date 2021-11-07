@@ -29,7 +29,8 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository<Comm
     TypedQuery<Comment> query = em.createQuery(
       "SELECT c FROM Comment c " +
         "LEFT JOIN FETCH c.writer " +
-        "WHERE c.parent.id = ?1 ", Comment.class);
+        "WHERE c.parent.id = ?1 " +
+        "ORDER BY c.createdAt ASC", Comment.class);
     query.setParameter(1, parentId);
     List<Comment> commentResults = query.getResultList()
       .stream()
