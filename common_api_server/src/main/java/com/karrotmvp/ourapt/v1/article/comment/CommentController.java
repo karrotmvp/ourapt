@@ -44,9 +44,10 @@ public class CommentController {
   public CommonResponseBody<OneCommentDto> writeNewComment(
     @RequestBody @Valid WriteNewCommentDto commentContent,
     @PathVariable String questionId,
-    @CurrentUser KarrotProfile profile
+    @CurrentUser KarrotProfile profile,
+    @RequestHeader(name = "Region-Id") String regionId
   ) {
-    CommentDto created = this.commentService.writeNewComment(commentContent, questionId, profile.getId());
+    CommentDto created = this.commentService.writeNewComment(commentContent, questionId, profile.getId(), regionId);
     return CommonResponseBody.<OneCommentDto>builder()
       .data(new OneCommentDto(created))
       .success()

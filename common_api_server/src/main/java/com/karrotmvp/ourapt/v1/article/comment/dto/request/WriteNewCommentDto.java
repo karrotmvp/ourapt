@@ -14,8 +14,4 @@ public class WriteNewCommentDto {
     @NotNull
     @NotEmpty
     private String mainText;
-
-    @NotNull
-    @NotEmpty
-    private String regionId;
 }

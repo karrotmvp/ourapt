@@ -44,7 +44,7 @@ public class CommentService {
   }
 
   @Transactional
-  public CommentDto writeNewComment(WriteNewCommentDto content, String questionId,  String writerId) {
+  public CommentDto writeNewComment(WriteNewCommentDto content, String questionId,  String writerId, String regionId) {
     User writer = this.userRepository.findById(writerId)
       .orElseThrow(RegisteredUserNotFoundException::new);
     this.userService.assertUserIsNotBanned(writer);
@@ -52,7 +52,7 @@ public class CommentService {
       .orElseThrow(() -> new DataNotFoundFromDBException("해당하는 Article이 없습니다."));
     Comment comment = mapper.map(content, Comment.class);
     comment.setWriter(writer);
-    comment.setRegionWhereCreated(content.getRegionId());
+    comment.setRegionWhereCreated(regionId);
     comment.setParent(parent);
     if (writer.getCheckedIn() == null) {
       throw new NotCheckedInUserException();
