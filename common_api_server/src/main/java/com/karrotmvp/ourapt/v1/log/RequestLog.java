@@ -15,7 +15,7 @@ import java.util.Date;
 public class RequestLog {
 
   @Id
-  private long id;
+  private Long id;
 
   @Column(name = "user_id")
   private String userId;
