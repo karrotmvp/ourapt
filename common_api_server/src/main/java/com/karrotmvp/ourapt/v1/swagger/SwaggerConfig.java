@@ -9,16 +9,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseBuilder;
+import springfox.documentation.builders.*;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -42,6 +41,7 @@ public class SwaggerConfig {
         new ResponseBuilder().code("401").description("인증 실패").build(),
         new ResponseBuilder().code("500").description("서버 측에서 예상치 못한 에러").build()
       ))
+      .globalRequestParameters(defaultGlobalParameters())
       .apiInfo(this.apiInfo())
       .select()
       .apis(RequestHandlerSelectors.basePackage("com.karrotmvp.ourapt.v1"))
@@ -67,6 +67,25 @@ public class SwaggerConfig {
       new AuthorizationScope("global", "accessEverything")
     };
     return List.of(new SecurityReference("KarrotAccessToken", authScopes));
+  }
+
+  private List<RequestParameter> defaultGlobalParameters() {
+    List<RequestParameter> headers = new ArrayList<>();
+    headers.add(new RequestParameterBuilder()
+      .name("Instance-Id")
+      .description("앱 인스턴스 ID")
+      .in(ParameterType.HEADER)
+      .required(true)
+      .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
+      .build());
+    headers.add(new RequestParameterBuilder()
+      .name("Region-Id")
+      .description("리전 ID")
+      .in(ParameterType.HEADER)
+      .required(true)
+      .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
+      .build());
+    return headers;
   }
 
 

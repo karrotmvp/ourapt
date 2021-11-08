@@ -2,8 +2,7 @@ package com.karrotmvp.ourapt.v1.article.question;
 
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
-import com.karrotmvp.ourapt.v1.article.question.dto.request.UpdateQuestionDto;
-import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
 import com.karrotmvp.ourapt.v1.article.question.repository.QuestionRepository;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NoPermissionException;
@@ -93,7 +92,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public QuestionDto updateNewQuestionById(String questionId, String updaterId, UpdateQuestionDto content)  {
+    public QuestionDto updateNewQuestionById(String questionId, String updaterId, QuestionContentDto content)  {
         Question toUpdate = this.safelyGetQuestionById(questionId);
         if (!toUpdate.getWriter().getId().equals(updaterId)) {
             throw new NoPermissionException("You has no permission to update this");
@@ -110,13 +109,13 @@ public class QuestionService {
 
 
     @Transactional
-    public QuestionDto writeNewQuestion(WriteNewQuestionDto content, String writerId) {
+    public QuestionDto writeNewQuestion(QuestionContentDto content, String writerId, String regionId) {
         User writer = this.userRepository.findById(writerId)
           .orElseThrow(RegisteredUserNotFoundException::new);
         this.userService.assertUserIsNotBanned(writer);
         Question question = mapper.map(content, Question.class);
         question.setWriter(writer);
-        question.setRegionWhereCreated(content.getRegionId());
+        question.setRegionWhereCreated(regionId);
         if (writer.getCheckedIn() == null) {
             throw new NotCheckedInUserException();
         }
@@ -124,6 +123,4 @@ public class QuestionService {
         this.questionRepository.save(question);
         return mapper.map(question, QuestionDto.class);
     }
-
-
 }

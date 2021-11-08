@@ -1,10 +1,9 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
-import com.karrotmvp.ourapt.v1.article.question.dto.request.UpdateQuestionDto;
-import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
-import com.karrotmvp.ourapt.v1.article.question.dto.response.OneQuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.GetQuestionsDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.response.OneQuestionDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
@@ -71,10 +70,11 @@ public class QuestionController {
   @PostMapping(value = "/question")
   @ApiOperation(value = "새로운 질문 작성")
   public CommonResponseBody<OneQuestionDto> writeNewQuestion(
-    @RequestBody @Valid WriteNewQuestionDto questionContent,
+    @RequestBody @Valid QuestionContentDto questionContent,
+    @RequestHeader(name = "Region-Id") String regionId,
     @CurrentUser KarrotProfile userProfile
   ) {
-    QuestionDto createdQuestion = this.questionService.writeNewQuestion(questionContent, userProfile.getId());
+    QuestionDto createdQuestion = this.questionService.writeNewQuestion(questionContent, userProfile.getId(), regionId);
     return CommonResponseBody.<OneQuestionDto>builder()
       .data(new OneQuestionDto(createdQuestion))
       .success()
@@ -85,7 +85,7 @@ public class QuestionController {
   @ApiOperation(value = "질문 수정하기")
   public CommonResponseBody<OneQuestionDto> updateQuestion(
     @PathVariable(name = "questionId") String questionId,
-    @RequestBody @Valid UpdateQuestionDto questionContent,
+    @RequestBody @Valid QuestionContentDto questionContent,
     @CurrentUser KarrotProfile userProfile
   ) {
     QuestionDto updated = this.questionService.updateNewQuestionById(

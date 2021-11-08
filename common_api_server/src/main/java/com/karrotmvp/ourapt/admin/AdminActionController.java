@@ -1,20 +1,18 @@
 package com.karrotmvp.ourapt.admin;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
-import com.karrotmvp.ourapt.v1.article.comment.CommentService;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
-import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.Calendar;
+import java.util.Date;
 
 @Controller
 @RequestMapping(value = "/admin/action")
@@ -23,13 +21,11 @@ public class AdminActionController {
   private final UserService userService;
   private final ApartmentService apartmentService;
   private final QuestionService questionService;
-  private final CommentService commentService;
 
-  public AdminActionController(ApartmentService apartmentService, UserService userService, QuestionService questionService, CommentService commentService) {
+  public AdminActionController(ApartmentService apartmentService, UserService userService, QuestionService questionService) {
     this.apartmentService = apartmentService;
     this.userService = userService;
     this.questionService = questionService;
-    this.commentService = commentService;
   }
 
   @GetMapping(value = "/active-apartment.do")
@@ -82,8 +78,9 @@ public class AdminActionController {
     final String ADMIN_USER_ID = "ADMIN";
     this.userService.updateCheckedInUserById(ADMIN_USER_ID, apartmentId);
     this.questionService.writeNewQuestion(
-        new WriteNewQuestionDto(mainText, regionId)
-        , ADMIN_USER_ID);
+      new QuestionContentDto(mainText),
+      ADMIN_USER_ID,
+      regionId);
     rd.setUrl("/admin/questions?perPage=20&pageNum=1");
     return rd;
   }

@@ -6,7 +6,6 @@ import com.karrotmvp.ourapt.v1.article.comment.CommentService;
 import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
-import com.karrotmvp.ourapt.v1.preopen.PreopenRepository;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import org.springframework.stereotype.Controller;
@@ -30,12 +29,9 @@ public class AdminPageController {
 
   private final UserService userService;
 
-  private final PreopenRepository preopenRepository;
 
-
-  public AdminPageController(QuestionService questionService, PreopenRepository preopenRepository, ApartmentService apartmentService, UserService userService, CommentService commentService) {
+  public AdminPageController(QuestionService questionService, ApartmentService apartmentService, UserService userService, CommentService commentService) {
     this.questionService = questionService;
-    this.preopenRepository = preopenRepository;
     this.commentService =commentService;
     this.apartmentService = apartmentService;
     this.userService = userService;

@@ -29,6 +29,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/v1/app/**",
             "/api/v1/oauth/karrot",
             "/api/v1/apartments",
+            "/api/v1/log/**"
     };
 
     @Override
