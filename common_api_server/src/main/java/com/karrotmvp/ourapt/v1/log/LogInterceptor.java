@@ -12,7 +12,8 @@ public class LogInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
     String instanceId = request.getHeader("Instance-Id");
     String regionId = request.getHeader("Region-Id");
-    System.out.println("[InstanceId:" + instanceId + " , RegionId: " + regionId + "]");
+    String authHeader = request.getHeader("Authorization");
+    System.out.println("[InstanceId:" + instanceId + ", RegionId: " + regionId + ", AccessToken: " + authHeader + "]");
     return true;
   }
 }
