@@ -5,7 +5,6 @@ import com.karrotmvp.ourapt.v1.auth.springsecurity.ApiSecurityConfig;
 import io.swagger.models.auth.In;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.AntPathMatcher;
@@ -30,7 +29,7 @@ import java.util.function.Predicate;
 public class SwaggerConfig {
 
   @Bean
-  @Profile({"!production"})
+//  @Profile({"!production"})
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)
       .securityContexts(List.of(this.securityContexts()))

@@ -30,7 +30,7 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
-                .antMatcher("/admin**")
+                .antMatcher("/admin/**")
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic()

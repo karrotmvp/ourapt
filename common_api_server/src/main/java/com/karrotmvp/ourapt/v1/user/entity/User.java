@@ -67,12 +67,14 @@ public class User extends BaseEntity {
     }
 
     public User(String userId, KarrotProfile profile) {
+        super();
         this.id = userId;
         this.profile = profile;
         this.isAdmin = false;
     }
 
     public User(String userId, KarrotProfile profile, boolean isAdmin) {
+        super();
         // TODO: 관리자의 경우 상속을 이용하도록 리팩토링
         this.id = userId;
         this.profile = profile;

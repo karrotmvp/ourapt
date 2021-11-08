@@ -76,6 +76,7 @@ public class Apartment extends BaseEntity {
   private Date inactiveAt;
 
   public Apartment() {
+    super();
     this.id = UUID.randomUUID().toString();
   }
 

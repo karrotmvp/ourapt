@@ -1,25 +1,26 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.request.UpdateQuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.repository.QuestionRepository;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
+import com.karrotmvp.ourapt.v1.common.exception.application.NoPermissionException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NotCheckedInUserException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -84,6 +85,24 @@ public class QuestionService {
         this.questionRepository.save(target);
     }
 
+    @Transactional
+    public void deleteQuestionById(String questionId) {
+        Question toDelete = this.safelyGetQuestionById(questionId);
+        toDelete.setDeletedAt(new Date());
+        this.questionRepository.save(toDelete);
+    }
+
+    @Transactional
+    public QuestionDto updateNewQuestionById(String questionId, String updaterId, UpdateQuestionDto content)  {
+        Question toUpdate = this.safelyGetQuestionById(questionId);
+        if (!toUpdate.getWriter().getId().equals(updaterId)) {
+            throw new NoPermissionException("You has no permission to update this");
+        }
+        toUpdate.setMainText(content.getMainText());
+        this.questionRepository.save(toUpdate);
+        return mapper.map(toUpdate, QuestionDto.class);
+    }
+
     private Question safelyGetQuestionById(String questionId) {
         return this.questionRepository.findById(questionId).orElseThrow(
           () -> new DataNotFoundFromDBException("There is no question match with ID: " + questionId));
@@ -105,5 +124,6 @@ public class QuestionService {
         this.questionRepository.save(question);
         return mapper.map(question, QuestionDto.class);
     }
+
 
 }

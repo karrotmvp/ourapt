@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,5 +60,16 @@ public class CommentService {
     comment.setApartmentWhereCreated(writer.getCheckedIn());
     this.commentRepository.save(comment);
     return mapper.map(comment, CommentDto.class);
+  }
+
+  public void deleteCommentById(String commentId) {
+    Comment toDelete = this.safelyGetCommentById(commentId);
+    toDelete.setDeletedAt(new Date());
+    this.commentRepository.save(toDelete);
+  }
+
+  private Comment safelyGetCommentById(String commentId) {
+    return this.commentRepository.findById(commentId).orElseThrow(
+      () -> new DataNotFoundFromDBException("Cannot found matched comment with id: " + commentId));
   }
 }

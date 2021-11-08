@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Table(name = "article", indexes = {
@@ -43,7 +44,18 @@ public abstract class Article extends BaseEntity {
   @Setter
   private int countOfComments = 0;
 
+  @Column(name = "deleted_at")
+  @Temporal(TemporalType.TIMESTAMP)
+  @Getter
+  @Setter
+  private Date deletedAt;
+
   public Article() {
+    super();
     this.id = UUID.randomUUID().toString();
+  }
+
+  public boolean isDeleted() {
+    return this.deletedAt != null && this.deletedAt.before(new Date());
   }
 }

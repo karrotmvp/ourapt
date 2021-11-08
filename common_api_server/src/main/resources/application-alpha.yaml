@@ -24,7 +24,7 @@ spring:
           characterEncoding: UTF-8
           useUnicode: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   devtools:
     livereload:
       enabled: false

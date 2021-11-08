@@ -33,5 +33,11 @@ public class Question extends Article {
     public boolean isPinned() {
         return this.pinnedUntil != null && new Date().before(this.pinnedUntil);
     }
+
+    public void setMainText(String mainText) {
+        this.mainText = mainText;
+        this.setUpdatedAt(new Date());
+    }
+
 }
 

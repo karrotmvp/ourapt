@@ -1,6 +1,7 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.request.UpdateQuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.WriteNewQuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.OneQuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.GetQuestionsDto;
@@ -76,6 +77,34 @@ public class QuestionController {
     QuestionDto createdQuestion = this.questionService.writeNewQuestion(questionContent, userProfile.getId());
     return CommonResponseBody.<OneQuestionDto>builder()
       .data(new OneQuestionDto(createdQuestion))
+      .success()
+      .build();
+  }
+
+  @PatchMapping(value = "/question/{questionId}")
+  @ApiOperation(value = "질문 수정하기")
+  public CommonResponseBody<OneQuestionDto> updateQuestion(
+    @PathVariable(name = "questionId") String questionId,
+    @RequestBody @Valid UpdateQuestionDto questionContent,
+    @CurrentUser KarrotProfile userProfile
+  ) {
+    QuestionDto updated = this.questionService.updateNewQuestionById(
+      questionId,
+      userProfile.getId(),
+      questionContent);
+    return CommonResponseBody.<OneQuestionDto>builder()
+      .success()
+      .data(new OneQuestionDto(updated))
+      .build();
+  }
+
+  @DeleteMapping(value = "/question/{questionId}")
+  @ApiOperation(value = "질문 삭제하기")
+  public CommonResponseBody<Void> deleteQuestion(
+    @PathVariable(name = "questionId") String questionId
+  ) {
+    this.questionService.deleteQuestionById(questionId);
+    return CommonResponseBody.<Void>builder()
       .success()
       .build();
   }

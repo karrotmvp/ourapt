@@ -23,6 +23,7 @@ public class Notification extends BaseEntity {
     private String mainText;
 
     public Notification() {
+        super();
         this.id = UUID.randomUUID().toString();
     }
 

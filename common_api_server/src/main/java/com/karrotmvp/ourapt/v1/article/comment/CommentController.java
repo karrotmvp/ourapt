@@ -52,4 +52,15 @@ public class CommentController {
       .success()
       .build();
   }
+
+  @DeleteMapping(value = "/comment/{commentId}")
+  @ApiOperation(value = "댓글 삭제하기")
+  public CommonResponseBody<Void> deleteComment(
+    @PathVariable String commentId
+  ) {
+    this.commentService.deleteCommentById(commentId);
+    return CommonResponseBody.<Void>builder()
+      .success()
+      .build();
+  }
 }
