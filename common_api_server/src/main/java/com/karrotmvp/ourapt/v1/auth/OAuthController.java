@@ -34,8 +34,8 @@ public class OAuthController {
   @ApiOperation(value = "당근마켓 OAuth 로그인")
   @Transactional
   public CommonResponseBody<KarrotAccessTokenDto> karrotLogin(
-    @RequestBody KarrotLoginDto body,
-    @RequestHeader(name = "Instance-Id") String instanceId
+    @RequestHeader(name = "Instance-Id") String instanceId,
+    @RequestBody KarrotLoginDto body
   ) {
 
     // accessToken 받아오기

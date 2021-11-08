@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.*;
 import springfox.documentation.schema.ScalarType;
@@ -34,6 +35,7 @@ public class SwaggerConfig {
       .securityContexts(List.of(this.securityContexts()))
       .securitySchemes(List.of(this.apiKey()))
       .ignoredParameterTypes(CurrentUser.class)
+      .ignoredParameterTypes(RequestHeader.class)
       .useDefaultResponseMessages(false)
       .globalResponses(HttpMethod.GET, Arrays.asList(
         new ResponseBuilder().code("200").description("status 가 'SUCCESS' 가 아닌경우").build(),
@@ -41,7 +43,7 @@ public class SwaggerConfig {
         new ResponseBuilder().code("401").description("인증 실패").build(),
         new ResponseBuilder().code("500").description("서버 측에서 예상치 못한 에러").build()
       ))
-      .globalRequestParameters(defaultGlobalParameters())
+//      .globalRequestParameters(defaultGlobalParameters())
       .apiInfo(this.apiInfo())
       .select()
       .apis(RequestHandlerSelectors.basePackage("com.karrotmvp.ourapt.v1"))
