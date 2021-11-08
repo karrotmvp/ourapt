@@ -50,7 +50,6 @@ public class ApartmentService {
     this.apartmentRepository.save(targetApt);
   }
 
-
   private Apartment safelyGetApartmentEntityById(String apartmentId) {
     return this.apartmentRepository.findById(apartmentId)
       .orElseThrow(() -> new DataNotFoundFromDBException(apartmentId + "에 해당하는 아파트가 없습니다."));
