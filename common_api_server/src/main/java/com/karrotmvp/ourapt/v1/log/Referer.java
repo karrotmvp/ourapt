@@ -4,5 +4,6 @@ public enum Referer {
   FEED,
   NEAR_BY,
   MESSAGE,
+  UNKNOWN,
   QR;
 }
