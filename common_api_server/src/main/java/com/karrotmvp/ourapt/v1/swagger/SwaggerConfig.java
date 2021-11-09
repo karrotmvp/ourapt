@@ -43,7 +43,7 @@ public class SwaggerConfig {
         new ResponseBuilder().code("401").description("인증 실패").build(),
         new ResponseBuilder().code("500").description("서버 측에서 예상치 못한 에러").build()
       ))
-//      .globalRequestParameters(defaultGlobalParameters())
+      .globalRequestParameters(defaultGlobalParameters())
       .apiInfo(this.apiInfo())
       .select()
       .apis(RequestHandlerSelectors.basePackage("com.karrotmvp.ourapt.v1"))
@@ -77,14 +77,14 @@ public class SwaggerConfig {
       .name("Instance-Id")
       .description("앱 인스턴스 ID")
       .in(ParameterType.HEADER)
-      .required(true)
+      .required(false)
       .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
       .build());
     headers.add(new RequestParameterBuilder()
       .name("Region-Id")
       .description("리전 ID")
       .in(ParameterType.HEADER)
-      .required(true)
+      .required(false)
       .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
       .build());
     return headers;
