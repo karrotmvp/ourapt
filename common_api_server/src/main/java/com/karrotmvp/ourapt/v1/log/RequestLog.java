@@ -28,7 +28,7 @@ public class RequestLog {
   @Column(name = "region_id")
   private String regionId;
 
-  @Column(name = "instance_id")
+  @Column(name = "app_instance_id")
   private String instanceId;
 
   @Column(name = "created_at")
