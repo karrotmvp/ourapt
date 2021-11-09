@@ -2,6 +2,7 @@ package com.karrotmvp.ourapt.v1.article.question.repository;
 
 import com.karrotmvp.ourapt.v1.article.comment.repository.projection.CommentCount;
 import com.karrotmvp.ourapt.v1.article.question.Question;
+import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
@@ -40,7 +41,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       Question question = query.getSingleResult();
       KarrotProfile profileOfWriter =
         question.getWriter().isAdmin() ?
-          makeAdminKarrotProfile(question.getWriter().getId()) :
+          Static.makeAdminKarrotProfile(question.getWriter().getId()) :
           karrotOAPI.getKarrotUserProfileById(question.getWriter().getId());
       question.getWriter().setProfile(profileOfWriter);
       question.setCountOfComments(Math.toIntExact(countByParentId(question.getId())));
@@ -101,7 +102,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       .stream()
       .peek(q -> writerIds.add(q.getWriter().getId()))
       .peek(q -> questionIds.add(q.getId()))
-      .peek(q -> q.getWriter().setProfile(q.isByAdmin() ? makeAdminKarrotProfile(q.getId()) : null))
+      .peek(q -> q.getWriter().setProfile(q.isByAdmin() ? Static.makeAdminKarrotProfile(q.getId()) : null))
       .collect(Collectors.toList());
 
     incompleteQuestions = Utils.leftOuterHashJoin(
@@ -133,10 +134,4 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
     query.setParameter(1, parentId);
     return query.getSingleResult();
   }
-
-
-  private KarrotProfile makeAdminKarrotProfile(String userId) {
-    return new KarrotProfile(userId, "우리아파트", "");
-  }
-
 }

@@ -1,6 +1,7 @@
 package com.karrotmvp.ourapt.v1.article.comment.repository;
 
 import com.karrotmvp.ourapt.v1.article.comment.Comment;
+import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
@@ -52,7 +53,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository<Comm
     query.setParameter(1, parentId);
     List<Comment> commentResults = query.getResultList()
       .stream()
-      .peek(c -> c.getWriter().setProfile(c.getWriter().isAdmin() ? makeAdminKarrotProfile(c.getId()) : null))
+      .peek(c -> c.getWriter().setProfile(c.getWriter().isAdmin() ? Static.makeAdminKarrotProfile(c.getId()) : null))
       .collect(Collectors.toList());
 
     List<KarrotProfile> profiles = karrotOAPI.getKarrotUserProfilesByIds(
@@ -63,9 +64,5 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository<Comm
       (cmt) -> cmt.getWriter().getId(),
       KarrotProfile::getId,
       (cmt, kp) -> cmt.getWriter().setProfile(kp));
-  }
-
-  private KarrotProfile makeAdminKarrotProfile(String userId) {
-    return new KarrotProfile(userId, "우리아파트", "");
   }
 }

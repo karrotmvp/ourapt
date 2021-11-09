@@ -1,6 +1,7 @@
 package com.karrotmvp.ourapt.v1.user.repository;
 
 import com.karrotmvp.ourapt.v1.common.BaseEntityCreatedDateComparator;
+import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
@@ -45,7 +46,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository<User, Stri
         KarrotProfile karrotOApiUserProfile = this.karrotOAPI.getKarrotUserProfileById(userId);
         foundUser.setProfile(karrotOApiUserProfile);
       } else {
-        foundUser.setProfile(makeAdminKarrotProfile(foundUser.getId()));
+        foundUser.setProfile(Static.makeAdminKarrotProfile(foundUser.getId()));
       }
       return Optional.of(foundUser);
     } catch (NoResultException ne) {
@@ -66,7 +67,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository<User, Stri
     List<User> normalUsers = query.getResultList().stream()
       .peek(u -> {
         if (u.isAdmin()) {
-          u.setProfile(makeAdminKarrotProfile(u.getId()));
+          u.setProfile(Static.makeAdminKarrotProfile(u.getId()));
           adminUsers.add(u);
         }
       })
@@ -87,7 +88,4 @@ public class UserCustomRepositoryImpl implements UserCustomRepository<User, Stri
         .collect(Collectors.toList()));
   }
 
-  private KarrotProfile makeAdminKarrotProfile(String userId) {
-    return new KarrotProfile(userId, "우리아파트", "");
-  }
 }

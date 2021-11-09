@@ -43,7 +43,7 @@ public class SwaggerConfig {
         new ResponseBuilder().code("401").description("인증 실패").build(),
         new ResponseBuilder().code("500").description("서버 측에서 예상치 못한 에러").build()
       ))
-      .globalRequestParameters(defaultGlobalParameters())
+//      .globalRequestParameters(defaultGlobalParameters())
       .apiInfo(this.apiInfo())
       .select()
       .apis(RequestHandlerSelectors.basePackage("com.karrotmvp.ourapt.v1"))
