@@ -28,10 +28,6 @@ public class LogInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
     Authentication auth = getAuthenticationFromSecurity();
-    logger.info(
-      "[InstanceId:" + request.getHeader("Instance-Id") +
-      ", RegionId: " + request.getHeader("Region-Id") +
-        ", AccessToken: " + request.getHeader("Authorization") + "]");
     this.logService.logEveryRequest(request, parseUserId(auth).orElse(null));
     return true;
   }
@@ -48,7 +44,17 @@ public class LogInterceptor implements HandlerInterceptor {
 
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-    logger.info(request.getMethod() + " " + request.getRequestURI() + " " + response.getStatus());
+    logger.info(getAccessLog(request, response) + getHeaderLog(request));
     HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
+  }
+  private String getAccessLog(HttpServletRequest request, HttpServletResponse response) {
+    return request.getMethod() + " " + request.getRequestURI() + " " + response.getStatus();
+  }
+
+  private String getHeaderLog(HttpServletRequest request) {
+    return
+      "[InstanceId:" + request.getHeader("Instance-Id") +
+        ", RegionId: " + request.getHeader("Region-Id") +
+        ", AccessToken: " + request.getHeader("Authorization") + "]";
   }
 }
