@@ -59,6 +59,7 @@ jobs:
           cd ./common_api_server
           mkdir ./deploy
           cp ./build/libs/*.jar ./deploy
+          echo "web: java --show-version -jar application.jar" > ./deploy/Procfile
 
       - name: Deploy to EB
         env:
