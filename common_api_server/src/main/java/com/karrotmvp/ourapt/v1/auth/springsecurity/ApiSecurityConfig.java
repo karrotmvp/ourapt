@@ -28,10 +28,9 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String[] AUTHORIZATION_CHECK_EXCLUSION_PATTERNS = new String[]{
             "/api/v1/app/**",
             "/api/v1/oauth/karrot",
-            "/api/v1/apartments",
-            "/api/v1/apartment/**",
-            "/api/v1/no-apartment",
-            "/api/v1/log/**"
+//            "/api/v1/apartments",
+//            "/api/v1/apartment/**",
+//            "/api/v1/log/**"
     };
 
     @Override

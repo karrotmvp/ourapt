@@ -14,8 +14,8 @@ import java.util.Date;
 public class FirstRequestLog {
 
   @Id
-  @Column(name = "app_instance_id")
-  private String instanceId;
+  @Column(name = "user_id")
+  private String userId;
 
   @Column(name = "created_at")
   @CreationTimestamp
@@ -27,7 +27,7 @@ public class FirstRequestLog {
   private Referer referer;
 
   public FirstRequestLog(String instanceId, Referer referer) {
-    this.instanceId = instanceId;
+    this.userId = instanceId;
     this.referer = referer;
   }
 }

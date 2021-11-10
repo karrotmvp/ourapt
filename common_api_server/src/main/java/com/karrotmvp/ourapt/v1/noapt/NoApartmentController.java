@@ -1,6 +1,8 @@
 package com.karrotmvp.ourapt.v1.noapt;
 
+import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +27,10 @@ public class NoApartmentController {
   public CommonResponseBody<Void> submitAnswerNoApartment(
     @RequestBody @Valid NoApartmentAnswerDto answer,
     @RequestHeader(name = "Instance-Id") String instanceId,
-    @RequestHeader(name = "Region-Id") String regionId
+    @RequestHeader(name = "Region-Id") String regionId,
+    @CurrentUser KarrotProfile profile
   ) {
-    this.noApartmentRepository.save(new NoApartment(instanceId, answer.getAnswer(), regionId));
+    this.noApartmentRepository.save(new NoApartment(instanceId, answer.getAnswer(), regionId, profile.getId()));
     return CommonResponseBody.<Void>builder()
       .success().build();
   }

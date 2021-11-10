@@ -22,6 +22,9 @@ public class RequestLog {
   @Column(name = "user_id")
   private String userId;
 
+  @Column(name = "method")
+  private String method;
+
   @Column(name = "path")
   private String path;
 
