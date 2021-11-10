@@ -21,7 +21,7 @@ public class LogService {
 
   public void logEveryRequest(HttpServletRequest request, String userId) {
     RequestLog log = new RequestLog();
-    log.setInstanceId(this.extractInstanceId(request));
+//    log.setInstanceId(this.extractInstanceId(request));
     log.setMethod(request.getMethod());
     log.setRegionId(this.extractRegionId(request));
     log.setPath(this.extractPath(request));

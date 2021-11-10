@@ -26,11 +26,10 @@ public class NoApartmentController {
   @Transactional
   public CommonResponseBody<Void> submitAnswerNoApartment(
     @RequestBody @Valid NoApartmentAnswerDto answer,
-    @RequestHeader(name = "Instance-Id") String instanceId,
     @RequestHeader(name = "Region-Id") String regionId,
     @CurrentUser KarrotProfile profile
   ) {
-    this.noApartmentRepository.save(new NoApartment(instanceId, answer.getAnswer(), regionId, profile.getId()));
+    this.noApartmentRepository.save(new NoApartment(answer.getAnswer(), regionId, profile.getId()));
     return CommonResponseBody.<Void>builder()
       .success().build();
   }

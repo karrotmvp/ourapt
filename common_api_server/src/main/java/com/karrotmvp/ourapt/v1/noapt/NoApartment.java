@@ -18,9 +18,6 @@ public class NoApartment {
   @Id
   private String id;
 
-  @Column(name = "app_instance_id")
-  private String instanceId;
-
   @Column(name = "user_id")
   private String userId;
 
@@ -30,9 +27,8 @@ public class NoApartment {
   @Column(name = "region_id")
   private String regionId;
 
-  public NoApartment(String instanceId, String answer, String regionId, String userId) {
+  public NoApartment(String answer, String regionId, String userId) {
     this.id = UUID.randomUUID().toString();
-    this.instanceId = instanceId;
     this.answer = answer;
     this.regionId = regionId;
     this.userId = userId;

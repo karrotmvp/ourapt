@@ -26,8 +26,8 @@ public class FirstRequestLog {
   @Enumerated(EnumType.STRING)
   private Referer referer;
 
-  public FirstRequestLog(String instanceId, Referer referer) {
-    this.userId = instanceId;
+  public FirstRequestLog(String userId, Referer referer) {
+    this.userId = userId;
     this.referer = referer;
   }
 }

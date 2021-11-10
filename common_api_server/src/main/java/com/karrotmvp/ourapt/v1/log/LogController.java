@@ -1,6 +1,8 @@
 package com.karrotmvp.ourapt.v1.log;
 
+import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
+import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,14 +23,14 @@ public class LogController {
   @ApiOperation(value = "앱 방문시 첫 요청")
   @Transactional
   public CommonResponseBody<Void> logFirstRequest(
-    @RequestParam("referer") Referer referer,
-    @RequestHeader("Instance-Id") String instanceId
+    @RequestParam(name = "referer", required = false) Referer referer,
+    @CurrentUser KarrotProfile karrotProfile
   ) {
-    FirstRequestLog firstLog = this.firstRequestLogRepository.findById(instanceId).orElse(null);
+    FirstRequestLog firstLog = this.firstRequestLogRepository.findById(karrotProfile.getId()).orElse(null);
     if (firstLog != null) {
         return CommonResponseBody.<Void>builder().success().build();
     }
-    this.firstRequestLogRepository.save(new FirstRequestLog(instanceId, referer));
+    this.firstRequestLogRepository.save(new FirstRequestLog(karrotProfile.getId(), referer != null ? referer : Referer.UNKNOWN));
     return CommonResponseBody.<Void>builder().success().build();
   }
 }
