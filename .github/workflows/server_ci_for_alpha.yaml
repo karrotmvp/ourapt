@@ -94,3 +94,10 @@ jobs:
             KARROT_O_API_BASE_URL=${{ env.KARROT_O_API_BASE_URL }}
           echo "Start to deploy to EB..."
           eb deploy
+
+      - name: Send slack webhook
+        run: |
+          curl --location --request POST 'https://hooks.slack.com/services/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' \
+            --header 'Authorization: Bearer Vp7VDNuVl4w1-nrU1oDgVSQnHI4' \
+            --header 'Content-Type: text/plain' \
+            --data-raw '{"text": "[Alpha] Success to deploy alpha server"}'
