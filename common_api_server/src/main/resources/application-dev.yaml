@@ -1,13 +1,13 @@
 server:
   port: 8080
-#  tomcat:
-#    accesslog:
-#      enabled: true
-#      buffered: false
-#      directory: /dev
-#      prefix: stdout
-#      file-date-format:
-#      suffix:
+  tomcat:
+    accesslog:
+      enabled: true
+      buffered: false
+      directory: /dev
+      prefix: stdout
+      file-date-format:
+      suffix:
 spring:
   application:
     name: ourapt_api_server

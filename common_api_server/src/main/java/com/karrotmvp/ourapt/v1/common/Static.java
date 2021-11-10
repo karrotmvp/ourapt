@@ -60,6 +60,6 @@ public class Static {
 
     public static KarrotProfile makeAdminKarrotProfile(String userId) {
         return new KarrotProfile(userId, "우리아파트(관리자)",
-          "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><style>.cls-1{fill:#e95454;}.cls-2{fill:#fff;}</style></defs><g id='레이어_2' data-name='레이어 2'><g id='레이어_1-2' data-name='레이어 1'><circle class='cls-1' cx='16' cy='16' r='16'/><path class='cls-2' d='M6,17.07v1.51H5.19V17.07H3.06v-.72H8.14v.72ZM4.65,15.91a1.16,1.16,0,0,1-1.22-1.23,1.16,1.16,0,0,1,1.22-1.23h1.9a1.23,1.23,0,1,1,0,2.46Zm.09-1.75a.5.5,0,0,0-.5.52.49.49,0,0,0,.5.52H6.47a.52.52,0,0,0,0-1Z'/><path class='cls-2' d='M8.54,17.76V15.28h2v-1H8.53v-.71h2.86V16h-2v1.06h2.42v.71Zm3.67.82V13.42H13v5.16Z'/><path class='cls-2' d='M16.57,16.53a1.36,1.36,0,0,1-1.49,1.37,1.35,1.35,0,0,1-1.49-1.37V14.87a1.35,1.35,0,0,1,1.49-1.37,1.36,1.36,0,0,1,1.49,1.37ZM15.76,15c0-.46-.23-.75-.68-.75s-.69.29-.69.75v1.48c0,.46.23.75.69.75s.68-.29.68-.75Zm1.36,3.62V13.42h.81v1.77h.7V16h-.7v2.62Z'/><path class='cls-2' d='M18.59,17.7V17h.53V14.36h-.47v-.72H22v.72h-.52V17H22v.72Zm2-3.34h-.7V17h.7Zm1.69,4.22V13.42h.81V15.3h.7v.77h-.7v2.51Z'/><path class='cls-2' d='M23.86,18.23v-.71h5.08v.71Zm.47-1.37v-3.3h4.14v.71H25.14v.58h3.27v.7H25.14v.59h3.42v.72Z'/></g></g></svg>");
+          "https://ourapt-img-source.s3.ap-northeast-2.amazonaws.com/admin_profile_img.svg");
     }
 }

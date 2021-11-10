@@ -24,7 +24,7 @@
             <td th:text="${perPage * (pageNum - 1) + index.index + 1}"></td>
             <td th:text="${user.id}"></td>
             <td th:text="${user.profile.nickname}"></td>
-            <td><a th:href="${user.profile.profileImageUrl}">사진</a></td>
+            <td><a th:src="${user.profile.profileImageUrl}"><img style="width: 22px; height: 22px;" th:src="${user.profile.profileImageUrl}"></img></a></td>
             <td th:text="${user.isPushAgreed ? '동의' : '비동의'}"></td>
             <td th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
