@@ -17,7 +17,6 @@ public class Question extends Article {
 
     @Column(name = "main_text")
     @Getter
-    @Setter
     private String mainText;
 
     @Column(name = "pinned_until")
