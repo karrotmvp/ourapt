@@ -59,7 +59,7 @@ jobs:
           cd ./common_api_server
           mkdir ./deploy
           cp ./build/libs/*.jar ./deploy
-          echo "web: ls -al && java --show-version -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -jar ourapt-0.0.1-SNAPSHOT.jar" > ./deploy/Procfile
+          echo "web: ls -al && java --show-version -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar ourapt-0.0.1-SNAPSHOT.jar" > ./deploy/Procfile
 
       - name: Deploy to EB
         env:
