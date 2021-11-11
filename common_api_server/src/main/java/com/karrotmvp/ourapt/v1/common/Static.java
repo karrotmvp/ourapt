@@ -59,7 +59,7 @@ public class Static {
     }
 
     public static KarrotProfile makeAdminKarrotProfile(String userId) {
-        return new KarrotProfile(userId, "우리아파트(관리자)",
+        return new KarrotProfile(userId, "우리아파트",
           "https://ourapt-img-source.s3.ap-northeast-2.amazonaws.com/admin_profile_img.svg");
     }
 }
