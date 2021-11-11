@@ -34,7 +34,7 @@ public class OAuthController {
   @ApiOperation(value = "당근마켓 OAuth 로그인")
   @Transactional
   public CommonResponseBody<KarrotAccessTokenDto> karrotLogin(
-    @RequestHeader(name = "Instance-Id") String instanceId,
+    @RequestHeader(name = "Instance-Id", required = false) String instanceId,
     @RequestBody KarrotLoginDto body
   ) {
 
@@ -50,7 +50,6 @@ public class OAuthController {
     if (alreadySignedUpUser != null) {
       // login
       // instanceId 업데이트
-      alreadySignedUpUser.setInstanceId(instanceId);
       userRepository.save(alreadySignedUpUser);
       return CommonResponseBody.<KarrotAccessTokenDto>builder()
         .success()
@@ -61,7 +60,6 @@ public class OAuthController {
     //signup
     User newUser = new User(userProfile.getUserId(), new KarrotProfile(userProfile.getUserId(), userProfile.getNickname(), ""), false);
     newUser.setPushAgreedAt(new Date());
-    newUser.setInstanceId(instanceId);
     userRepository.save(newUser);
 
     return CommonResponseBody.<KarrotAccessTokenDto>builder()

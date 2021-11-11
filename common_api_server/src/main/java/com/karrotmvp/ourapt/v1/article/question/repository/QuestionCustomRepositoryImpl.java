@@ -2,6 +2,7 @@ package com.karrotmvp.ourapt.v1.article.question.repository;
 
 import com.karrotmvp.ourapt.v1.article.comment.repository.projection.CommentCount;
 import com.karrotmvp.ourapt.v1.article.question.Question;
+import com.karrotmvp.ourapt.v1.common.BaseEntityCreatedDateComparator;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
@@ -117,7 +118,10 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
       this.findCountPerParentIdIn(questionIds),
       Question::getId,
       CommentCount::getParentId,
-      (q, cc) -> q.setCountOfComments(Math.toIntExact(cc.getCommentCount())));
+      (q, cc) -> q.setCountOfComments(Math.toIntExact(cc.getCommentCount())))
+      .stream()
+      .sorted(new BaseEntityCreatedDateComparator(BaseEntityCreatedDateComparator.Order.DESC))
+      .collect(Collectors.toList());
   }
 
   private List<CommentCount> findCountPerParentIdIn(Set<String> parentIds) {

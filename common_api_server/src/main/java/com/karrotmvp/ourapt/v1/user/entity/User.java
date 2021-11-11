@@ -10,9 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 
-@Table(name = "user", indexes = {
-  @Index(columnList = "app_instance_id")
-})
+@Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class User extends BaseEntity {
@@ -37,10 +35,6 @@ public class User extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Setter
     private Date deletedAt;
-
-    @Column(name = "app_instance_id")
-    @Setter
-    private String instanceId;
 
     @Column(name = "banned_at")
     @Temporal(TemporalType.TIMESTAMP)
