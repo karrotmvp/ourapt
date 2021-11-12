@@ -92,7 +92,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public QuestionDto updateNewQuestionById(String questionId, String updaterId, QuestionContentDto content)  {
+    public QuestionDto updateQuestionById(String questionId, String updaterId, QuestionContentDto content)  {
         Question toUpdate = this.safelyGetQuestionById(questionId);
         if (!toUpdate.getWriter().getId().equals(updaterId)) {
             throw new NoPermissionException("You has no permission to update this");
@@ -107,6 +107,9 @@ public class QuestionService {
           () -> new DataNotFoundFromDBException("There is no question match with ID: " + questionId));
     }
 
+    public int getCountOfAllQuestions() {
+        return Math.toIntExact(this.questionRepository.count());
+    }
 
     @Transactional
     public QuestionDto writeNewQuestion(QuestionContentDto content, String writerId, String regionId) {

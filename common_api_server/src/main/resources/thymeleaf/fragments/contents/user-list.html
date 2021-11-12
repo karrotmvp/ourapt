@@ -2,7 +2,6 @@
     <div style="text-align: center;">
         <h1>이용자 목록</h1>
         <p th:text="${#strings.concat('총: ', countOfAll)}"></p>
-        <p th:text="${#strings.concat('정지 된 유저 수: ', countOfTheBanned)}"></p>
     </div>
     <br>
     <table class="table">
@@ -61,6 +60,6 @@
         </tbody>
     </table>
     <div
-            th:replace="fragments/pagination.html :: pagination(currentPage=${pageNum}, display=5, perPage=${perPage}, isLastPage=${isLastPage}, url='/admin/questions', countOfAll=${countOfAll} )"
+            th:replace="fragments/pagination.html :: pagination(currentPage=${pageNum}, display=5, perPage=${perPage}, isLastPage=${isLastPage}, url='/admin/users', countOfAll=${countOfAll} )"
     ></div>
 </div>

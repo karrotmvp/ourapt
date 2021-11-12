@@ -67,9 +67,7 @@ public class AdminPageController {
   ) {
     List<UserDto> users = this.userService.getUsersWithPagination(perPage, pageNum - 1);
     model.addAttribute("users", users);
-    model.addAttribute("countOfAll", users.size());
-    model.addAttribute("countOfTheBanned", users
-      .stream().filter(u -> u.getBannedAt() != null).count());
+    model.addAttribute("countOfAll", this.userService.getCountOfAllUsers());
     model.addAttribute("pageNum", pageNum);
     model.addAttribute("perPage", perPage);
     model.addAttribute("isLastPage", users.size() < perPage);
@@ -85,7 +83,7 @@ public class AdminPageController {
   ) {
     List<QuestionWithWhereCreatedDto> questions = this.questionService.getQuestionsAndOriginWithOffsetCursor(perPage, pageNum - 1);
     model.addAttribute("questions", questions);
-    model.addAttribute("countOfAll", questions.size());
+    model.addAttribute("countOfAll", this.questionService.getCountOfAllQuestions());
     model.addAttribute("pageNum", pageNum);
     model.addAttribute("perPage", perPage);
     model.addAttribute("isLastPage", questions.size() < perPage);

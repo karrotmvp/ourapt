@@ -69,6 +69,10 @@ public class UserService {
       .collect(Collectors.toList());
   }
 
+  public int getCountOfAllUsers() {
+    return Math.toIntExact(this.userRepository.countByDeletedAtIsNull());
+  }
+
   private User safelyGetUserById(String userId) {
     return this.userRepository.findById(userId)
       .orElseThrow(RegisteredUserNotFoundException::new);

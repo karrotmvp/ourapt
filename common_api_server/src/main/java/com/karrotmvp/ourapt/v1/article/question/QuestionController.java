@@ -88,7 +88,7 @@ public class QuestionController {
     @RequestBody @Valid QuestionContentDto questionContent,
     @CurrentUser KarrotProfile userProfile
   ) {
-    QuestionDto updated = this.questionService.updateNewQuestionById(
+    QuestionDto updated = this.questionService.updateQuestionById(
       questionId,
       userProfile.getId(),
       questionContent);
