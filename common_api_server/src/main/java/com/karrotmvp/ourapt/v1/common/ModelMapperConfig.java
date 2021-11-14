@@ -47,7 +47,6 @@ public class ModelMapperConfig {
       }
     );
 
-
     // Question
     modelMapper.typeMap(Question.class, QuestionDto.class).addMappings(
       mapper -> {

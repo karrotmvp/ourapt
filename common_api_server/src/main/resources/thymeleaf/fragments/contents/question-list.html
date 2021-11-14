@@ -4,7 +4,8 @@
   ></div>
   <div style="text-align: center">
     <h1>질문 관리</h1>
-    <p th:text="${#strings.concat('총: ', countOfAll)}"></p>
+    <p th:text="${#strings.concat('총 게시글: ', countOfAll)}"></p>
+    <p th:text="${#strings.concat('총 댓글: ', countOfAllComments)}"></p>
   </div>
   <br />
   <table class="table">
@@ -19,6 +20,7 @@
       <th>작성일</th>
       <th>수정일</th>
       <th>핀 여부</th>
+      <th>삭제</th>
     </thead>
     <tbody>
       <tr th:each="question, index : ${questions}">
@@ -52,6 +54,15 @@
             <div
               th:replace="fragments/toggle-button :: toggle-button(predicate = ${question.isPinned}, onTrue='고정됨', onFalse='일반')"
             ></div>
+          </form>
+        </td>
+        <td>
+          <form
+              action="/admin/action/delete-question.do"
+              method="post"
+          >
+            <input type="hidden" name="id" th:value="${question.id}"/>
+            <button class="btn btn-danger">삭제</button>
           </form>
         </td>
       </tr>

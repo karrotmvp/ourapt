@@ -84,6 +84,7 @@ public class AdminPageController {
     List<QuestionWithWhereCreatedDto> questions = this.questionService.getQuestionsAndOriginWithOffsetCursor(perPage, pageNum - 1);
     model.addAttribute("questions", questions);
     model.addAttribute("countOfAll", this.questionService.getCountOfAllQuestions());
+    model.addAttribute("countOfAllComments", this.commentService.getCountOfAllComments());
     model.addAttribute("pageNum", pageNum);
     model.addAttribute("perPage", perPage);
     model.addAttribute("isLastPage", questions.size() < perPage);

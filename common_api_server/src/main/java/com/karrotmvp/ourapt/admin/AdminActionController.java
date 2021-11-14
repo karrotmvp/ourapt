@@ -108,4 +108,14 @@ public class AdminActionController {
     return rd;
   }
 
+  @PostMapping("/delete-question.do")
+  public RedirectView deleteQuestion(
+    RedirectView rd,
+    @RequestParam String id
+  ) {
+    this.questionService.deleteQuestionById(id);
+    rd.setUrl("/admin/questions?perPage=20&pageNum=1");
+    return rd;
+  }
+
 }

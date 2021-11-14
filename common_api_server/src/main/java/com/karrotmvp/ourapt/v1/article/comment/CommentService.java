@@ -68,6 +68,10 @@ public class CommentService {
     this.commentRepository.save(toDelete);
   }
 
+  public int getCountOfAllComments() {
+    return Math.toIntExact(this.commentRepository.countByDeletedAtIsNull());
+  }
+
   private Comment safelyGetCommentById(String commentId) {
     return this.commentRepository.findById(commentId).orElseThrow(
       () -> new DataNotFoundFromDBException("Cannot found matched comment with id: " + commentId));

@@ -108,7 +108,7 @@ public class QuestionService {
     }
 
     public int getCountOfAllQuestions() {
-        return Math.toIntExact(this.questionRepository.count());
+        return Math.toIntExact(this.questionRepository.countByDeletedAtIsNull());
     }
 
     @Transactional
