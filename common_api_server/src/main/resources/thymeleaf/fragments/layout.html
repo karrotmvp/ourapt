@@ -4,6 +4,7 @@
     th:replace="fragments/head.html :: head(title = '우리아파트 관리자 페이지')"
   ></div>
   <body>
+  <div class="container">
     <div
       th:replace="fragments/navbar.html :: navbar(brand = '우리아파트', activeIndex = ${navIdx})"
     ></div>
@@ -14,20 +15,21 @@
       if (window.location.href.includes("api-alpha.daangn")) {
         // alpha
         profileAssertion.style.backgroundColor = "#D2C4DD";
-        profileAssertion.innerHTML = "<h3>[알파] 환경의 관리자 페이지 입니다! 여기서 시도된 모든 행동은 알파 서비스를 대상으로 반영돼요!</h3>"
+        profileAssertion.innerHTML = "<strong>[알파] 환경의 관리자 페이지 입니다! 여기서 시도된 모든 행동은 알파 환경을 대상으로 반영돼요!</strong>"
       } else if (window.location.href.includes("api.daangn")) {
         // production
         profileAssertion.style.backgroundColor = "red";
-        profileAssertion.innerHTML = "<h3>[프로덕션] 환경의 관리자 페이지 입니다! 여기서 시도된 모든 행동은 프로덕션 서비스를 대상으로 시행되어 실제 유저에게 전달 되니, 신중을 기하여 조작하시기 바래요</h3>"
+        profileAssertion.innerHTML = "<strong>[프로덕션] 환경의 관리자 페이지 입니다! 여기서 시도된 모든 행동은 프로덕션 환경을 대상으로 시행되어4실제 유저에게 전달 되니, 신중을 기하여 조작하시기 바래요</strong>"
       } else {
         // local or else
         profileAssertion.style.backgroundColor = "#A8CCD7";
-        profileAssertion.innerHTML = "<h3>[???]이 서비스가 연결된 환경을 찾을 수 없어요!, Jacob.han에게 문의하셔서 확인을 받기 전까진 조작하지 마세요. 큰일납니다!</h3>"
+        profileAssertion.innerHTML = "<strong>[???] 이 서비스가 연결된 환경을 찾을 수 없어요!, Jacob.han에게 문의하셔서 확인을 받기 전까진 조작하지 마세요. 큰일납니다!</strong>"
       }
       profileAssertion.style.display = "block";
     </script>
     <div
       th:replace="${#strings.concat('fragments/contents/', filename)} :: ${frgmnt}"
     ></div>
+  </div>
   </body>
 </html>
