@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -109,6 +110,22 @@ public class QuestionService {
 
     public int getCountOfAllQuestions() {
         return Math.toIntExact(this.questionRepository.countByDeletedAtIsNull());
+    }
+
+    public int getCountOfTodayQuestions() {
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        Date now = new Date();
+        from.setTime(now);
+        from.set(Calendar.HOUR, 0);
+        from.set(Calendar.MINUTE, 0);
+        from.set(Calendar.SECOND, 0);
+        to.setTime(now);
+        to.add(Calendar.DATE, 1);
+        to.set(Calendar.HOUR, 0);
+        to.set(Calendar.MINUTE, 0);
+        to.set(Calendar.SECOND, 0);
+        return Math.toIntExact(this.questionRepository.countByCreatedAtBetween(from.getTime(), to.getTime()));
     }
 
     @Transactional
