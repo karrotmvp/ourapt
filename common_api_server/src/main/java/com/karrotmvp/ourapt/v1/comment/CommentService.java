@@ -1,10 +1,11 @@
 package com.karrotmvp.ourapt.v1.comment;
 
 import com.karrotmvp.ourapt.v1.article.Article;
+import com.karrotmvp.ourapt.v1.article.question.Question;
+import com.karrotmvp.ourapt.v1.article.repository.ArticleRepository;
 import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.comment.dto.request.WriteNewCommentDto;
 import com.karrotmvp.ourapt.v1.comment.repository.CommentRepository;
-import com.karrotmvp.ourapt.v1.article.question.repository.QuestionRepository;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NotCheckedInUserException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
@@ -22,13 +23,13 @@ import java.util.stream.Collectors;
 @Service
 public class CommentService {
 
-  private final QuestionRepository questionRepository;
+  private final ArticleRepository<Question> questionRepository;
   private final CommentRepository commentRepository;
   private final UserRepository userRepository;
   private final ModelMapper mapper;
   private final UserService userService;
 
-  public CommentService(QuestionRepository questionRepository, CommentRepository commentRepository, UserRepository userRepository, ModelMapper mapper, UserService userService) {
+  public CommentService(ArticleRepository<Question> questionRepository, CommentRepository commentRepository, UserRepository userRepository, ModelMapper mapper, UserService userService) {
     this.questionRepository = questionRepository;
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
@@ -48,7 +49,7 @@ public class CommentService {
     User writer = this.userRepository.findById(writerId)
       .orElseThrow(RegisteredUserNotFoundException::new);
     this.userService.assertUserIsNotBanned(writer);
-    Article parent = this.questionRepository.findById(questionId)
+    Article parent = this.questionRepository.findById(questionId, Question.class)
       .orElseThrow(() -> new DataNotFoundFromDBException("해당하는 Article이 없습니다."));
     Comment comment = mapper.map(content, Comment.class);
     comment.setWriter(writer);

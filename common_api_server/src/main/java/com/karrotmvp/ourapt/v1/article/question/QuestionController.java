@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
-import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.GetQuestionsDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.OneQuestionDto;
@@ -27,8 +27,8 @@ public class QuestionController {
     this.questionService = questionService;
   }
 
-  @GetMapping(value = "/apartment/{apartmentId}/questions/pinned")
-  @ApiOperation(value = "사용자에게 보여질 pinned_question 랜덤 조회")
+  @GetMapping(value = "/apartment/{apartmentId}/articles/pinned")
+  @ApiOperation(value = "사용자에게 보여질 pinned_question 랜덤 조회 (Deprecated) ")
   public CommonResponseBody<OneQuestionDto> getPinnedQuestionOfApartment(
     @PathVariable(name = "apartmentId") String apartmentId
   ) {

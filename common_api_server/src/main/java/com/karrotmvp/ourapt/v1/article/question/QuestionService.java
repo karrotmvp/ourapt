@@ -1,9 +1,9 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
-import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
-import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
+import com.karrotmvp.ourapt.v1.article.dto.model.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
-import com.karrotmvp.ourapt.v1.article.question.repository.QuestionRepository;
+import com.karrotmvp.ourapt.v1.article.repository.ArticleRepository;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NoPermissionException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NotCheckedInUserException;
@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 @Service
 public class QuestionService {
 
-    private final QuestionRepository questionRepository;
+    private final ArticleRepository<Question> questionRepository;
     private final UserRepository userRepository;
     private final ModelMapper mapper;
     private final UserService userService;
 
-    public QuestionService(QuestionRepository questionRepository, UserRepository userRepository, ModelMapper mapper, UserService userService) {
+    public QuestionService(ArticleRepository<Question> questionRepository, UserRepository userRepository, ModelMapper mapper, UserService userService) {
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
         this.mapper = mapper;
@@ -38,20 +38,20 @@ public class QuestionService {
     }
 
     public List<QuestionWithWhereCreatedDto> getQuestionsAndOriginWithOffsetCursor(int perPage, int pageNum) {
-        return this.questionRepository.findByOffsetCursor(PageRequest.of(pageNum, perPage))
+        return this.questionRepository.findByOffsetCursor(PageRequest.of(pageNum, perPage), Question.class)
           .stream().map(q -> mapper.map(q, QuestionWithWhereCreatedDto.class)).collect(Collectors.toList());
     }
 
     public List<QuestionDto> getQuestionsOfApartmentWithDateCursor(String apartmentId, Date cursor, int perPage) {
         return this.questionRepository
-          .findFirstByApartmentIdToAndDateCursorByOrderByDesc(apartmentId, cursor, PageRequest.of(0, perPage))
+          .findFirstByApartmentIdToAndDateCursorByOrderByDesc(apartmentId, cursor, PageRequest.of(0, perPage), Question.class)
           .stream()
           .map(q -> mapper.map(q, QuestionDto.class))
           .collect(Collectors.toList());
     }
 
     public QuestionDto getRandomPinnedQuestionOfApartment(String apartmentId) {
-        List<Question> pinnedQuestionOfApt = this.questionRepository.findByApartmentIdAndPinned(apartmentId);
+        List<Question> pinnedQuestionOfApt = this.questionRepository.findByApartmentIdAndPinned(apartmentId, Question.class);
         if (pinnedQuestionOfApt.size() == 0) {
           throw new DataNotFoundFromDBException("There is no available pinned question");
         }
@@ -104,7 +104,7 @@ public class QuestionService {
     }
 
     private Question safelyGetQuestionById(String questionId) {
-        return this.questionRepository.findById(questionId).orElseThrow(
+        return this.questionRepository.findById(questionId, Question.class).orElseThrow(
           () -> new DataNotFoundFromDBException("There is no question match with ID: " + questionId));
     }
 

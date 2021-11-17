@@ -28,6 +28,10 @@ public abstract class Article extends BaseEntity {
   @Setter
   private User writer;
 
+  @Column(name = "main_text")
+  @Getter
+  private String mainText;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "apartment_id", referencedColumnName = "id")
   @Setter
@@ -49,12 +53,31 @@ public abstract class Article extends BaseEntity {
   @Setter
   private Date deletedAt;
 
+  @Column(name = "pinned_until")
+  @Getter
+  @Setter
+  private Date pinnedUntil;
+
   public Article() {
     super();
     this.id = UUID.randomUUID().toString();
   }
 
+  public boolean isPinned() {
+    return this.pinnedUntil != null && new Date().before(this.pinnedUntil);
+  }
+
   public boolean isDeleted() {
     return this.deletedAt != null && this.deletedAt.before(new Date());
   }
+
+  public boolean isByAdmin() {
+    return this.getWriter().isAdmin();
+  }
+
+  public void setMainText(String mainText) {
+    this.mainText = mainText;
+    this.setUpdatedAt(new Date());
+  }
+
 }

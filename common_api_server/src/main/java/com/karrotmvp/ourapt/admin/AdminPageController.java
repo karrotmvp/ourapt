@@ -5,7 +5,7 @@ import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.comment.CommentService;
 import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
-import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
+import com.karrotmvp.ourapt.v1.article.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import org.springframework.stereotype.Controller;

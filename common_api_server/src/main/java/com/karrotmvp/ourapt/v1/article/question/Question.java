@@ -24,11 +24,6 @@ public class Question extends Article {
     @Setter
     private Date pinnedUntil;
 
-
-    public boolean isByAdmin() {
-        return this.getWriter().isAdmin();
-    }
-
     public boolean isPinned() {
         return this.pinnedUntil != null && new Date().before(this.pinnedUntil);
     }
