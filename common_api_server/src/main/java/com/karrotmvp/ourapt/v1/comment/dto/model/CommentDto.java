@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.comment.dto.model;
+package com.karrotmvp.ourapt.v1.comment.dto.model;
 
 import java.util.Date;
 

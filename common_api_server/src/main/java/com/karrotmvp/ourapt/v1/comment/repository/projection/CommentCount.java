@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.comment.repository.projection;
+package com.karrotmvp.ourapt.v1.comment.repository.projection;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

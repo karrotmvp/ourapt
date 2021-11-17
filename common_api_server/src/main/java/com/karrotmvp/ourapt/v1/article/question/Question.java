@@ -20,8 +20,8 @@ public class Question extends Article {
     private String mainText;
 
     @Column(name = "pinned_until")
-    @Setter
     @Getter
+    @Setter
     private Date pinnedUntil;
 
 

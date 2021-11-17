@@ -1,9 +1,9 @@
-package com.karrotmvp.ourapt.v1.article.comment;
+package com.karrotmvp.ourapt.v1.comment;
 
 import com.karrotmvp.ourapt.v1.article.Article;
-import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
-import com.karrotmvp.ourapt.v1.article.comment.dto.request.WriteNewCommentDto;
-import com.karrotmvp.ourapt.v1.article.comment.repository.CommentRepository;
+import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
+import com.karrotmvp.ourapt.v1.comment.dto.request.WriteNewCommentDto;
+import com.karrotmvp.ourapt.v1.comment.repository.CommentRepository;
 import com.karrotmvp.ourapt.v1.article.question.repository.QuestionRepository;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NotCheckedInUserException;

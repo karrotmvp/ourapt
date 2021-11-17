@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.comment.repository;
+package com.karrotmvp.ourapt.v1.comment.repository;
 
 import java.util.List;
 import java.util.Optional;

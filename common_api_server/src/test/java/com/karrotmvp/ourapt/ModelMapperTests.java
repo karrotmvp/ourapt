@@ -4,8 +4,8 @@ import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.RegionDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.apartment.entity.Region;
-import com.karrotmvp.ourapt.v1.article.comment.Comment;
-import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
+import com.karrotmvp.ourapt.v1.comment.Comment;
+import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.Question;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.common.Static;
@@ -121,6 +121,7 @@ public class ModelMapperTests {
     assertEquals(source.getWriter().getProfile().getId(), result.getWriter().getId());
     assertEquals(source.getWriter().getProfile().getNickname(), result.getWriter().getNickname());
     assertEquals(source.getWriter().getProfile().getProfileImageUrl(), result.getWriter().getProfileImageUrl());
+    assertEquals(source.getCountOfComments(), result.getCountOfComments());
     assertNotNull(result.getMainText());
     assertNotNull(result.getCreatedAt());
     assertNotNull(result.getUpdatedAt());

@@ -1,6 +1,6 @@
-package com.karrotmvp.ourapt.v1.article.comment.repository;
+package com.karrotmvp.ourapt.v1.comment.repository;
 
-import com.karrotmvp.ourapt.v1.article.comment.Comment;
+import com.karrotmvp.ourapt.v1.comment.Comment;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;

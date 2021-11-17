@@ -11,8 +11,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Table(name = "article", indexes = {
-  @Index(columnList = "writer_id"),
-  @Index(columnList = "parent_id")
+  @Index(columnList = "writer_id")
 })
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

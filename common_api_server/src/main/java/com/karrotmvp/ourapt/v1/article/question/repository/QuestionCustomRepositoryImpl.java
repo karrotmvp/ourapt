@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.question.repository;
 
-import com.karrotmvp.ourapt.v1.article.comment.repository.projection.CommentCount;
+import com.karrotmvp.ourapt.v1.comment.repository.projection.CommentCount;
 import com.karrotmvp.ourapt.v1.article.question.Question;
 import com.karrotmvp.ourapt.v1.common.BaseEntityCreatedDateComparator;
 import com.karrotmvp.ourapt.v1.common.Static;
@@ -126,7 +126,7 @@ public class QuestionCustomRepositoryImpl implements QuestionCustomRepository<Qu
 
   private List<CommentCount> findCountPerParentIdIn(Set<String> parentIds) {
     TypedQuery<CommentCount> query = em.createQuery(
-      "SELECT new com.karrotmvp.ourapt.v1.article.comment.repository.projection.CommentCount(c.parent.id, COUNT(c)) " +
+      "SELECT new com.karrotmvp.ourapt.v1.comment.repository.projection.CommentCount(c.parent.id, COUNT(c)) " +
         "FROM Comment c WHERE c.parent.id IN ?1 AND c.deletedAt IS NULL " +
         "GROUP BY c.parent.id", CommentCount.class);
     query.setParameter(1, parentIds);

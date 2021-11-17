@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.comment.dto.request;
+package com.karrotmvp.ourapt.v1.comment.dto.request;
 
 
 import lombok.Getter;
