@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.EntityManager;
 
 @RestController
-@RequestMapping(value = "/v1/api/survey")
+@RequestMapping(value = "/api/v1/survey")
 @Api(tags = "설문용 임시 controller")
 public class SurveyController {
 
