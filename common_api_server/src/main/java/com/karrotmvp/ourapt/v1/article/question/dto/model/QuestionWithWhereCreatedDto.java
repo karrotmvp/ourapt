@@ -1,4 +1,4 @@
-package com.karrotmvp.ourapt.v1.article.dto.model;
+package com.karrotmvp.ourapt.v1.article.question.dto.model;
 
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import lombok.Getter;

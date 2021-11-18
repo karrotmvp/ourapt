@@ -1,11 +1,11 @@
 package com.karrotmvp.ourapt.v1.comment;
 
 
+import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.comment.dto.request.WriteNewCommentDto;
 import com.karrotmvp.ourapt.v1.comment.dto.response.GetCommentsOfQuestionDto;
 import com.karrotmvp.ourapt.v1.comment.dto.response.OneCommentDto;
-import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import io.swagger.annotations.Api;

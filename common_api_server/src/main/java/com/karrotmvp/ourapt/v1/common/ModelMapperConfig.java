@@ -7,8 +7,8 @@ import com.karrotmvp.ourapt.v1.apartment.entity.Region;
 import com.karrotmvp.ourapt.v1.comment.Comment;
 import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.Question;
-import com.karrotmvp.ourapt.v1.article.dto.model.QuestionDto;
-import com.karrotmvp.ourapt.v1.article.dto.model.QuestionWithWhereCreatedDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 

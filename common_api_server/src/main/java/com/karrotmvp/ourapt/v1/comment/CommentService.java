@@ -1,8 +1,7 @@
 package com.karrotmvp.ourapt.v1.comment;
 
 import com.karrotmvp.ourapt.v1.article.Article;
-import com.karrotmvp.ourapt.v1.article.question.Question;
-import com.karrotmvp.ourapt.v1.article.repository.ArticleRepository;
+import com.karrotmvp.ourapt.v1.article.ArticleRepository;
 import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.comment.dto.request.WriteNewCommentDto;
 import com.karrotmvp.ourapt.v1.comment.repository.CommentRepository;
@@ -23,14 +22,14 @@ import java.util.stream.Collectors;
 @Service
 public class CommentService {
 
-  private final ArticleRepository<Question> questionRepository;
+  private final ArticleRepository<Article> articleRepository;
   private final CommentRepository commentRepository;
   private final UserRepository userRepository;
   private final ModelMapper mapper;
   private final UserService userService;
 
-  public CommentService(ArticleRepository<Question> questionRepository, CommentRepository commentRepository, UserRepository userRepository, ModelMapper mapper, UserService userService) {
-    this.questionRepository = questionRepository;
+  public CommentService(ArticleRepository<Article> articleRepository, CommentRepository commentRepository, UserRepository userRepository, ModelMapper mapper, UserService userService) {
+    this.articleRepository = articleRepository;
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
     this.mapper = mapper;
@@ -49,8 +48,8 @@ public class CommentService {
     User writer = this.userRepository.findById(writerId)
       .orElseThrow(RegisteredUserNotFoundException::new);
     this.userService.assertUserIsNotBanned(writer);
-    Article parent = this.questionRepository.findById(questionId, Question.class)
-      .orElseThrow(() -> new DataNotFoundFromDBException("해당하는 Article이 없습니다."));
+    Article parent = this.articleRepository.findById(questionId)
+      .orElseThrow(() -> new DataNotFoundFromDBException("해당하는 Article 이 없습니다."));
     Comment comment = mapper.map(content, Comment.class);
     comment.setWriter(writer);
     comment.setRegionWhereCreated(regionId);

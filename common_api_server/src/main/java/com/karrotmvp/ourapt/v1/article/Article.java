@@ -58,9 +58,9 @@ public abstract class Article extends BaseEntity {
   @Setter
   private Date pinnedUntil;
 
+
   public Article() {
     super();
-    this.id = UUID.randomUUID().toString();
   }
 
   public boolean isPinned() {
@@ -78,6 +78,12 @@ public abstract class Article extends BaseEntity {
   public void setMainText(String mainText) {
     this.mainText = mainText;
     this.setUpdatedAt(new Date());
+  }
+
+
+  @PrePersist
+  public void generateId() {
+    this.id = UUID.randomUUID().toString();
   }
 
 }

@@ -93,7 +93,7 @@ public class AdminActionController {
     Calendar cal = Calendar.getInstance();
     cal.setTime(new Date());
     cal.add(Calendar.YEAR, 100); // Permanently
-    this.questionService.pinQuestionUntil(id, cal.getTime());
+    this.questionService.pin(id, cal.getTime());
     rd.setUrl("/admin/questions?perPage=20&pageNum=1");
     return rd;
   }
@@ -103,7 +103,7 @@ public class AdminActionController {
     RedirectView rd,
     @RequestParam String id
   ) {
-    this.questionService.unpinQuestion(id);
+    this.questionService.unpin(id);
     rd.setUrl("/admin/questions?perPage=20&pageNum=1");
     return rd;
   }
@@ -113,7 +113,7 @@ public class AdminActionController {
     RedirectView rd,
     @RequestParam String id
   ) {
-    this.questionService.deleteQuestionById(id);
+    this.questionService.deleteById(id);
     rd.setUrl("/admin/questions?perPage=20&pageNum=1");
     return rd;
   }

@@ -31,5 +31,9 @@ public class Utils {
         return resultList;
     }
 
-
+    public static int getRandomInt(int max) {
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+        return random.nextInt(max);
+    }
 }

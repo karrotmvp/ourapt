@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
-import com.karrotmvp.ourapt.v1.article.dto.model.QuestionDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.GetQuestionsDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.response.OneQuestionDto;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-@Api(tags = "4. 질문피드")
+@Api(tags = "4. 질문")
 public class QuestionController {
 
   private final QuestionService questionService;
@@ -27,14 +27,14 @@ public class QuestionController {
     this.questionService = questionService;
   }
 
-  @GetMapping(value = "/apartment/{apartmentId}/articles/pinned")
-  @ApiOperation(value = "사용자에게 보여질 pinned_question 랜덤 조회 (Deprecated) ")
+  @GetMapping(value = "/apartment/{apartmentId}/questions/pinned")
+  @ApiOperation(value = "사용자에게 보여질 pinned_question 랜덤 조회")
   public CommonResponseBody<OneQuestionDto> getPinnedQuestionOfApartment(
     @PathVariable(name = "apartmentId") String apartmentId
   ) {
     return CommonResponseBody.<OneQuestionDto>builder()
       .success()
-      .data(new OneQuestionDto(this.questionService.getRandomPinnedQuestionOfApartment(apartmentId)))
+      .data(new OneQuestionDto(this.questionService.getRandomPinnedOfApartment(apartmentId)))
       .build();
   }
 
@@ -45,7 +45,7 @@ public class QuestionController {
   ) {
     return CommonResponseBody.<OneQuestionDto>builder()
       .success()
-      .data(new OneQuestionDto(this.questionService.getQuestionById(questionId)))
+      .data(new OneQuestionDto(this.questionService.getOneById(questionId)))
       .build();
   }
 
@@ -56,7 +56,7 @@ public class QuestionController {
     @RequestParam(name = "cursor") long cursorTimestamp,
     @PathVariable(name = "apartmentId") String apartmentId
   ) {
-    List<QuestionDto> questions = this.questionService.getQuestionsOfApartmentWithDateCursor(
+    List<QuestionDto> questions = this.questionService.getPageOfApartmentWithDateCursor(
       apartmentId,
       new Date(cursorTimestamp),
       perPage);
@@ -88,10 +88,10 @@ public class QuestionController {
     @RequestBody @Valid QuestionContentDto questionContent,
     @CurrentUser KarrotProfile userProfile
   ) {
-    QuestionDto updated = this.questionService.updateQuestionById(
+    QuestionDto updated = this.questionService.updateMainTextById(
       questionId,
       userProfile.getId(),
-      questionContent);
+      questionContent.getMainText());
     return CommonResponseBody.<OneQuestionDto>builder()
       .success()
       .data(new OneQuestionDto(updated))
@@ -103,7 +103,7 @@ public class QuestionController {
   public CommonResponseBody<Void> deleteQuestion(
     @PathVariable(name = "questionId") String questionId
   ) {
-    this.questionService.deleteQuestionById(questionId);
+    this.questionService.deleteById(questionId);
     return CommonResponseBody.<Void>builder()
       .success()
       .build();

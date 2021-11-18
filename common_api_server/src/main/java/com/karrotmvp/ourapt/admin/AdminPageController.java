@@ -5,7 +5,7 @@ import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.comment.CommentService;
 import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
-import com.karrotmvp.ourapt.v1.article.dto.model.QuestionWithWhereCreatedDto;
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import org.springframework.stereotype.Controller;
@@ -83,8 +83,8 @@ public class AdminPageController {
   ) {
     List<QuestionWithWhereCreatedDto> questions = this.questionService.getQuestionsAndOriginWithOffsetCursor(perPage, pageNum - 1);
     model.addAttribute("questions", questions);
-    model.addAttribute("countOfAll", this.questionService.getCountOfAllQuestions());
-    model.addAttribute("countOfToday", this.questionService.getCountOfTodayQuestions());
+    model.addAttribute("countOfAll", this.questionService.getCountOfAll());
+    model.addAttribute("countOfToday", this.questionService.getCountInToday());
     model.addAttribute("countOfAllComments", this.commentService.getCountOfAllComments());
     model.addAttribute("pageNum", pageNum);
     model.addAttribute("perPage", perPage);
