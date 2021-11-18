@@ -73,7 +73,7 @@ public class UserService {
     return Math.toIntExact(this.userRepository.countByDeletedAtIsNull());
   }
 
-  private User safelyGetUserById(String userId) {
+  public User safelyGetUserById(String userId) {
     return this.userRepository.findById(userId)
       .orElseThrow(RegisteredUserNotFoundException::new);
   }

@@ -3,6 +3,7 @@ package com.karrotmvp.ourapt.v1.common;
 import com.karrotmvp.ourapt.v1.common.exception.application.AbstractWebApplicationContextException;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RequestHeaderNotFoundException;
+import com.karrotmvp.ourapt.v1.common.exception.application.ViolatingConsistencyInputException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,8 @@ public class CommonRestControllerAdvice {
     HttpMessageNotReadableException.class,
     HttpMediaTypeNotSupportedException.class,
     MethodArgumentNotValidException.class,
-    RequestHeaderNotFoundException.class
+    RequestHeaderNotFoundException.class,
+    ViolatingConsistencyInputException.class
   })
   public CommonResponseBody<Void> handleHttpMessageNotReadableException(
     HttpServletRequest request,

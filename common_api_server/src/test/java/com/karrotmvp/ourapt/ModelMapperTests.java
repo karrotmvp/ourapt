@@ -1,26 +1,30 @@
 package com.karrotmvp.ourapt;
 
-import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
-import com.karrotmvp.ourapt.v1.apartment.dto.model.RegionDto;
-import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
-import com.karrotmvp.ourapt.v1.apartment.entity.Region;
-import com.karrotmvp.ourapt.v1.comment.Comment;
-import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
-import com.karrotmvp.ourapt.v1.article.question.Question;
-import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
-import com.karrotmvp.ourapt.v1.common.Static;
-import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
-import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
-import com.karrotmvp.ourapt.v1.user.entity.User;
-import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
+import com.karrotmvp.ourapt.v1.apartment.dto.model.RegionDto;
+import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
+import com.karrotmvp.ourapt.v1.apartment.entity.Region;
+import com.karrotmvp.ourapt.v1.article.question.Question;
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
+import com.karrotmvp.ourapt.v1.comment.Comment;
+import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
+import com.karrotmvp.ourapt.v1.common.Static;
+import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
+import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
+import com.karrotmvp.ourapt.v1.user.entity.User;
+
+import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest

@@ -14,7 +14,6 @@ public class DataNotFoundFromDBException extends AbstractWebApplicationContextEx
 
   @Override
   public ApiResult getApiResult() {
-    // TODO Auto-generated method stub
     return ApiResult.DATA_NOT_FOUND_FROM_DB;
   }
   

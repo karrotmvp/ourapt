@@ -1,20 +1,19 @@
 package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
+import java.io.IOException;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
-
-import java.io.IOException;
 
 public class KarrotOAuthFilter extends GenericFilterBean {
 
@@ -26,7 +25,6 @@ public class KarrotOAuthFilter extends GenericFilterBean {
 
     private String extractBearerToken(HttpServletRequest request) throws AuthenticationServiceException {
         String authHeader = request.getHeader("Authorization");
-        // TODO: Refactor, 에러전파
         if (authHeader == null) {
             String msg = "Fail to find 'Authorization' header from request.";
             throw new AuthenticationServiceException(msg);

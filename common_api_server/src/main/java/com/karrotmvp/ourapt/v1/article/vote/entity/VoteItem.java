@@ -18,6 +18,7 @@ public class VoteItem {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "parent_id")
+  @Getter
   private Vote parent;
 
   @Column(name = "main_text")

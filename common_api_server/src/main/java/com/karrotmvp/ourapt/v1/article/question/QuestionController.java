@@ -27,9 +27,9 @@ public class QuestionController {
     this.questionService = questionService;
   }
 
-  @GetMapping(value = "/apartment/{apartmentId}/questions/pinned")
-  @ApiOperation(value = "사용자에게 보여질 pinned_question 랜덤 조회")
-  public CommonResponseBody<OneQuestionDto> getPinnedQuestionOfApartment(
+  @GetMapping(value = "/apartment/{apartmentId}/question/pinned")
+  @ApiOperation(value = "사용자에게 보여질 핀 질문 랜덤 조회")
+  public CommonResponseBody<OneQuestionDto> getRandomPinnedQuestionOfApartment(
     @PathVariable(name = "apartmentId") String apartmentId
   ) {
     return CommonResponseBody.<OneQuestionDto>builder()
@@ -39,7 +39,7 @@ public class QuestionController {
   }
 
   @GetMapping(value = "/question/{questionId}")
-  @ApiOperation(value = "question_id 로 Question 조회")
+  @ApiOperation(value = "ID로 질문 게시글 조회")
   public CommonResponseBody<OneQuestionDto> getQuestionById(
     @PathVariable(name = "questionId") String questionId
   ) {
@@ -50,7 +50,7 @@ public class QuestionController {
   }
 
   @GetMapping(value = "/apartment/{apartmentId}/questions")
-  @ApiOperation(value = "질문목록 Date 커서기반 페이징으로 조회")
+  @ApiOperation(value = "질문 게시글 목록 Date 커서 기반 페이징으로 조회")
   public CommonResponseBody<GetQuestionsDto> getQuestions(
     @RequestParam(name = "perPage") @Max(value = 10) int perPage,
     @RequestParam(name = "cursor") long cursorTimestamp,
@@ -68,7 +68,7 @@ public class QuestionController {
 
 
   @PostMapping(value = "/question")
-  @ApiOperation(value = "새로운 질문 작성")
+  @ApiOperation(value = "새로운 질문 게시글 작성")
   public CommonResponseBody<OneQuestionDto> writeNewQuestion(
     @RequestBody @Valid QuestionContentDto questionContent,
     @RequestHeader(name = "Region-Id") String regionId,
@@ -82,7 +82,7 @@ public class QuestionController {
   }
 
   @PatchMapping(value = "/question/{questionId}")
-  @ApiOperation(value = "질문 수정하기")
+  @ApiOperation(value = "질문 게시글 수정하기")
   public CommonResponseBody<OneQuestionDto> updateQuestion(
     @PathVariable(name = "questionId") String questionId,
     @RequestBody @Valid QuestionContentDto questionContent,
@@ -99,7 +99,7 @@ public class QuestionController {
   }
 
   @DeleteMapping(value = "/question/{questionId}")
-  @ApiOperation(value = "질문 삭제하기")
+  @ApiOperation(value = "질문 게시글 삭제하기")
   public CommonResponseBody<Void> deleteQuestion(
     @PathVariable(name = "questionId") String questionId
   ) {
