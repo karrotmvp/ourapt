@@ -1,13 +1,19 @@
 package com.karrotmvp.ourapt.v1.common;
 
+import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotAuthenticationToken;
 import com.karrotmvp.ourapt.v1.common.exception.application.AbstractWebApplicationContextException;
 import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResponseException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RequestHeaderNotFoundException;
 import com.karrotmvp.ourapt.v1.common.exception.application.ViolatingConsistencyInputException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.karrotmvp.ourapt.v1.common.exception.event.ExceptionOccurEventPublisher;
+import com.karrotmvp.ourapt.v1.log.event.AccessEventPublisher;
+import com.karrotmvp.ourapt.v1.log.vo.LogVo;
+import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,10 +21,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 @RestControllerAdvice
+@AllArgsConstructor
 public class CommonRestControllerAdvice {
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+
+  private final ExceptionOccurEventPublisher exceptionEventPublisher;
+  private final AccessEventPublisher accessEventPublisher;
 
   // 일단 정상 응답 성공 시 Http status 는 모두 200으로, API 수행 성공여부는 responseBody 에서 다루는 형태.
   @ResponseStatus(HttpStatus.OK)
@@ -75,7 +85,30 @@ public class CommonRestControllerAdvice {
   }
 
   private void doLog(HttpServletRequest request, HttpStatus status, Exception exception) {
-    logger.info(request.getMethod() + " " + request.getRequestURI() + " " + status.value());
-    logger.error("[ThrownException] -> " + exception.getMessage());
+    Authentication auth = getAuthenticationFromSecurity();
+    accessEventPublisher.publish(
+      LogVo.builder()
+        .path(request.getRequestURI())
+        .method(request.getMethod())
+        .status(status.value())
+        .regionId(request.getHeader("Region-Id"))
+        .userId(parseUserId(auth).orElse(null))
+        .build()
+    );
+    exceptionEventPublisher.publish(
+      request.getMethod() + " " + request.getRequestURI() + " " + status.value(),
+      exception.getMessage()
+    );
+  }
+
+  private Authentication getAuthenticationFromSecurity() {
+    return SecurityContextHolder.getContext().getAuthentication();
+  }
+
+  private Optional<String> parseUserId(Authentication auth) {
+    if (!KarrotAuthenticationToken.class.isAssignableFrom(auth.getClass())) {
+      return Optional.empty();
+    }
+    return Optional.of(((KarrotProfile) auth.getPrincipal()).getId());
   }
 }

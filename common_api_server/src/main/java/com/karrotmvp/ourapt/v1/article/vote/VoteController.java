@@ -77,11 +77,11 @@ public class VoteController {
   @ApiOperation(value = "ID로 투표 게시글 조회")
   public CommonResponseBody<OneVoteDto> getVoteById(
     @PathVariable String voteId
-  ) {
-    return CommonResponseBody.<OneVoteDto>builder()
-      .data(new OneVoteDto(this.voteService.getOneById(voteId)))
-      .success()
-      .build();
+  ) { throw new RuntimeException("ExceptionTest");
+//    return CommonResponseBody.<OneVoteDto>builder()
+//      .data(new OneVoteDto(this.voteService.getOneById(voteId)))
+//      .success()
+//      .build();
   }
 
 }

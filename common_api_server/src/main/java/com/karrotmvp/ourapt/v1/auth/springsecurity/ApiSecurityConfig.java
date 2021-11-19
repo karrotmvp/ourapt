@@ -1,5 +1,8 @@
 package com.karrotmvp.ourapt.v1.auth.springsecurity;
 
+import com.karrotmvp.ourapt.v1.common.exception.event.ExceptionOccurEventPublisher;
+import com.karrotmvp.ourapt.v1.log.event.AccessEventPublisher;
+import com.karrotmvp.ourapt.v1.log.vo.LogVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -25,13 +28,19 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    private final ExceptionOccurEventPublisher exceptionEventPublisher;
+    private final AccessEventPublisher accessEventPublisher;
+
     public static final String[] AUTHORIZATION_CHECK_EXCLUSION_PATTERNS = new String[]{
             "/api/v1/app/**",
             "/api/v1/oauth/karrot",
             "/api/v1/apartments",
-//            "/api/v1/apartment/**",
-//            "/api/v1/log/**"
     };
+
+    public ApiSecurityConfig(ExceptionOccurEventPublisher exceptionEventPublisher, AccessEventPublisher accessEventPublisher) {
+      this.exceptionEventPublisher = exceptionEventPublisher;
+      this.accessEventPublisher = accessEventPublisher;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -56,7 +65,19 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Handle failure to authority check
                 .exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
                     String firstException = String.valueOf(request.getAttribute("firstExceptionMessage"));
-                    logger.info("Authentication NOT PASSED: " + firstException);
+                    accessEventPublisher.publish(
+                      LogVo.builder()
+                        .method(request.getMethod())
+                        .path(request.getRequestURI())
+                        .status(401)
+                        .regionId(request.getHeader("Region-Id"))
+                        .userId(null)
+                        .build()
+                    );
+                    exceptionEventPublisher.publish(
+                      request.getMethod() + " " + request.getRequestURI() + " " + 401,
+                      firstException
+                    );
                     response.sendError(
                             HttpStatus.UNAUTHORIZED.value(),
                             firstException);

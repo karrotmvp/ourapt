@@ -3,11 +3,10 @@ package com.karrotmvp.ourapt.v1.noapt;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Table(name = "no_apartment")
@@ -26,6 +25,11 @@ public class NoApartment {
 
   @Column(name = "region_id")
   private String regionId;
+
+  @Column(name = "created_at", nullable = true)
+  @Temporal(TemporalType.TIMESTAMP)
+  @CreationTimestamp
+  private Date createdAt;
 
   public NoApartment(String answer, String regionId, String userId) {
     this.id = UUID.randomUUID().toString();

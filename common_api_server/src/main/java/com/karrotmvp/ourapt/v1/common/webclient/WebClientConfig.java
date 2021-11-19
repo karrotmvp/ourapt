@@ -36,4 +36,12 @@ public class WebClientConfig {
             .build();
   }
 
+  @Bean
+  public WebClient slackWebhookClient() {
+    return this.webClientBuilder
+      .baseUrl("https://hooks.slack.com/services/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")
+      .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+      .build();
+  }
+
 }

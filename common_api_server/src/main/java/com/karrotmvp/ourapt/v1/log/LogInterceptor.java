@@ -1,7 +1,11 @@
 package com.karrotmvp.ourapt.v1.log;
 
 import com.karrotmvp.ourapt.v1.auth.springsecurity.KarrotAuthenticationToken;
+import com.karrotmvp.ourapt.v1.common.exception.application.RequestHeaderNotFoundException;
+import com.karrotmvp.ourapt.v1.log.event.AccessEventPublisher;
+import com.karrotmvp.ourapt.v1.log.vo.LogVo;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -15,46 +19,56 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Component
+@AllArgsConstructor
 public class LogInterceptor implements HandlerInterceptor {
 
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  private final LogService logService;
-
-  public LogInterceptor(LogService logService) {
-    this.logService = logService;
-  }
+  private final AccessEventPublisher logEventPublisher;
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-    Authentication auth = getAuthenticationFromSecurity();
-    this.logService.logEveryRequest(request, parseUserId(auth).orElse(null));
+    assertRegionIdIncludedInHeader(request);
     return true;
+  }
+
+
+  @Override
+  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    Authentication auth = getAuthenticationFromSecurity();
+    this.logEventPublisher.publish(
+      LogVo.builder()
+        .method(request.getMethod())
+        .path(extractPath(request))
+        .regionId(extractRegionId(request).orElse(null))
+        .userId(parseUserId(auth).orElse(null))
+        .status(response.getStatus())
+        .build()
+    );
+    HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
   }
 
   private Authentication getAuthenticationFromSecurity() {
     return SecurityContextHolder.getContext().getAuthentication();
   }
+
   private Optional<String> parseUserId(Authentication auth) {
     if (!KarrotAuthenticationToken.class.isAssignableFrom(auth.getClass())) {
       return Optional.empty();
     }
     return Optional.of(((KarrotProfile) auth.getPrincipal()).getId());
   }
-
-  @Override
-  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-    logger.info(getAccessLog(request, response) + getHeaderLog(request));
-    HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
-  }
-  private String getAccessLog(HttpServletRequest request, HttpServletResponse response) {
-    return request.getMethod() + " " + request.getRequestURI() + " " + response.getStatus();
+  private void assertRegionIdIncludedInHeader(HttpServletRequest request) {
+    extractRegionId(request)
+      .orElseThrow(() -> new RequestHeaderNotFoundException("There is no Region-Id in request headers"));
   }
 
-  private String getHeaderLog(HttpServletRequest request) {
-    return
-      "[InstanceId:" + request.getHeader("Instance-Id") +
-        ", RegionId: " + request.getHeader("Region-Id") +
-        ", AccessToken: " + request.getHeader("Authorization") + "]";
+  private Optional<String> extractRegionId(HttpServletRequest request) {
+    return Optional.ofNullable(request.getHeader("Region-Id"));
   }
+
+  private String extractPath(HttpServletRequest request) {
+    return request.getRequestURI();
+  }
+
 }

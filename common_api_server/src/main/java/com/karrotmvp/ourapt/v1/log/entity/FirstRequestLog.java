@@ -1,5 +1,6 @@
-package com.karrotmvp.ourapt.v1.log;
+package com.karrotmvp.ourapt.v1.log.entity;
 
+import com.karrotmvp.ourapt.v1.log.Referer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
