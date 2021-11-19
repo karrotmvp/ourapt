@@ -41,5 +41,6 @@ public class LogService {
 
   private String extractPath(HttpServletRequest request) {
     return request.getRequestURI();
+    
   }
 }
