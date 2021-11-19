@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
-import com.karrotmvp.ourapt.v1.article.ArticleService;
+import com.karrotmvp.ourapt.v1.article.ArticleBaseService;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class QuestionService extends ArticleService<Question, QuestionDto> {
+public class QuestionService extends ArticleBaseService<Question, QuestionDto> {
 
   private final UserRepository userRepository;
   private final UserService userService;

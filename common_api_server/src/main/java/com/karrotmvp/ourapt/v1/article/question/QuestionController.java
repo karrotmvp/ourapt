@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1")
-@Api(tags = "4. 질문")
+@Api(tags = "4-1. 질문")
 public class QuestionController {
 
   private final QuestionService questionService;

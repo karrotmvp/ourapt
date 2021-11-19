@@ -1,6 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.vote;
 
-import com.karrotmvp.ourapt.v1.article.ArticleService;
+import com.karrotmvp.ourapt.v1.article.ArticleBaseService;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.request.VoteContentDto;
 import com.karrotmvp.ourapt.v1.article.vote.entity.Vote;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
-public class VoteService extends ArticleService<Vote, VoteDto> {
+public class VoteService extends ArticleBaseService<Vote, VoteDto> {
 
   private final VoteItemRepository voteItemRepository;
   private final VotingRepository votingRepository;

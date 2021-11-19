@@ -26,12 +26,12 @@ public class CommentController {
     this.commentService = commentService;
   }
 
-  @GetMapping(value = "/question/{questionId}/comments")
+  @GetMapping(value = "/article/{articleId}/comments")
   @ApiOperation(value = "질문에 달린 게시글 보기")
   public CommonResponseBody<GetCommentsOfQuestionDto> getCommentsOfQuestion(
-    @PathVariable String questionId
+    @PathVariable String articleId
   ) {
-    List<CommentDto> comments = this.commentService.getCommentsByQuestionId(questionId);
+    List<CommentDto> comments = this.commentService.getCommentsByQuestionId(articleId);
 
     return CommonResponseBody.<GetCommentsOfQuestionDto>builder()
       .success()
@@ -39,15 +39,15 @@ public class CommentController {
       .build();
   }
 
-  @PostMapping(value = "/question/{questionId}/comment")
+  @PostMapping(value = "/article/{articleId}/comment")
   @ApiOperation(value = "새로운 댓글 작성")
   public CommonResponseBody<OneCommentDto> writeNewComment(
     @RequestBody @Valid WriteNewCommentDto commentContent,
-    @PathVariable String questionId,
+    @PathVariable String articleId,
     @CurrentUser KarrotProfile profile,
     @RequestHeader(name = "Region-Id") String regionId
   ) {
-    CommentDto created = this.commentService.writeNewComment(commentContent, questionId, profile.getId(), regionId);
+    CommentDto created = this.commentService.writeNewComment(commentContent, articleId, profile.getId(), regionId);
     return CommonResponseBody.<OneCommentDto>builder()
       .data(new OneCommentDto(created))
       .success()

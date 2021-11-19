@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1")
-@Api(tags = "투표")
+@Api(tags = "4-2. 투표")
 public class VoteController {
 
   private final VoteService voteService;
@@ -69,6 +69,17 @@ public class VoteController {
   ) {
     this.voteService.cancelVoting(profile.getId(), itemId);
     return CommonResponseBody.<Void>builder()
+      .success()
+      .build();
+  }
+
+  @GetMapping("/vote/{voteId}")
+  @ApiOperation(value = "ID로 투표 게시글 조회")
+  public CommonResponseBody<OneVoteDto> getVoteById(
+    @PathVariable String voteId
+  ) {
+    return CommonResponseBody.<OneVoteDto>builder()
+      .data(new OneVoteDto(this.voteService.getOneById(voteId)))
       .success()
       .build();
   }

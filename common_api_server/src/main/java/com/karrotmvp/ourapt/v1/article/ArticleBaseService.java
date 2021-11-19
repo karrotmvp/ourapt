@@ -12,13 +12,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class ArticleService<T extends Article, D> {
+public abstract class ArticleBaseService<T extends Article, D> {
 
   protected final ArticleRepository<T> articleRepository;
   protected final ArticleCustomRepository<T, String> articleCustomRepository;
   protected final ModelMapper mapper;
 
-  public ArticleService(ArticleRepository<T> articleRepository, ArticleCustomRepository<T, String> articleCustomRepository, ModelMapper mapper) {
+  public ArticleBaseService(ArticleRepository<T> articleRepository, ArticleCustomRepository<T, String> articleCustomRepository, ModelMapper mapper) {
     this.articleRepository = articleRepository;
     this.articleCustomRepository = articleCustomRepository;
     this.mapper = mapper;

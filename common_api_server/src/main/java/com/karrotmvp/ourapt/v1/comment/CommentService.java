@@ -36,19 +36,19 @@ public class CommentService {
     this.userService = userService;
   }
 
-  public List<CommentDto> getCommentsByQuestionId(String questionId) {
-    List<Comment> foundComments = this.commentRepository.findByParentIdOrderByCreatedAtAsc(questionId);
+  public List<CommentDto> getCommentsByQuestionId(String articleId) {
+    List<Comment> foundComments = this.commentRepository.findByParentIdOrderByCreatedAtAsc(articleId);
     return foundComments.stream()
       .map(c -> mapper.map(c, CommentDto.class))
       .collect(Collectors.toList());
   }
 
   @Transactional
-  public CommentDto writeNewComment(WriteNewCommentDto content, String questionId,  String writerId, String regionId) {
+  public CommentDto writeNewComment(WriteNewCommentDto content, String articleId,  String writerId, String regionId) {
     User writer = this.userRepository.findById(writerId)
       .orElseThrow(RegisteredUserNotFoundException::new);
     this.userService.assertUserIsNotBanned(writer);
-    Article parent = this.articleRepository.findById(questionId)
+    Article parent = this.articleRepository.findById(articleId)
       .orElseThrow(() -> new DataNotFoundFromDBException("해당하는 Article 이 없습니다."));
     Comment comment = mapper.map(content, Comment.class);
     comment.setWriter(writer);
