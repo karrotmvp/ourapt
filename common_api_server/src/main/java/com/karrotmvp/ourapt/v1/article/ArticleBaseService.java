@@ -101,5 +101,6 @@ public abstract class ArticleBaseService<T extends Article, D> {
       () -> new DataNotFoundFromDBException("There is no article match with ID: " + articleId)
     );
   }
+
   protected abstract Class<D> getClassOfDomainModel();
 }

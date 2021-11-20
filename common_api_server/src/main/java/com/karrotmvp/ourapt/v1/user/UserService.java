@@ -1,9 +1,9 @@
 package com.karrotmvp.ourapt.v1.user;
 
 import com.karrotmvp.ourapt.v1.apartment.ApartmentRepository;
+import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.common.exception.application.BannedUserException;
-import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import com.karrotmvp.ourapt.v1.user.entity.User;
@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
   private final UserRepository userRepository;
-  private final ApartmentRepository apartmentRepository;
+  private final ApartmentService apartmentService;
   private final ModelMapper mapper;
-  public UserService(UserRepository userRepository, ApartmentRepository apartmentRepository, ModelMapper mapper) {
+  public UserService(UserRepository userRepository, ApartmentService apartmentService, ApartmentRepository apartmentRepository, ModelMapper mapper) {
     this.userRepository = userRepository;
-    this.apartmentRepository = apartmentRepository;
+    this.apartmentService = apartmentService;
     this.mapper = mapper;
   }
 
@@ -36,8 +36,7 @@ public class UserService {
 
   public void updateCheckedInUserById(String userId, String newApartmentId) {
     User found = safelyGetUserById(userId);
-    Apartment apt = this.apartmentRepository.findById(newApartmentId)
-      .orElseThrow(() -> new DataNotFoundFromDBException("유효하지 않은 아파트 ID입니다."));
+    Apartment apt = this.apartmentService.safelyGetApartmentById(newApartmentId);
     found.setCheckedIn(apt);
     this.userRepository.save(found);
   }

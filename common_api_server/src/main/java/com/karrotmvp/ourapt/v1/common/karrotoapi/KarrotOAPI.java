@@ -45,7 +45,7 @@ public class KarrotOAPI {
                 .uri(uri)
                 .retrieve()
                 .onStatus(status -> !status.is2xxSuccessful(), (resp) -> {
-                    throw new KarrotUnexpectedResponseException("KARROT OAPI 호출 중에 " + resp.statusCode() + "응답을 받았습니다.");
+                    throw new KarrotUnexpectedResponseException("Get the " + resp.statusCode()  + " as response of KARROT OAPI");
                 });
     }
 }

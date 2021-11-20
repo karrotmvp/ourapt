@@ -49,7 +49,7 @@ public class CommentService {
       .orElseThrow(RegisteredUserNotFoundException::new);
     this.userService.assertUserIsNotBanned(writer);
     Article parent = this.articleRepository.findById(articleId)
-      .orElseThrow(() -> new DataNotFoundFromDBException("해당하는 Article 이 없습니다."));
+      .orElseThrow(() -> new DataNotFoundFromDBException("Cannot find the Article matched with ID: " + articleId));
     Comment comment = mapper.map(content, Comment.class);
     comment.setWriter(writer);
     comment.setRegionWhereCreated(regionId);

@@ -35,23 +35,23 @@ public class ApartmentService {
   }
 
   public ApartmentDto getApartmentById(String apartmentId) {
-    return mapper.map(safelyGetApartmentEntityById(apartmentId), ApartmentDto.class);
+    return mapper.map(safelyGetApartmentById(apartmentId), ApartmentDto.class);
   }
 
   public void inactivateApartmentById(String apartmentId) {
-    Apartment targetApt = safelyGetApartmentEntityById(apartmentId);
+    Apartment targetApt = safelyGetApartmentById(apartmentId);
     targetApt.setInactiveAt(new Date());
     this.apartmentRepository.save(targetApt);
   }
 
   public void activateApartmentById(String apartmentId) {
-    Apartment targetApt = safelyGetApartmentEntityById(apartmentId);
+    Apartment targetApt = safelyGetApartmentById(apartmentId);
     targetApt.setInactiveAt(null);
     this.apartmentRepository.save(targetApt);
   }
 
-  private Apartment safelyGetApartmentEntityById(String apartmentId) {
+  public Apartment safelyGetApartmentById(String apartmentId) {
     return this.apartmentRepository.findById(apartmentId)
-      .orElseThrow(() -> new DataNotFoundFromDBException(apartmentId + "에 해당하는 아파트가 없습니다."));
+      .orElseThrow(() -> new DataNotFoundFromDBException("Cannot find Apartment matched with ID: " + apartmentId));
   }
 }
