@@ -1,19 +1,19 @@
 package com.karrotmvp.ourapt.v1.article.vote.repository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-
 import com.karrotmvp.ourapt.v1.article.ArticleBaseCustomRepository;
 import com.karrotmvp.ourapt.v1.article.vote.entity.Vote;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
-
 import org.springframework.data.domain.Pageable;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> implements VoteCustomRepository {
 
@@ -38,6 +38,7 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
           karrotOAPI.getKarrotUserProfileById(vote.getWriter().getId())
       );
       vote.setCountOfComments(Math.toIntExact(this.countByParentId(vote.getId())));
+      vote.sortItems();
       return Optional.of(vote);
     } catch (NoResultException ne) {
       return Optional.empty();
@@ -87,5 +88,12 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
     query.setFirstResult(Math.toIntExact(pageable.getOffset()));
     query.setMaxResults(pageable.getPageSize());
     return joinOnKarrotProfileAndCommentCount(query);
+  }
+
+  @Override
+  protected List<Vote> joinOnKarrotProfileAndCommentCount(TypedQuery<Vote> query) {
+    return super.joinOnKarrotProfileAndCommentCount(query).stream()
+      .peek(vote -> vote.sortItems())
+      .collect(Collectors.toList());
   }
 }

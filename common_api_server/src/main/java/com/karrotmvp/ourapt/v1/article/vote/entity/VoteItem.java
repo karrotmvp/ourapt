@@ -28,6 +28,7 @@ public class VoteItem {
 
   @Column(name = "order_in_parent")
   @Setter
+  @Getter
   private int orderInParent;
 
   public VoteItem (String mainText, int orderInParent) {
