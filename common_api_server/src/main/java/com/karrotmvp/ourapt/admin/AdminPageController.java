@@ -1,42 +1,36 @@
 package com.karrotmvp.ourapt.admin;
 
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
-import com.karrotmvp.ourapt.v1.comment.CommentService;
-import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
+import com.karrotmvp.ourapt.v1.comment.CommentService;
+import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 
 @Controller
 @RequestMapping(value = "/admin")
+@AllArgsConstructor
 public class AdminPageController {
 
   private final QuestionService questionService;
-
   private final ApartmentService apartmentService;
-
   private final CommentService commentService;
-
   private final UserService userService;
-
-
-  public AdminPageController(QuestionService questionService, ApartmentService apartmentService, UserService userService, CommentService commentService) {
-    this.questionService = questionService;
-    this.commentService =commentService;
-    this.apartmentService = apartmentService;
-    this.userService = userService;
-  }
-
+  private final StatisticService statisticService;
 
   @GetMapping("")
   public String renderIndex() {
@@ -104,5 +98,17 @@ public class AdminPageController {
     model.addAttribute("question", question);
     model.addAttribute("comments", comments);
     return "pages/question-detail";
+  }
+
+  @GetMapping("/statistic")
+  public String renderStatistic(
+      Model model
+  ) {
+    model.addAttribute("period", statisticService.getLast7DateFormats(new Date()));
+
+    model.addAttribute("dau", statisticService.getLast7DaysDailyActiveUsers(new Date()));
+    model.addAttribute("signUpUser", statisticService.getLast7DaysDailySigningUpUsers(new Date()));
+    model.addAttribute("feedUser", statisticService.getLast7DaysSeeingFeedUsers(new Date()));
+    return "pages/statistic";
   }
 }

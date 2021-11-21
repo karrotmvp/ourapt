@@ -45,7 +45,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .antMatcher("/api/**")
+                .antMatcher("/api/v1/**")
                 .httpBasic().disable()
                 .csrf().disable()
                 .formLogin().disable()

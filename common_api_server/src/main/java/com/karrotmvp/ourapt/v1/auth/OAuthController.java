@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/api/v1/oauth")
+@RequestMapping(value = "/api/v1/oauth")
 @Api(tags = "3. 당근마켓 연동 인증")
 public class OAuthController {
 
