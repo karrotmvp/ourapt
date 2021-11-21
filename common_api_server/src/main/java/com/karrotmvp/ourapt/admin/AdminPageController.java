@@ -1,5 +1,6 @@
 package com.karrotmvp.ourapt.admin;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -104,8 +105,8 @@ public class AdminPageController {
   public String renderStatistic(
       Model model
   ) {
-    model.addAttribute("period", statisticService.getLast7DateFormats(new Date()));
-
+    model.addAttribute("period", Arrays.stream(statisticService.getLast7DateFormats(new Date()))
+        .map(date -> date.substring(5).replaceFirst("-", "/")).toArray(String[]::new));
     model.addAttribute("dau", statisticService.getLast7DaysDailyActiveUsers(new Date()));
     model.addAttribute("signUpUser", statisticService.getLast7DaysDailySigningUpUsers(new Date()));
     model.addAttribute("feedUser", statisticService.getLast7DaysSeeingFeedUsers(new Date()));
