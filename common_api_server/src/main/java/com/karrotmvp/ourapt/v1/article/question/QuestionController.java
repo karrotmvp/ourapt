@@ -27,6 +27,17 @@ public class QuestionController {
     this.questionService = questionService;
   }
 
+  @GetMapping(value = "/apartment/{apartmentId}/questions/pinned")
+  @ApiOperation(value = "사용자에게 보여질 핀 질문 랜덤 조회 (deprecated) ")
+  public CommonResponseBody<OneQuestionDto> getRandomPinnedQuestionOfApartmentDeprecated(
+    @PathVariable(name = "apartmentId") String apartmentId
+  ) {
+    return CommonResponseBody.<OneQuestionDto>builder()
+      .success()
+      .data(new OneQuestionDto(this.questionService.getRandomPinnedOfApartment(apartmentId)))
+      .build();
+  }
+
   @GetMapping(value = "/apartment/{apartmentId}/question/pinned")
   @ApiOperation(value = "사용자에게 보여질 핀 질문 랜덤 조회")
   public CommonResponseBody<OneQuestionDto> getRandomPinnedQuestionOfApartment(
