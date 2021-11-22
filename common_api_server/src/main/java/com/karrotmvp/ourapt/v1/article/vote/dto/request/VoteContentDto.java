@@ -17,6 +17,8 @@ public class VoteContentDto {
   @Getter
   @Setter
   public static class VoteItemContentDto {
+    @NotNull
+    @NotEmpty
     private String mainText;
   }
 

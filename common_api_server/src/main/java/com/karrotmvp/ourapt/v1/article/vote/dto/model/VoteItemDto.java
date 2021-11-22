@@ -4,13 +4,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @NoArgsConstructor
 @Getter
 @Setter
 public class VoteItemDto {
 
+  @NotNull
   private String id;
+  @NotNull
   private String mainText;
-  private int votedCount;
-  private boolean isMyVote;
+  @NotNull
+  private int votedCount = 0;
+  @NotNull
+  private boolean isMyVote = false;
 }
