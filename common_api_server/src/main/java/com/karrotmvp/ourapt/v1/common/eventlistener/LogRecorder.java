@@ -13,6 +13,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,10 @@ public class LogRecorder {
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
   private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
   private final ObjectMapper jsonBuilder = new ObjectMapper();
+  private final String[] exclusionPatterns = {
+    "/api/v1/app/*",
+    "/api/v1/survey"
+  };
 
   @EventListener(AccessEvent.class)
   public void handleAccessEvent(AccessEvent event) {
@@ -32,6 +37,10 @@ public class LogRecorder {
       logger.info(buildRequestLogToPrint(event));
     } catch (JsonProcessingException e) {
       logger.error("Fail to build LogJson: " + e.getMessage());
+    }
+
+    if (Arrays.stream(exclusionPatterns).anyMatch((pattern) -> event.getLog().getPath().matches(pattern))) {
+      return;
     }
 
     // Record access log to DB
@@ -54,6 +63,5 @@ public class LogRecorder {
     jsonSource.put("userId", log.getUserId());
     return this.jsonBuilder.writeValueAsString(jsonSource);
   }
-
 
 }

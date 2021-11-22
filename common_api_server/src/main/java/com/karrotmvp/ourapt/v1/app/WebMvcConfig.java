@@ -9,24 +9,24 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private final LogInterceptor logInterceptor;
+  private final LogInterceptor logInterceptor;
 
-    public WebMvcConfig(LogInterceptor logInterceptor) {
-        this.logInterceptor = logInterceptor;
-    }
+  public WebMvcConfig(LogInterceptor logInterceptor) {
+    this.logInterceptor = logInterceptor;
+  }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("*")
-                .allowedHeaders("*");
-    }
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**")
+      .allowedOrigins("*")
+      .allowedMethods("*")
+      .allowedHeaders("*");
+  }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(logInterceptor)
-          .addPathPatterns("/api/v1/**")
-          .excludePathPatterns("/api/v1/app/**");
-    }
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(logInterceptor)
+      .addPathPatterns("/api/v1/**")
+      .excludePathPatterns("/api/v1/app/**");
+  }
 }
