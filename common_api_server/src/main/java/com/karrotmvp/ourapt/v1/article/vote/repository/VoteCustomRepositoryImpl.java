@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -93,7 +92,7 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
   @Override
   protected List<Vote> joinOnKarrotProfileAndCommentCount(TypedQuery<Vote> query) {
     return super.joinOnKarrotProfileAndCommentCount(query).stream()
-      .peek(vote -> vote.sortItems())
+      .peek(Vote::sortItems)
       .collect(Collectors.toList());
   }
 }
