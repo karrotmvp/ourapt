@@ -50,7 +50,6 @@ public class OAuthController {
     if (alreadySignedUpUser != null) {
       // login
       // instanceId 업데이트
-      userRepository.save(alreadySignedUpUser);
       return CommonResponseBody.<KarrotAccessTokenDto>builder()
         .success()
         .data(accessToken)
