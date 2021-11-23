@@ -20,11 +20,11 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
     super(em, karrotOAPI);
   }
 
+  // SELECT 시 중복 때문에 OneToMany 관계는 eagar loading batchsize
   @Override
   public Optional<Vote> findById(String voteId) {
     TypedQuery<Vote> query = em.createQuery(
       "SELECT v FROM Vote v " +
-        "LEFT JOIN FETCH v.items " +
         "LEFT JOIN FETCH v.writer " +
         "LEFT JOIN FETCH v.apartmentWhereCreated " +
         "WHERE v.id = ?1", Vote.class);
@@ -48,7 +48,6 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
   public List<Vote> findFirstByApartmentIdToAndDateCursorByOrderByDesc(String apartmentId, Date dateCursor, Pageable pageable) {
     TypedQuery<Vote> query = em.createQuery(
       "SELECT v FROM Vote v " + 
-      "LEFT JOIN FETCH v.items " +
         "LEFT JOIN FETCH v.writer " +
         "LEFT JOIN FETCH v.apartmentWhereCreated " +
         "WHERE v.apartmentWhereCreated.id = ?1 AND v.createdAt < ?2 AND v.deletedAt IS NULL " +
@@ -66,7 +65,6 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
   public List<Vote> findByApartmentIdAndPinned(String apartmentId) {
     TypedQuery<Vote> query = em.createQuery(
       "SELECT v FROM Vote v " +
-        "LEFT JOIN FETCH v.items " +
         "LEFT JOIN FETCH v.writer " +
         "LEFT JOIN FETCH v.apartmentWhereCreated " +
         "WHERE v.apartmentWhereCreated.id = ?1 AND v.pinnedUntil >= ?2 AND v.deletedAt IS NULL", Vote.class);

@@ -2,6 +2,7 @@ package com.karrotmvp.ourapt.v1.article.vote.entity;
 
 import com.karrotmvp.ourapt.v1.article.Article;
 import lombok.Getter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -15,7 +16,8 @@ import java.util.List;
 @DiscriminatorValue(value = "V")
 public class Vote extends Article {
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
+  @BatchSize(size = 10)
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "parent")
   @Getter
   private List<VoteItem> items = new ArrayList<>();
 

@@ -63,6 +63,7 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
     return mapper.map(saved, VoteDto.class);
   }
 
+
   @Transactional
   public void addOrUpdateVotingToVoteItem(String userId, String voteItemId) {
     VoteItem itemToVoteFor = this.safelyGetVoteItem(voteItemId);
@@ -90,7 +91,6 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
   public void cancelVoting(String userId, String voteItemId) {
     this.votingRepository.deleteById(new VotingId(userId, voteItemId));
   }
-
 
   private List<Voting> getVotingsOfUserForVote(String userId, String voteId) {
     List<Voting> votingsForVote = this.getVotingsForVote(voteId);

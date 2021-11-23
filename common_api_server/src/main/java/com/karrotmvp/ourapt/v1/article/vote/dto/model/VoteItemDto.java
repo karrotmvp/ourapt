@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -16,7 +17,5 @@ public class VoteItemDto {
   @NotNull
   private String mainText;
   @NotNull
-  private int votedCount = 0;
-  @NotNull
-  private boolean isMyVote = false;
+  private List<String> voterIds;
 }
