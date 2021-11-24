@@ -23,22 +23,26 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col"><h1>퍼널</h1></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
         <div class="card">
-          <div class="card-title"><h3>피드 진입</h3></div>
+          <div class="card-title"><h3>기능별 퍼널</h3></div>
           <div class="card-body">
-            <canvas id="feedUser" height="100"></canvas>
+            <canvas id="feature_funnel" height="100"></canvas>
           </div>
         </div>
       </div>
     </div>
+    <br />
   </div>
   <!-- chart.js-->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <script th:inline="javascript">
-    function drawLineChart(context, title, period, data) {
+    function drawLineChart(type, context, title, period, data) {
       return new Chart(context, {
-        type: 'line',
+        type: type,
         data: {
           labels: period,
           datasets: [
@@ -65,11 +69,17 @@
             },
           ],
         },
-        options: {},
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        },
       });
     }
-    drawLineChart(document.getElementById('dau'), '활성 사용자 수', [[${period}]], [[${dau}]]);
-    drawLineChart(document.getElementById('signUpUser'), '신규 가입자 수', [[${period}]], [[${signUpUser}]]);
-    drawLineChart(document.getElementById('feedUser'), '피드 진입 사용자 수', [[${period}]], [[${feedUser}]]);
+    drawLineChart('line', document.getElementById('dau'), '활성 사용자 수', [[${period}]], [[${dau}]]);
+    drawLineChart('line', document.getElementById('signUpUser'), '신규 가입자 수', [[${period}]], [[${signUpUser}]]);
+    drawLineChart('bar', document.getElementById('feature_funnel'), '기능별 유니크 이용자 수', [[${funnel_label}]], [[${funnel_data}]]);
   </script>
 </div>

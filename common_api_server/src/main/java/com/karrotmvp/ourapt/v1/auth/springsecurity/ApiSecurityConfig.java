@@ -22,81 +22,80 @@ import org.springframework.web.filter.GenericFilterBean;
 
 @Order(1)
 @Configuration
-@EnableWebSecurity(debug = false)
+@EnableWebSecurity
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
-    // Apply Spring Security FilterChain for all API
+  // Apply Spring Security FilterChain for all API
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+  private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final ExceptionOccurEventPublisher exceptionEventPublisher;
-    private final AccessEventPublisher accessEventPublisher;
+  private final ExceptionOccurEventPublisher exceptionEventPublisher;
+  private final AccessEventPublisher accessEventPublisher;
 
-    public static final String[] AUTHORIZATION_CHECK_EXCLUSION_PATTERNS = new String[]{
-            "/api/v1/app/**",
-            "/api/v1/oauth/karrot",
-            "/api/v1/apartments",
-    };
+  public static final String[] AUTHORIZATION_CHECK_EXCLUSION_PATTERNS = new String[]{
+    "/api/v1/app/**",
+    "/api/v1/oauth/karrot"
+  };
 
-    public ApiSecurityConfig(ExceptionOccurEventPublisher exceptionEventPublisher, AccessEventPublisher accessEventPublisher) {
-      this.exceptionEventPublisher = exceptionEventPublisher;
-      this.accessEventPublisher = accessEventPublisher;
-    }
+  public ApiSecurityConfig(ExceptionOccurEventPublisher exceptionEventPublisher, AccessEventPublisher accessEventPublisher) {
+    this.exceptionEventPublisher = exceptionEventPublisher;
+    this.accessEventPublisher = accessEventPublisher;
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .antMatcher("/api/v1/**")
-                .httpBasic().disable()
-                .csrf().disable()
-                .formLogin().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(this.karrotOAuthFilter(), UsernamePasswordAuthenticationFilter.class)
-                .cors()
-                .and()
-                .authorizeRequests()
-                // Try to authenticate this pattern, but I don't check the authority.
-                .requestMatchers(CorsUtils::isPreFlightRequest)
-                .permitAll()
-                .antMatchers(AUTHORIZATION_CHECK_EXCLUSION_PATTERNS)
-                .permitAll()
-                .anyRequest().authenticated()
-                .and()
-                // Handle failure to authority check
-                .exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
-                    String firstException = String.valueOf(request.getAttribute("firstExceptionMessage"));
-                    accessEventPublisher.publish(
-                      LogVo.builder()
-                        .method(request.getMethod())
-                        .path(request.getRequestURI())
-                        .status(401)
-                        .regionId(request.getHeader("Region-Id"))
-                        .userId(null)
-                        .build()
-                    );
-                    exceptionEventPublisher.publish(
-                      request.getMethod() + " " + request.getRequestURI() + " " + 401,
-                      firstException
-                    );
-                    response.sendError(
-                            HttpStatus.UNAUTHORIZED.value(),
-                            firstException);
-                });
-    }
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http
+      .antMatcher("/api/v1/**")
+      .httpBasic().disable()
+      .csrf().disable()
+      .formLogin().disable()
+      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      .and()
+      .addFilterBefore(this.karrotOAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+      .cors()
+      .and()
+      .authorizeRequests()
+      // Try to authenticate this pattern, but I don't check the authority.
+      .requestMatchers(CorsUtils::isPreFlightRequest)
+      .permitAll()
+      .antMatchers(AUTHORIZATION_CHECK_EXCLUSION_PATTERNS)
+      .permitAll()
+      .anyRequest().authenticated()
+      .and()
+      // Handle failure to authority check
+      .exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
+        String firstException = String.valueOf(request.getAttribute("firstExceptionMessage"));
+        accessEventPublisher.publish(
+          LogVo.builder()
+            .method(request.getMethod())
+            .path(request.getRequestURI())
+            .status(401)
+            .regionId(request.getHeader("Region-Id"))
+            .userId(null)
+            .build()
+        );
+        exceptionEventPublisher.publish(
+          request.getMethod() + " " + request.getRequestURI() + " " + 401,
+          firstException
+        );
+        response.sendError(
+          HttpStatus.UNAUTHORIZED.value(),
+          firstException);
+      });
+  }
 
-    public GenericFilterBean karrotOAuthFilter() throws Exception {
-        return new KarrotOAuthFilter(authenticationManagerBean());
-    }
+  public GenericFilterBean karrotOAuthFilter() throws Exception {
+    return new KarrotOAuthFilter(authenticationManagerBean());
+  }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.addAllowedOrigin("*");
+    configuration.addAllowedMethod("*");
+    configuration.addAllowedHeader("*");
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 
 }

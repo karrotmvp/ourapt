@@ -4,14 +4,15 @@ import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.RegionDto;
 import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.apartment.entity.Region;
-import com.karrotmvp.ourapt.v1.comment.Comment;
-import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.question.Question;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
+import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteItemDto;
+import com.karrotmvp.ourapt.v1.article.vote.entity.VoteItem;
+import com.karrotmvp.ourapt.v1.comment.Comment;
+import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import com.karrotmvp.ourapt.v1.user.entity.User;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,6 +61,13 @@ public class ModelMapperConfig {
         mapper.map((q) -> q.getWriter().getProfile(), QuestionWithWhereCreatedDto::setWriter);
         mapper.map(Question::isByAdmin, QuestionWithWhereCreatedDto::setByAdmin);
         mapper.map(Question::isPinned, QuestionWithWhereCreatedDto::setIsPinned);
+      }
+    );
+
+    // Vote
+    modelMapper.typeMap(VoteItem.class, VoteItemDto.class).addMappings(
+      mapper -> {
+        mapper.map(VoteItem::getVoterIds, VoteItemDto::setVoterIds);
       }
     );
 

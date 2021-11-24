@@ -1,6 +1,9 @@
 package com.karrotmvp.ourapt.admin;
 
 
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -8,10 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
-
-import org.springframework.stereotype.Service;
-
-import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -21,28 +20,43 @@ public class StatisticService {
 
   public long[] getLast7DaysDailyActiveUsers(Date pointOfView) {
     return Arrays.stream(getLast7DateFormats(pointOfView))
-      .mapToLong((tString) -> this.statisticRepository.countDailyActiveUser(tString))
+      .mapToLong(this.statisticRepository::countDailyActiveUser)
       .toArray();
   }
 
   public long[] getLast7DaysDailySigningUpUsers(Date pointOfView) {
     return Arrays.stream(getLast7DateFormats(pointOfView))
-      .mapToLong((tString) -> this.statisticRepository.countDailySigningUpUser(tString))
+      .mapToLong(this.statisticRepository::countDailySigningUpUser)
       .toArray();
   }
 
   public long[] getLast7DaysSeeingFeedUsers(Date pointOfView) {
     return Arrays.stream(getLast7DateFormats(pointOfView))
-      .mapToLong((tString) -> this.statisticRepository.countDailySeeingFeedUser(tString))
+      .mapToLong(this.statisticRepository::countDailyFeedView)
       .toArray();
   }
 
   public String[] getLast7DateFormats(Date pointOfView) {
     return IntStream.range(0, 8)
       .mapToObj(useCountedDateGetterFromAWeekAgo(pointOfView))
-      .map((t) -> this.dateFormatter.format(t))
+      .map(this.dateFormatter::format)
       .toArray(String[]::new);
   }
+
+  public long[] getFunnelOfDaily(Date pointOfView) {
+    String formattedDate = this.dateFormatter.format(pointOfView);
+    return new long[] {
+      this.statisticRepository.countDailyApartmentView(formattedDate),
+      this.statisticRepository.countDailyCheckInView(formattedDate),
+      this.statisticRepository.countDailyFeedView(formattedDate),
+      this.statisticRepository.countDailyArticleDetailView(formattedDate),
+      this.statisticRepository.countDailyArticleUserWrite(formattedDate),
+      this.statisticRepository.countDailyCommentUserWrite(formattedDate),
+      this.statisticRepository.countDailyDoVote(formattedDate),
+      this.statisticRepository.countDailyCancelVote(formattedDate)
+    };
+  }
+
 
   private IntFunction<Date> useCountedDateGetterFromAWeekAgo(Date pointOfView) {
     return (i) -> {

@@ -1,10 +1,5 @@
 package com.karrotmvp.ourapt.admin;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
@@ -13,14 +8,17 @@ import com.karrotmvp.ourapt.v1.comment.CommentService;
 import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
-
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import lombok.AllArgsConstructor;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -91,8 +89,8 @@ public class AdminPageController {
 
   @GetMapping("/question/detail")
   public String renderQuestionDetail(
-      Model model, 
-      @RequestParam String id
+    Model model,
+    @RequestParam String id
   ) {
     QuestionWithWhereCreatedDto question = this.questionService.getQuestionsAndOriginById(id);
     List<CommentDto> comments = this.commentService.getCommentsByQuestionId(id);
@@ -103,13 +101,18 @@ public class AdminPageController {
 
   @GetMapping("/statistic")
   public String renderStatistic(
-      Model model
+    Model model
   ) {
     model.addAttribute("period", Arrays.stream(statisticService.getLast7DateFormats(new Date()))
-        .map(date -> date.substring(5).replaceFirst("-", "/")).toArray(String[]::new));
+      .map(date -> date.substring(5).replaceFirst("-", "/")).toArray(String[]::new));
     model.addAttribute("dau", statisticService.getLast7DaysDailyActiveUsers(new Date()));
     model.addAttribute("signUpUser", statisticService.getLast7DaysDailySigningUpUsers(new Date()));
     model.addAttribute("feedUser", statisticService.getLast7DaysSeeingFeedUsers(new Date()));
+    model.addAttribute("funnel_label", new String[] {
+      "(아파트진입)", "(체크인)", "메인피드", "게시글 상세(댓글보기)", "게시글 작성", "댓글 작성", "투표(정정)하기", "투표취소"
+    });
+    model.addAttribute("funnel_data", this.statisticService.getFunnelOfDaily(new Date()));
+
     return "pages/statistic";
   }
 }
