@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class VoteItem {
   @BatchSize(size = 10)
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "voteFor")
   @Setter
-  private List<Voting> votings;
+  private List<Voting> votings = new ArrayList<>();
 
   @Column(name = "main_text")
   @Setter

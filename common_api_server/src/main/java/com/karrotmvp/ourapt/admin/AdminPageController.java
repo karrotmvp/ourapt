@@ -4,6 +4,8 @@ import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
+import com.karrotmvp.ourapt.v1.article.vote.VoteService;
+import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.comment.CommentService;
 import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class AdminPageController {
 
   private final QuestionService questionService;
+  private final VoteService voteService;
   private final ApartmentService apartmentService;
   private final CommentService commentService;
   private final UserService userService;
@@ -97,6 +100,26 @@ public class AdminPageController {
     model.addAttribute("question", question);
     model.addAttribute("comments", comments);
     return "pages/question-detail";
+  }
+
+
+  @GetMapping("/votes")
+  public String renderVoteList(
+    Model model,
+    @RequestParam int perPage,
+    @RequestParam int pageNum
+  ){
+    List<VoteWithWhereCreatedDto> votes = this.voteService.getVotesAndOriginWithOffsetCursor(perPage, pageNum - 1);
+    model.addAttribute("votes", votes);
+    model.addAttribute("countOfAll", this.voteService.getCountOfAll());
+    model.addAttribute("countOfToday", this.voteService.getCountInToday());
+    model.addAttribute("pageNum", pageNum);
+    model.addAttribute("perPage", perPage);
+    model.addAttribute("isLastPage", votes.size() < perPage);
+    List<ApartmentDto> apartments = this.apartmentService.getAvailableApartments();
+    model.addAttribute("apartments", apartments);
+
+    return "pages/votes";
   }
 
   @GetMapping("/statistic")

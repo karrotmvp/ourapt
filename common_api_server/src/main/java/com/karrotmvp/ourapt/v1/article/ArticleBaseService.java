@@ -44,6 +44,11 @@ public abstract class ArticleBaseService<T extends Article, D> {
       .collect(Collectors.toList());
   }
 
+  protected <U> List<U> getPageAndOriginWithOffsetCursor(int perPage, int pageNum, Class<U> outputClass) {
+    return this.articleCustomRepository.findByOffsetCursor(PageRequest.of(pageNum, perPage))
+      .stream().map(q -> mapper.map(q, outputClass)).collect(Collectors.toList());
+  }
+
   public int getCountOfAll() {
     return Math.toIntExact(this.articleRepository.countByDeletedAtIsNull());
   }

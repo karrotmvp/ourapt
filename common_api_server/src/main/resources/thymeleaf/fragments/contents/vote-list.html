@@ -1,0 +1,75 @@
+<div th:fragment="vote-list">
+    <div
+            th:replace="fragments/contents/vote-form.html :: vote-form(apartments=${apartments})"
+    ></div>
+    <div style="text-align: center">
+        <h1>투표 관리</h1>
+        <p th:text="${#strings.concat('총 투표 게시글 수: ', countOfAll)}"></p>
+<!--        <p th:text="${#strings.concat('총 댓글: ', countOfAllComments)}"></p>-->
+        <p th:text="${#strings.concat('오늘 작성 투표 게시글: ', countOfToday)}"></p>
+    </div>
+    <br />
+    <table class="table">
+        <thead>
+        <th>순번</th>
+        <th>ID</th>
+        <th>닉네임</th>
+        <th>본문</th>
+        <th>관리자 작성여부</th>
+        <th>작성아파트</th>
+        <th>댓글 수</th>
+        <th>작성일</th>
+        <th>수정일</th>
+        <th>핀 여부</th>
+        <th>삭제</th>
+        </thead>
+        <tbody>
+        <tr th:each="vote, index : ${votes}">
+            <td th:text="${perPage * (pageNum - 1) + index.index + 1}"></td>
+            <td th:text="${vote.id}"></td>
+            <td th:text="${vote.writer.nickname}"></td>
+            <td th:with="mainTextLength=${#strings.length(vote.mainText)}">
+                <a
+                        th:href="${#strings.concat('/admin/vote/detail?id=', vote.id)}"
+                        th:text="${#strings.substring(vote.mainText, 0,
+                        mainTextLength <= 20 ? mainTextLength : 20)}"
+                ></a>
+            </td>
+            <td th:text="${vote.byAdmin ? 'O' : 'X'}"></td>
+            <td>
+                <a th:text="${vote.apartmentWhereCreated.name}" href="#"> </a>
+            </td>
+            <td th:text="${vote.countOfComments}"></td>
+            <td
+                    th:text="${#dates.format(vote.createdAt, 'yyyy-MM-dd HH:mm:ss')}"
+            ></td>
+            <td
+                    th:text="${#dates.format(vote.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"
+            ></td>
+            <td>
+                <form
+                        th:action="${vote.isPinned ? '/admin/action/unpin-vote.do' : '/admin/action/pin-vote.do'}"
+                        method="post"
+                >
+                    <input type="hidden" name="id" th:value="${vote.id}" />
+                    <div
+                            th:replace="fragments/toggle-button :: toggle-button(predicate = ${vote.isPinned}, onTrue='고정됨', onFalse='일반')"
+                    ></div>
+                </form>
+            </td>
+            <td>
+                <form
+                        action="/admin/action/delete-vote.do"
+                        method="post"
+                >
+                    <input type="hidden" name="id" th:value="${vote.id}"/>
+                    <button class="btn btn-danger">삭제</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div
+            th:replace="fragments/pagination.html :: pagination(currentPage=${pageNum}, display=5, perPage=${perPage}, isLastPage=${isLastPage}, url='/admin/votes', countOfAll=${countOfAll} )"
+    ></div>
+</div>

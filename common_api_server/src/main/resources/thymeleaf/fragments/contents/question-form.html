@@ -1,5 +1,5 @@
 <div th:fragment="question-form(apartments)">
-  <div style="border: 2px dotted">
+  <div>
     <form action="/admin/action/new-question.do" method="post">
       <div class="row">
         <h1 class="card-title" style="text-align: center">관리자 질문 작성</h1>
@@ -26,9 +26,14 @@
             style="resize: none; min-height: 100px"
           ></textarea>
           <br />
-          <button class="btn btn-primary" type="submit">작성</button>
         </label>
         <!-- card body -->
+      </div>
+      <div class="row">
+        <div class="col-sm-11"></div>
+        <div class="col-sm-1">
+          <button class="btn btn-primary" type="submit">작성</button>
+        </div>
       </div>
     </form>
   </div>

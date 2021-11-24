@@ -3,7 +3,9 @@ package com.karrotmvp.ourapt.admin;
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
+import com.karrotmvp.ourapt.v1.article.vote.VoteService;
 import com.karrotmvp.ourapt.v1.user.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,17 +18,13 @@ import java.util.Date;
 
 @Controller
 @RequestMapping(value = "/admin/action")
+@AllArgsConstructor
 public class AdminActionController {
 
   private final UserService userService;
   private final ApartmentService apartmentService;
   private final QuestionService questionService;
-
-  public AdminActionController(ApartmentService apartmentService, UserService userService, QuestionService questionService) {
-    this.apartmentService = apartmentService;
-    this.userService = userService;
-    this.questionService = questionService;
-  }
+  private final VoteService voteService;
 
   @GetMapping(value = "/active-apartment.do")
   public RedirectView doTurnOnApartmentAction(
@@ -85,6 +83,7 @@ public class AdminActionController {
     return rd;
   }
 
+  // TODO: Refactor
   @PostMapping("/pin-question.do")
   public RedirectView doPinQuestionAction(
     RedirectView rd,
@@ -115,6 +114,39 @@ public class AdminActionController {
   ) {
     this.questionService.deleteById(id);
     rd.setUrl("/admin/questions?perPage=20&pageNum=1");
+    return rd;
+  }
+
+  @PostMapping("/pin-vote.do")
+  public RedirectView doPinVoteAction(
+    RedirectView rd,
+    @RequestParam String id
+  ) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(new Date());
+    cal.add(Calendar.YEAR, 100); // Permanently
+    this.voteService.pin(id, cal.getTime());
+    rd.setUrl("/admin/votes?perPage=20&pageNum=1");
+    return rd;
+  }
+
+  @PostMapping("/unpin-vote.do")
+  public RedirectView doUnpinVoteAction(
+    RedirectView rd,
+    @RequestParam String id
+  ) {
+    this.voteService.unpin(id);
+    rd.setUrl("/admin/votes?perPage=20&pageNum=1");
+    return rd;
+  }
+
+  @PostMapping("/delete-vote.do")
+  public RedirectView deleteVote(
+    RedirectView rd,
+    @RequestParam String id
+  ) {
+    this.voteService.deleteById(id);
+    rd.setUrl("/admin/votes?perPage=20&pageNum=1");
     return rd;
   }
 

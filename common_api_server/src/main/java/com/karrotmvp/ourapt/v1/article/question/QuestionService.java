@@ -11,12 +11,10 @@ import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class QuestionService extends ArticleBaseService<Question, QuestionDto> {
@@ -31,8 +29,7 @@ public class QuestionService extends ArticleBaseService<Question, QuestionDto> {
   }
 
   public List<QuestionWithWhereCreatedDto> getQuestionsAndOriginWithOffsetCursor(int perPage, int pageNum) {
-    return this.articleCustomRepository.findByOffsetCursor(PageRequest.of(pageNum, perPage))
-      .stream().map(q -> mapper.map(q, QuestionWithWhereCreatedDto.class)).collect(Collectors.toList());
+    return this.getPageAndOriginWithOffsetCursor(perPage, pageNum, QuestionWithWhereCreatedDto.class);
   }
 
   public QuestionWithWhereCreatedDto getQuestionsAndOriginById(String questionId) {
