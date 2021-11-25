@@ -7,7 +7,10 @@ import com.karrotmvp.ourapt.v1.apartment.entity.Region;
 import com.karrotmvp.ourapt.v1.article.question.Question;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
+import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteItemDto;
+import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteWithWhereCreatedDto;
+import com.karrotmvp.ourapt.v1.article.vote.entity.Vote;
 import com.karrotmvp.ourapt.v1.article.vote.entity.VoteItem;
 import com.karrotmvp.ourapt.v1.comment.Comment;
 import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
@@ -65,6 +68,20 @@ public class ModelMapperConfig {
     );
 
     // Vote
+    modelMapper.typeMap(Vote.class, VoteDto.class).addMappings(
+      mapper -> {
+        mapper.map((v) -> v.getWriter().getProfile(), VoteDto::setWriter);
+        mapper.map(Vote::isByAdmin, VoteDto::setByAdmin);
+        mapper.map(Vote::isPinned, VoteDto::setIsPinned);
+      }
+    );
+    modelMapper.typeMap(Vote.class, VoteWithWhereCreatedDto.class).addMappings(
+      mapper -> {
+        mapper.map((v) -> v.getWriter().getProfile(), VoteWithWhereCreatedDto::setWriter);
+        mapper.map(Vote::isByAdmin, VoteWithWhereCreatedDto::setByAdmin);
+        mapper.map(Vote::isPinned, VoteWithWhereCreatedDto::setIsPinned);
+      }
+    );
     modelMapper.typeMap(VoteItem.class, VoteItemDto.class).addMappings(
       mapper -> {
         mapper.map(VoteItem::getVoterIds, VoteItemDto::setVoterIds);

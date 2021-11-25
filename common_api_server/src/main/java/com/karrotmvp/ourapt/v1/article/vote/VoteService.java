@@ -2,6 +2,7 @@ package com.karrotmvp.ourapt.v1.article.vote;
 
 import com.karrotmvp.ourapt.v1.article.ArticleBaseService;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteDto;
+import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.request.VoteContentDto;
 import com.karrotmvp.ourapt.v1.article.vote.entity.Vote;
 import com.karrotmvp.ourapt.v1.article.vote.entity.VoteItem;
@@ -39,6 +40,11 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
     this.userRepository = userRepository;
     this.userService = userService;
   }
+
+  public List<VoteWithWhereCreatedDto> getVotesAndOriginWithOffsetCursor(int perPage, int pageNum) {
+    return this.getPageAndOriginWithOffsetCursor(perPage, pageNum, VoteWithWhereCreatedDto.class);
+  }
+
 
   @Transactional(rollbackFor = RuntimeException.class)
   public VoteDto writeNewVote(VoteContentDto content, String writerId, String regionId) {
