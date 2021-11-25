@@ -33,13 +33,16 @@
                             id="funnel_date"
                             type="date"
                             name="funnel_date"
-                            style="margin-right: 10px; padding-left: 10px; padding-right: 10px; font-weight: bold; max-height: 34px;"
-                            th:value="${#dates.format(#dates.createNow(), 'YYYY-MM-dd')}" />
+                            style="margin-right: 10px; padding-left: 10px; padding-right: 10px; font-weight: bold; max-height: 34px;"/>
+                    <script>
+                        const formatDate = (date) => `${date.getFullYear()}-${('0'+ (date.getMonth()+1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
+                        const search = new URLSearchParams(window.location.search);
+                        const dateParam = search.get('funnel_date');
+                        document.getElementById('funnel_date').value = dateParam ? formatDate(new Date(Number(dateParam))) : formatDate(new Date());
+                    </script>
                 </label>
                 <button class="btn btn-primary" onclick="
                     const funnelDate = document.getElementById('funnel_date').value;
-                    console.log(document.getElementById('funnel_date'))
-                    alert(funnelDate)
                     if (!funnelDate || funnelDate.length === 0) {
                         alert('퍼널 설정 날짜를 확인하세요');
                     } else {
