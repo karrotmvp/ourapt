@@ -18,6 +18,7 @@ import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.entity.User;
 import com.karrotmvp.ourapt.v1.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,8 +95,12 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
     this.votingRepository.save(voting);
   }
 
+  @Transactional
   public void cancelVoting(String userId, String voteItemId) {
-    this.votingRepository.deleteById(new VotingId(userId, voteItemId));
+    try {
+      this.votingRepository.deleteById(new VotingId(userId, voteItemId));
+    } catch (EmptyResultDataAccessException ignored) {
+    }
   }
 
   private List<Voting> getVotingsOfUserForVote(String userId, String voteId) {
