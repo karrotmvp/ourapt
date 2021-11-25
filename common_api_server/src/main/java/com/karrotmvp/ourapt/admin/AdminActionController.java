@@ -4,13 +4,11 @@ import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
 import com.karrotmvp.ourapt.v1.article.vote.VoteService;
+import com.karrotmvp.ourapt.v1.article.vote.dto.request.VoteContentDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Calendar;
@@ -80,6 +78,24 @@ public class AdminActionController {
       ADMIN_USER_ID,
       regionId);
     rd.setUrl("/admin/questions?perPage=20&pageNum=1");
+    return rd;
+  }
+
+  @PostMapping("/new-vote.do")
+  public RedirectView doCreateNewVoteAction(
+    RedirectView rd,
+    @RequestParam String apartmentId,
+    @RequestParam String regionId,
+    @ModelAttribute VoteContentDto content
+  ) {
+    final String ADMIN_USER_ID = "ADMIN";
+    this.userService.updateCheckedInUserById(ADMIN_USER_ID, apartmentId);
+    content.trimItems();
+    this.voteService.writeNewVote(
+      content,
+      ADMIN_USER_ID,
+      regionId);
+    rd.setUrl("/admin/votes?perPage=20&pageNum=1");
     return rd;
   }
 

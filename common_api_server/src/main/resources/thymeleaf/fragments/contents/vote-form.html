@@ -1,47 +1,69 @@
 <div th:fragment="vote-form(apartments)">
     <div>
         <form action="/admin/action/new-vote.do" method="post">
-            <div class="row">
-                <h1 class="card-title" style="text-align: center">관리자 투표 작성</h1>
-            </div>
-            <br />
-            <div class="row">
-                <label class="col-sm-3">
-                    <h4 style="font-weight: bold">대상 아파트 선택</h4>
-                    <select name="apartmentId" class="form-select">
-                        <option
-                                th:each="apt : ${apartments}"
-                                th:value="${apt.id}"
-                                th:text="${apt.name}"
-                        ></option>
-                    </select>
-                    <input type="hidden" name="regionId" th:value="ADMIN" />
-                </label>
-                <label class="col-sm-9">
-                    <h4 style="font-weight: bold">본문 입력</h4>
-                    <textarea
-                            class="form-control"
-                            aria-label="With textarea"
-                            name="mainText"
-                            style="resize: none; min-height: 100px"
-                    ></textarea>
-                    <br />
-                </label>
-                <!-- card body -->
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div>
+            <div class="form-group">
+                <div class="row">
+                    <h1 class="card-title" style="text-align: center">관리자 투표 작성</h1>
+                </div>
+                <br/>
+                <div class="row">
+                    <label class="col-sm-3">
+                        <h4 style="font-weight: bold">대상 아파트 선택</h4>
+                        <select name="apartmentId" class="form-select">
+                            <option
+                                    th:each="apt : ${apartments}"
+                                    th:value="${apt.id}"
+                                    th:text="${apt.name}"
+                            ></option>
+                        </select>
+                        <input type="hidden" name="regionId" th:value="ADMIN"/>
+                    </label>
+                    <label class="col-sm-9">
+                        <h4 style="font-weight: bold">본문 입력</h4>
+                        <textarea
+                                class="form-control"
+                                aria-label="With textarea"
+                                name="mainText"
+                                style="resize: none; min-height: 100px"
+                        ></textarea>
+                        <br/>
+                    </label>
+                    <!-- card body -->
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label>
+                            항목1
+                            <input type="text" name="items[0]"/>
+                        </label>
+                        <label>
+                            항목4
+                            <input type="text" name="items[3]"/>
+                        </label>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>
+                            항목2
+                            <input type="text" name="items[1]"/>
+                        </label>
+                        <label>
+                            항목5
+                            <input type="text" name="items[4]"/>
+                        </label>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>
+                            항목3
+                            <input type="text" name="items[2]"/>
+                        </label>
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-primary" type="submit" style="text-align: right;">작성</button>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-11"></div>
-                <div class="col-sm-1">
-                    <button class="btn btn-primary" type="submit">작성</button>
-                </div>
+                <br/>
             </div>
         </form>
     </div>
-    <br />
+    <br/>
 </div>
