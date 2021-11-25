@@ -124,7 +124,8 @@ public class AdminPageController {
 
   @GetMapping("/statistic")
   public String renderStatistic(
-    Model model
+    Model model,
+    @RequestParam(name = "funnel_date", required = false) Long funnelDate
   ) {
     model.addAttribute("period", Arrays.stream(statisticService.getLast7DateFormats(new Date()))
       .map(date -> date.substring(5).replaceFirst("-", "/")).toArray(String[]::new));
@@ -134,7 +135,7 @@ public class AdminPageController {
     model.addAttribute("funnel_label", new String[] {
       "(아파트진입)", "(체크인)", "메인피드", "게시글 상세(댓글보기)", "게시글 작성", "댓글 작성", "투표(정정)하기", "투표취소"
     });
-    model.addAttribute("funnel_data", this.statisticService.getFunnelOfDaily(new Date()));
+    model.addAttribute("funnel_data", this.statisticService.getFunnelOfDaily(funnelDate != null ? new Date(funnelDate) : new Date()));
 
     return "pages/statistic";
   }

@@ -1,85 +1,116 @@
 <div th:fragment="statistic-chart">
-  <br />
-  <div class="container">
-    <div class="row">
-      <div class="col"><h1>이용 통계</h1></div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="card">
-          <div class="card-title"><h3>DAU</h3></div>
-          <div class="card-body">
-            <canvas id="dau" height="100"></canvas>
-          </div>
+    <br/>
+    <div class="container">
+        <div class="row">
+            <div class="col"><h1>이용 통계</h1></div>
         </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="card">
-          <div class="card-title"><h3>가입자</h3></div>
-          <div class="card-body">
-            <canvas id="signUpUser" height="100"></canvas>
-          </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-title"><h3>DAU</h3></div>
+                    <div class="card-body">
+                        <canvas id="dau" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-title"><h3>가입자</h3></div>
+                    <div class="card-body">
+                        <canvas id="signUpUser" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col"><h1>퍼널</h1></div>
-    </div>
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="card">
-          <div class="card-title"><h3>기능별 퍼널</h3></div>
-          <div class="card-body">
-            <canvas id="feature_funnel" height="100"></canvas>
-          </div>
+        <br />
+        <div class="row">
+            <div class="col"><h1>퍼널</h1></div>
         </div>
-      </div>
+        <div class="row">
+            <div class="col input-group">
+                <label>
+                    <input
+                            id="funnel_date"
+                            type="date"
+                            name="funnel_date"
+                            style="margin-right: 10px; padding-left: 10px; padding-right: 10px; font-weight: bold; max-height: 34px;"
+                            th:value="${#dates.format(#dates.createNow(), 'YYYY-MM-dd')}" />
+                </label>
+                <button class="btn btn-primary" onclick="
+                    const funnelDate = document.getElementById('funnel_date').value;
+                    console.log(document.getElementById('funnel_date'))
+                    alert(funnelDate)
+                    if (!funnelDate || funnelDate.length === 0) {
+                        alert('퍼널 설정 날짜를 확인하세요');
+                    } else {
+                        window.location.href=`/admin/statistic?funnel_date=${Date.parse(
+                            funnelDate
+                        )}`;
+                    }
+                ">이 날짜의 퍼널 데이터 조회
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-title"><h3>기능별 퍼널</h3></div>
+                    <div class="card-body">
+                        <canvas id="feature_funnel" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
     </div>
-    <br />
-  </div>
-  <!-- chart.js-->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-  <script th:inline="javascript">
-    function drawLineChart(type, context, title, period, data) {
-      return new Chart(context, {
-        type: type,
-        data: {
-          labels: period,
-          datasets: [
-            {
-              label: title,
-              data,
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-              ],
-              borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-              ],
-              borderWidth: 1.5,
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        },
-      });
-    }
-    drawLineChart('line', document.getElementById('dau'), '활성 사용자 수', [[${period}]], [[${dau}]]);
-    drawLineChart('line', document.getElementById('signUpUser'), '신규 가입자 수', [[${period}]], [[${signUpUser}]]);
-    drawLineChart('bar', document.getElementById('feature_funnel'), '기능별 유니크 이용자 수', [[${funnel_label}]], [[${funnel_data}]]);
-  </script>
+    <!-- chart.js-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script th:inline="javascript">
+        function drawLineChart(type, context, title, period, data) {
+            return new Chart(context, {
+                type: type,
+                data: {
+                    labels: period,
+                    datasets: [
+                        {
+                            label: title,
+                            data,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                            ],
+                            borderWidth: 1.5,
+                        },
+                    ],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                },
+            });
+        }
+
+        drawLineChart('line', document.getElementById('dau'), '활성 사용자 수', [[${period}]], [[${dau}]]);
+        drawLineChart('line', document.getElementById('signUpUser'), '신규 가입자 수', [[${period}]], [[${signUpUser}]]);
+        drawLineChart('bar', document.getElementById('feature_funnel'), '기능별 유니크 이용자 수', [[${funnel_label}]], [[${funnel_data}]]);
+    </script>
 </div>
