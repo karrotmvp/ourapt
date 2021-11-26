@@ -133,7 +133,7 @@ public class AdminPageController {
     model.addAttribute("signUpUser", statisticService.getLast7DaysDailySigningUpUsers(new Date()));
     model.addAttribute("feedUser", statisticService.getLast7DaysSeeingFeedUsers(new Date()));
     model.addAttribute("funnel_label", new String[] {
-      "(아파트진입)", "(체크인)", "메인피드", "게시글 상세(댓글보기)", "게시글 작성", "댓글 작성", "투표(정정)하기", "투표취소"
+      "(아파트목록보기)", "(아파트가없나요? 제출)", "(체크인)", "메인피드", "게시글 상세(댓글보기)", "게시글 작성", "댓글 작성", "투표(정정)하기", "투표취소"
     });
     model.addAttribute("funnel_data", this.statisticService.getFunnelOfDaily(funnelDate != null ? new Date(funnelDate) : new Date()));
 

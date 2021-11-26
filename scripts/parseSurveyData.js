@@ -764,6 +764,13 @@ const data = [
 console.log(
   JSON.stringify(
     data
+      .map((json) => {
+        json.content_json =
+          json.content_json.slice(0, 1) +
+          `"userId": "${json.user_id}", ` +
+          json.content_json.slice(1);
+        return json;
+      })
       .map((json) => json.content_json)
       .map((s) => s.replace('question01', '아파트'))
       .map((s) => s.replace('question02', '병원'))

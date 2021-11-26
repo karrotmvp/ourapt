@@ -41,7 +41,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SwaggerConfig {
 
   @Bean
-//  @Profile({"!production"})
+  @Profile({"!production"})
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)
       .securityContexts(List.of(this.securityContexts()))

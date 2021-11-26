@@ -39,6 +39,15 @@ public interface StatisticRepository extends JpaRepository<RequestLog, Long> {
   @Query(value = "SELECT COUNT(user_id) FROM " +
     "(SELECT DISTINCT user_id FROM request_log " +
     "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "AND path LIKE '/api/v1/no-apartmen_' " +
+    "AND method = 'POST') daily_cancel_vote", nativeQuery = true)
+  long countDailyNoApartmentSubmit(
+    String dateStringYYYYMMdd
+  );
+
+  @Query(value = "SELECT COUNT(user_id) FROM " +
+    "(SELECT DISTINCT user_id FROM request_log " +
+    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
     "AND path = '/api/v1/user/me/checkedIn' " +
     "AND method = 'PATCH') daily_apt_checkin", nativeQuery = true)
   long countDailyCheckInView(

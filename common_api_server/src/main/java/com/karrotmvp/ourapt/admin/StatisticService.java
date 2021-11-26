@@ -47,6 +47,7 @@ public class StatisticService {
     String formattedDate = this.dateFormatter.format(pointOfView);
     return new long[] {
       this.statisticRepository.countDailyApartmentView(formattedDate),
+      this.statisticRepository.countDailyNoApartmentSubmit(formattedDate),
       this.statisticRepository.countDailyCheckInView(formattedDate),
       this.statisticRepository.countDailyFeedView(formattedDate),
       this.statisticRepository.countDailyArticleDetailView(formattedDate),
