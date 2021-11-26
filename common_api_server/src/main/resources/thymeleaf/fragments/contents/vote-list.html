@@ -32,7 +32,7 @@
                 <a
                         th:href="${#strings.concat('/admin/vote/detail?id=', vote.id)}"
                         th:text="${#strings.substring(vote.mainText, 0,
-                        mainTextLength <= 20 ? mainTextLength : 20)}"
+                        mainTextLength <= 35 ? mainTextLength : 35)}"
                 ></a>
             </td>
             <td th:text="${vote.byAdmin ? 'O' : 'X'}"></td>
