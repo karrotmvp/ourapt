@@ -45,8 +45,8 @@
                     <script>
                         const formatDate = (date) => `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
                         const search = new URLSearchParams(window.location.search);
-                        const startDateParam = search.get('funnel_date_start');
-                        const endDateParam = search.get('funnel_date_end');
+                        const startDateParam = search.get('funnel_start_date');
+                        const endDateParam = search.get('funnel_end_date');
                         document.getElementById('funnel_date_start').value = startDateParam ? formatDate(new Date(Number(startDateParam))) : formatDate(new Date());
                         document.getElementById('funnel_date_end').value = endDateParam ? formatDate(new Date(Number(endDateParam))) : formatDate(new Date());
                     </script>
