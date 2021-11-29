@@ -30,12 +30,6 @@ public class StatisticService {
       .toArray();
   }
 
-  public long[] getLast7DaysSeeingFeedUsers(Date pointOfView) {
-    return Arrays.stream(getLast7DateFormats(pointOfView))
-      .mapToLong(this.statisticRepository::countDailyFeedView)
-      .toArray();
-  }
-
   public String[] getLast7DateFormats(Date pointOfView) {
     return IntStream.range(0, 8)
       .mapToObj(useCountedDateGetterFromAWeekAgo(pointOfView))
@@ -43,18 +37,19 @@ public class StatisticService {
       .toArray(String[]::new);
   }
 
-  public long[] getFunnelOfDaily(Date pointOfView) {
-    String formattedDate = this.dateFormatter.format(pointOfView);
+  public long[] getFunnelBetween(Date startDate, Date endDate) {
+    String formattedStartDate = this.dateFormatter.format(startDate);
+    String formattedEndDate = this.dateFormatter.format(endDate);
     return new long[] {
-      this.statisticRepository.countDailyApartmentView(formattedDate),
-      this.statisticRepository.countDailyNoApartmentSubmit(formattedDate),
-      this.statisticRepository.countDailyCheckInView(formattedDate),
-      this.statisticRepository.countDailyFeedView(formattedDate),
-      this.statisticRepository.countDailyArticleDetailView(formattedDate),
-      this.statisticRepository.countDailyArticleUserWrite(formattedDate),
-      this.statisticRepository.countDailyCommentUserWrite(formattedDate),
-      this.statisticRepository.countDailyDoVote(formattedDate),
-      this.statisticRepository.countDailyCancelVote(formattedDate)
+      this.statisticRepository.countApartmentViewBetween(formattedStartDate, formattedEndDate),
+      this.statisticRepository.countNoApartmentSubmitBetween(formattedStartDate, formattedEndDate),
+      this.statisticRepository.countCheckInBetween(formattedStartDate, formattedEndDate),
+      this.statisticRepository.countFeedViewBetween(formattedStartDate, formattedEndDate),
+      this.statisticRepository.countArticleDetailViewBetween(formattedStartDate, formattedEndDate),
+      this.statisticRepository.countArticleUserWriteBetween(formattedStartDate, formattedEndDate),
+      this.statisticRepository.countCommentUserWriteBetween(formattedStartDate, formattedEndDate),
+      this.statisticRepository.countDoVoteBetween(formattedStartDate, formattedEndDate),
+      this.statisticRepository.countCancelVoteBetween(formattedStartDate, formattedEndDate)
     };
   }
 

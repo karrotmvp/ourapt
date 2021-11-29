@@ -21,7 +21,8 @@ public interface StatisticRepository extends JpaRepository<RequestLog, Long> {
 
   @Query(value = "SELECT COUNT(karrot_id) FROM " +
     "(SELECT karrot_id FROM user " +
-    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1) daily_signup"
+    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "AND created_at != '2021-11-26 15:46:38') daily_signup"
     , nativeQuery = true)
   long countDailySigningUpUser(
     String dateStringYYYYMMdd
@@ -29,81 +30,90 @@ public interface StatisticRepository extends JpaRepository<RequestLog, Long> {
 
   @Query(value = "SELECT COUNT(user_id) FROM " +
     "(SELECT DISTINCT user_id FROM request_log " +
-    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "WHERE DATE(created_at) >= ?1 and DATE(created_at) <= ?2 " +
     "AND path LIKE '/api/v1/apartment_' " +
     "AND method = 'GET') daily_apt_view", nativeQuery = true)
-  long countDailyApartmentView(
-    String dateStringYYYYMMdd
+  long countApartmentViewBetween(
+    String startDateString,
+    String endDateString
   );
 
   @Query(value = "SELECT COUNT(user_id) FROM " +
     "(SELECT DISTINCT user_id FROM request_log " +
-    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "WHERE DATE(created_at) >= ?1 and DATE(created_at) <= ?2 " +
     "AND path LIKE '/api/v1/no-apartmen_' " +
     "AND method = 'POST') daily_cancel_vote", nativeQuery = true)
-  long countDailyNoApartmentSubmit(
-    String dateStringYYYYMMdd
+  long countNoApartmentSubmitBetween(
+    String startDateString,
+    String startEndString
   );
 
   @Query(value = "SELECT COUNT(user_id) FROM " +
     "(SELECT DISTINCT user_id FROM request_log " +
-    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "WHERE DATE(created_at) >= ?1 and DATE(created_at) <= ?2 " +
     "AND path = '/api/v1/user/me/checkedIn' " +
     "AND method = 'PATCH') daily_apt_checkin", nativeQuery = true)
-  long countDailyCheckInView(
-    String dateStringYYYYMMdd
+  long countCheckInBetween(
+    String startDateString,
+    String startEndString
   );
 
   @Query(value = "SELECT COUNT(user_id) FROM " +
     "(SELECT DISTINCT user_id FROM request_log " +
-    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "WHERE DATE(created_at) >= ?1 and DATE(created_at) <= ?2 " +
     "AND path LIKE '/api/v1/apartment/%/question_' " +
     "AND method = 'GET') daily_feed_view", nativeQuery = true)
-  long countDailyFeedView(
-    String dateStringYYYYMMdd
+  long countFeedViewBetween(
+    String startDateString,
+    String startEndString
   );
 
   @Query(value = "SELECT COUNT(user_id) FROM " +
     "(SELECT DISTINCT user_id FROM request_log " +
-    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "WHERE DATE(created_at) >= ?1 and DATE(created_at) <= ?2 " +
     "AND path LIKE '/api/v1/article/%/comments' " +
     "AND method = 'GET') daily_article_detail_view", nativeQuery = true)
-  long countDailyArticleDetailView(
-    String dateStringYYYYMMdd
+  long countArticleDetailViewBetween(
+    String startDateString,
+    String startEndString
   );
 
   @Query(value = "SELECT COUNT(writer_id) FROM " +
     "(SELECT DISTINCT writer_id FROM article " +
-    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "WHERE DATE(created_at) >= ?1 and DATE(created_at) <= ?2 " +
     "AND writer_id != 'ADMIN') daily_article_created", nativeQuery = true)
-  long countDailyArticleUserWrite(
-    String dateStringYYYYMMdd
+  long countArticleUserWriteBetween(
+    String startDateString,
+    String startEndString
   );
 
   @Query(value = "SELECT COUNT(writer_id) FROM " +
     "(SELECT DISTINCT writer_id FROM comment " +
-    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "WHERE DATE(created_at) >= ?1 and DATE(created_at) <= ?2 " +
     "AND writer_id != 'ADMIN') daily_article_created", nativeQuery = true)
-  long countDailyCommentUserWrite(
-    String dateStringYYYYMMdd
+  long countCommentUserWriteBetween(
+    String startDateString,
+    String startEndString
   );
 
   @Query(value = "SELECT COUNT(user_id) FROM " +
     "(SELECT DISTINCT user_id FROM request_log " +
-    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "WHERE DATE(created_at) >= ?1 and DATE(created_at) <= ?2 " +
     "AND path LIKE '/api/v1/vote/item/%/voting' " +
     "AND method = 'POST') daily_do_vote", nativeQuery = true)
-  long countDailyDoVote(
-    String dateStringYYYYMMdd
+  long countDoVoteBetween(
+    String startDateString,
+    String startEndString
   );
 
   @Query(value = "SELECT COUNT(user_id) FROM " +
     "(SELECT DISTINCT user_id FROM request_log " +
-    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+    "WHERE DATE(created_at) >= ?1 and DATE(created_at) <= ?2 " +
     "AND path LIKE '/api/v1/vote/item/%/voting' " +
     "AND method = 'DELETE') daily_cancel_vote", nativeQuery = true)
-  long countDailyCancelVote(
-    String dateStringYYYYMMdd
+  long countCancelVoteBetween(
+    String startDateString,
+    String startEndString
   );
 
 

@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <br />
+        <br/>
         <div class="row">
             <div class="col"><h1>퍼널</h1></div>
         </div>
@@ -30,25 +30,34 @@
             <div class="col input-group">
                 <label>
                     <input
-                            id="funnel_date"
+                            id="funnel_date_start"
                             type="date"
-                            name="funnel_date"
+                            name="funnel_date_start"
                             style="margin-right: 10px; padding-left: 10px; padding-right: 10px; font-weight: bold; max-height: 34px;"/>
+                </label>
+                <strong>~</strong>
+                <label>
+                    <input
+                            id="funnel_date_end"
+                            type="date"
+                            name="funnel_date_end"
+                            style="margin-left: 10px; margin-right: 10px; padding-left: 10px; padding-right: 10px; font-weight: bold; max-height: 34px;"/>
                     <script>
-                        const formatDate = (date) => `${date.getFullYear()}-${('0'+ (date.getMonth()+1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
+                        const formatDate = (date) => `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`
                         const search = new URLSearchParams(window.location.search);
-                        const dateParam = search.get('funnel_date');
-                        document.getElementById('funnel_date').value = dateParam ? formatDate(new Date(Number(dateParam))) : formatDate(new Date());
+                        const startDateParam = search.get('funnel_date_start');
+                        const endDateParam = search.get('funnel_date_end');
+                        document.getElementById('funnel_date_start').value = startDateParam ? formatDate(new Date(Number(startDateParam))) : formatDate(new Date());
+                        document.getElementById('funnel_date_end').value = endDateParam ? formatDate(new Date(Number(endDateParam))) : formatDate(new Date());
                     </script>
                 </label>
                 <button class="btn btn-primary" onclick="
-                    const funnelDate = document.getElementById('funnel_date').value;
-                    if (!funnelDate || funnelDate.length === 0) {
+                    const funnelStartDate = document.getElementById('funnel_date_start').value;
+                    const funnelEndDate = document.getElementById('funnel_date_end').value;
+                    if (!funnelStartDate || !funnelEndDate || funnelStartDate.length === 0 || funnelEndDate.length === 0) {
                         alert('퍼널 설정 날짜를 확인하세요');
                     } else {
-                        window.location.href=`/admin/statistic?funnel_date=${Date.parse(
-                            funnelDate
-                        )}`;
+                        window.location.href=`/admin/statistic?funnel_start_date=${Date.parse(fun)}&funnel_end_date=${Date.parse(funnelEndDate)}`;
                     }
                 ">이 날짜의 퍼널 데이터 조회
                 </button>
