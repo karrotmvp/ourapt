@@ -54,7 +54,7 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
         "ORDER BY v.createdAt DESC", Vote.class);
 
     query.setParameter(1, apartmentId);
-    query.setParameter(1, dateCursor);
+    query.setParameter(2, dateCursor);
     query.setFirstResult(0);
     query.setMaxResults(pageable.getPageSize());
 

@@ -5,7 +5,7 @@ import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.request.VoteContentDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.response.OneVoteDto;
-import com.karrotmvp.ourapt.v1.article.vote.dto.response.PinnedVoteDto;
+import com.karrotmvp.ourapt.v1.article.vote.dto.response.VoteListDto;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -29,14 +30,14 @@ public class VoteController {
 
   @GetMapping("/apartment/{apartmentId}/vote/pinned")
   @ApiOperation(value = "아파트의 핀 투표 조회")
-  public CommonResponseBody<PinnedVoteDto> getRandomPinnedVoteOfApartment(
+  public CommonResponseBody<OneVoteDto> getRandomPinnedVoteOfApartment(
     @PathVariable String apartmentId
   ) {
     VoteDto pinned = this.voteService.getPinnedOneOfApartment(apartmentId);
     List<QuestionDto> questionsOfPinned = this.questionService.getAllQuestionsAboutVote(pinned.getId());
-    return CommonResponseBody.<PinnedVoteDto>builder()
+    return CommonResponseBody.<OneVoteDto>builder()
       .success()
-      .data(new PinnedVoteDto(pinned, questionsOfPinned))
+      .data(new OneVoteDto(pinned, questionsOfPinned))
       .build();
   }
 
@@ -83,17 +84,25 @@ public class VoteController {
   public CommonResponseBody<OneVoteDto> getVoteById(
     @PathVariable String voteId
   ) {
-    throw new UnsupportedOperationException("Unsupported Yet");
+    VoteDto vote = this.voteService.getOneById(voteId);
+    List<QuestionDto> questionsOfVote = this.questionService.getAllQuestionsAboutVote(voteId);
+    return CommonResponseBody.<OneVoteDto>builder()
+      .success()
+      .data(new OneVoteDto(vote, questionsOfVote))
+      .build();
   }
 
   @GetMapping("/apartment/{apartmentId}/votes")
   @ApiOperation(value = "아파트의 투표들 Date 커서로 페이징 조회")
-  public CommonResponseBody<OneVoteDto> getVoteById(
+  public CommonResponseBody<VoteListDto> getVoteById(
     @RequestParam(name = "perPage") @Max(value = 10) int perPage,
     @RequestParam(name = "cursor") long cursorTimestamp,
     @PathVariable(name = "apartmentId") String apartmentId
   ) {
-    throw new UnsupportedOperationException("Unsupported Yet");
+    List<VoteDto> votes = this.voteService.getPageOfApartmentWithDateCursor(apartmentId, new Date(cursorTimestamp), perPage);
+    return CommonResponseBody.<VoteListDto>builder()
+      .success()
+      .data(new VoteListDto(votes))
+      .build();
   }
-
 }
