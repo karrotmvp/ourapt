@@ -7,6 +7,7 @@ import com.karrotmvp.ourapt.v1.article.vote.VoteService;
 import com.karrotmvp.ourapt.v1.article.vote.dto.request.VoteContentDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
@@ -67,17 +68,18 @@ public class AdminActionController {
   @PostMapping("/new-question.do")
   public RedirectView doCreateNewQuestionAction(
     RedirectView rd,
-    @RequestParam String apartmentId,
+    @RequestParam String voteId,
     @RequestParam String regionId,
     @RequestParam String mainText
   ) {
     final String ADMIN_USER_ID = "ADMIN";
-    this.userService.updateCheckedInUserById(ADMIN_USER_ID, apartmentId);
     this.questionService.writeNewQuestion(
       new QuestionContentDto(mainText),
       ADMIN_USER_ID,
-      regionId);
-    rd.setUrl("/admin/questions?perPage=20&pageNum=1");
+      regionId,
+      voteId
+    );
+    rd.setUrl("/admin/questions?voteId=" + voteId);
     return rd;
   }
 
@@ -126,10 +128,11 @@ public class AdminActionController {
   @PostMapping("/delete-question.do")
   public RedirectView deleteQuestion(
     RedirectView rd,
+    @RequestHeader(value = HttpHeaders.REFERER) final String referrer,
     @RequestParam String id
   ) {
     this.questionService.deleteById(id);
-    rd.setUrl("/admin/questions?perPage=20&pageNum=1");
+    rd.setUrl(referrer);
     return rd;
   }
 

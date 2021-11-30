@@ -1,12 +1,11 @@
 package com.karrotmvp.ourapt.v1.article.question;
 
 import com.karrotmvp.ourapt.v1.article.Article;
+import com.karrotmvp.ourapt.v1.article.vote.entity.Vote;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -21,6 +20,11 @@ public class Question extends Article {
     @Getter
     @Setter
     private Date pinnedUntil;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    @Setter
+    private Vote about;
 
     public Question() {
         super();

@@ -1,4 +1,4 @@
-<div th:fragment="question-form(apartments)">
+<div th:fragment="question-form">
   <div>
     <form action="/admin/action/new-question.do" method="post">
       <div class="row">
@@ -6,18 +6,9 @@
       </div>
       <br />
       <div class="row">
-        <label class="col-sm-3">
-          <h4 style="font-weight: bold">대상 아파트 선택</h4>
-          <select name="apartmentId" class="form-select">
-            <option
-              th:each="apt : ${apartments}"
-              th:value="${apt.id}"
-              th:text="${apt.name}"
-            ></option>
-          </select>
-          <input type="hidden" name="regionId" th:value="ADMIN" />
-        </label>
-        <label class="col-sm-9">
+        <input type="hidden" name="regionId" th:value="ADMIN" />
+        <input type="hidden" name="voteId" th:value="${voteId}"/>
+        <label class="col-sm-12">
           <h4 style="font-weight: bold">본문 입력</h4>
           <textarea
             class="form-control"

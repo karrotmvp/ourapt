@@ -53,7 +53,6 @@ public class StatisticService {
     };
   }
 
-
   private IntFunction<Date> useCountedDateGetterFromAWeekAgo(Date pointOfView) {
     return (i) -> {
       Calendar calendar = Calendar.getInstance();

@@ -1,8 +1,8 @@
 package com.karrotmvp.ourapt.v1.article;
 
-import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NoPermissionException;
+import com.karrotmvp.ourapt.v1.common.exception.application.ViolatingConsistencyInputException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +28,12 @@ public abstract class ArticleBaseService<T extends Article, D> {
     return mapper.map(this.safelyGetById(articleId), this.getClassOfDomainModel());
   }
 
-  public D getRandomPinnedOfApartment(String apartmentId) {
+  public D getPinnedOneOfApartment(String apartmentId) {
     List<T> pinned = this.articleCustomRepository.findByApartmentIdAndPinned(apartmentId);
     if (pinned.size() == 0) {
       throw new DataNotFoundFromDBException("There is no available pinned article");
     }
-    return mapper.map(pinned.get(Utils.getRandomInt(pinned.size())), this.getClassOfDomainModel());
+    return mapper.map(pinned.get(0), this.getClassOfDomainModel());
   }
 
   public List<D> getPageOfApartmentWithDateCursor(String apartmentId, Date cursor, int perPage) {
@@ -83,6 +83,10 @@ public abstract class ArticleBaseService<T extends Article, D> {
   @Transactional
   public void pin(String articleId, Date until) {
     T target = this.safelyGetById(articleId);
+    List<T> alreadyPinned = this.articleCustomRepository.findByApartmentIdAndPinned(target.getApartmentWhereCreated().getId());
+    if (alreadyPinned.size() > 0) {
+      throw new ViolatingConsistencyInputException("The only one article can pinned for one apartment");
+    }
     target.setPinnedUntil(until);
     this.articleRepository.save(target);
   }
@@ -95,13 +99,14 @@ public abstract class ArticleBaseService<T extends Article, D> {
   }
 
   @Transactional
-  public void deleteById(String articleId) {
+  public D deleteById(String articleId) {
     T toDelete = this.safelyGetById(articleId);
     toDelete.setDeletedAt(new Date());
     this.articleRepository.save(toDelete);
+    return mapper.map(toDelete, getClassOfDomainModel());
   }
 
-  protected T safelyGetById(String articleId) {
+  public T safelyGetById(String articleId) {
     return this.articleRepository.findById(articleId).orElseThrow(
       () -> new DataNotFoundFromDBException("There is no article match with ID: " + articleId)
     );

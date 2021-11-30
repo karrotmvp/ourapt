@@ -3,6 +3,7 @@ package com.karrotmvp.ourapt.admin;
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
+import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.article.vote.VoteService;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteWithWhereCreatedDto;
@@ -74,19 +75,11 @@ public class AdminPageController {
   @GetMapping("/questions")
   public String renderQuestionList(
     Model model,
-    @RequestParam int perPage,
-    @RequestParam int pageNum
+    @RequestParam String voteId
   ) {
-    List<QuestionWithWhereCreatedDto> questions = this.questionService.getQuestionsAndOriginWithOffsetCursor(perPage, pageNum - 1);
+    List<QuestionDto> questions = this.questionService.getAllQuestionsAboutVote(voteId);
     model.addAttribute("questions", questions);
-    model.addAttribute("countOfAll", this.questionService.getCountOfAll());
-    model.addAttribute("countOfToday", this.questionService.getCountInToday());
-    model.addAttribute("countOfAllComments", this.commentService.getCountOfAllComments());
-    model.addAttribute("pageNum", pageNum);
-    model.addAttribute("perPage", perPage);
-    model.addAttribute("isLastPage", questions.size() < perPage);
-    List<ApartmentDto> apartments = this.apartmentService.getAvailableApartments();
-    model.addAttribute("apartments", apartments);
+    model.addAttribute("voteId", voteId);
     return "pages/questions";
   }
 

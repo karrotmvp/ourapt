@@ -61,7 +61,7 @@ public interface StatisticRepository extends JpaRepository<RequestLog, Long> {
   @Query(value = "SELECT COUNT(user_id) FROM " +
     "(SELECT DISTINCT user_id FROM request_log " +
     "WHERE DATE(created_at) >= ?1 and DATE(created_at) <= ?2 " +
-    "AND path LIKE '/api/v1/apartment/%/question_' " +
+    "AND path LIKE '/api/v1/apartment/%/vote/pinned' " +
     "AND method = 'GET') daily_feed_view", nativeQuery = true)
   long countFeedViewBetween(
     String startDateString,
@@ -115,9 +115,5 @@ public interface StatisticRepository extends JpaRepository<RequestLog, Long> {
     String startDateString,
     String startEndString
   );
-
-
-
-
 
 }

@@ -87,4 +87,16 @@ public class QuestionCustomRepositoryImpl extends ArticleBaseCustomRepository<Qu
     return joinOnKarrotProfileAndCommentCount(query);
   }
 
+  @Override
+  public List<Question> findByAboutId(String voteId) {
+    TypedQuery<Question> query = em.createQuery(
+      "SELECT q FROM Question q " +
+        "LEFT JOIN FETCH q.writer " +
+        "LEFT JOIN FETCH q.apartmentWhereCreated " +
+        "WHERE q.deletedAt IS NULL " +
+        "AND q.about.id = ?1", Question.class
+    );
+    query.setParameter(1, voteId);
+    return joinOnKarrotProfileAndCommentCount(query);
+  }
 }
