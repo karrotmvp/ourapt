@@ -53,11 +53,6 @@ public abstract class ArticleBaseCustomRepository<T extends Article> {
       .peek(article -> article.getWriter().setProfile(article.isByAdmin() ? Static.makeAdminKarrotProfile(article.getId()) : null))
       .collect(Collectors.toList());
     List<KarrotProfile> profiles = this.karrotOAPI.getKarrotUserProfilesByIds(writerIds);
-    profiles.forEach((profile) -> {
-      logger.info("Nickname: " + profile.getId());
-      logger.info("Nickname: " + profile.getNickname());
-      logger.info("Nickname: " + profile.getProfileImageUrl());
-    });
 
     incompleteQuestions = Utils.leftOuterHashJoin(
       incompleteQuestions,
