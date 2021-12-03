@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -93,13 +94,14 @@ public class VoteController {
   }
 
   @GetMapping("/apartment/{apartmentId}/votes")
-  @ApiOperation(value = "아파트의 투표들 Date 커서로 페이징 조회")
+  @ApiOperation(value = "아파트의 unpinned 투표들 Date 커서로 페이징 조회")
   public CommonResponseBody<VoteListDto> getVoteById(
     @RequestParam(name = "perPage") @Max(value = 10) int perPage,
     @RequestParam(name = "cursor") long cursorTimestamp,
     @PathVariable(name = "apartmentId") String apartmentId
   ) {
-    List<VoteDto> votes = this.voteService.getPageOfApartmentWithDateCursor(apartmentId, new Date(cursorTimestamp), perPage);
+    List<VoteDto> votes = this.voteService.getPageOfApartmentWithDateCursor(apartmentId, new Date(cursorTimestamp), perPage)
+      .stream().filter(vote -> !vote.getIsPinned()).collect(Collectors.toList());
     return CommonResponseBody.<VoteListDto>builder()
       .success()
       .data(new VoteListDto(votes))

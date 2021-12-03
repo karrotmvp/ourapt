@@ -50,7 +50,9 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
       "SELECT v FROM Vote v " + 
         "LEFT JOIN FETCH v.writer " +
         "LEFT JOIN FETCH v.apartmentWhereCreated " +
-        "WHERE v.apartmentWhereCreated.id = ?1 AND v.createdAt < ?2 AND v.deletedAt IS NULL " +
+        "WHERE v.apartmentWhereCreated.id = ?1 " +
+        "AND v.createdAt < ?2 " +
+        "AND v.deletedAt IS NULL " +
         "ORDER BY v.createdAt DESC", Vote.class);
 
     query.setParameter(1, apartmentId);
