@@ -1,24 +1,26 @@
 package com.karrotmvp.ourapt.v1.article;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
 import com.karrotmvp.ourapt.v1.comment.repository.projection.CommentCount;
 import com.karrotmvp.ourapt.v1.common.BaseEntityCreatedDateComparator;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class ArticleBaseCustomRepository<T extends Article> {
 
   protected final EntityManager em;
   protected final KarrotOAPI karrotOAPI;
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   protected ArticleBaseCustomRepository(EntityManager em, KarrotOAPI karrotOAPI) {
     this.em = em;
@@ -50,10 +52,16 @@ public abstract class ArticleBaseCustomRepository<T extends Article> {
       .peek(article -> questionIds.add(article.getId()))
       .peek(article -> article.getWriter().setProfile(article.isByAdmin() ? Static.makeAdminKarrotProfile(article.getId()) : null))
       .collect(Collectors.toList());
+    List<KarrotProfile> profiles = this.karrotOAPI.getKarrotUserProfilesByIds(writerIds);
+    profiles.forEach((profile) -> {
+      logger.info("Nickname: " + profile.getId());
+      logger.info("Nickname: " + profile.getNickname());
+      logger.info("Nickname: " + profile.getProfileImageUrl());
+    });
 
     incompleteQuestions = Utils.leftOuterHashJoin(
       incompleteQuestions,
-      this.karrotOAPI.getKarrotUserProfilesByIds(writerIds),
+      profiles,
       (article) -> article.getWriter().getId(),
       KarrotProfile::getId,
       (article, profile) -> article.getWriter().setProfile(profile));
