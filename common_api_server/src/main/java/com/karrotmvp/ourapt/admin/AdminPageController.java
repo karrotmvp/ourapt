@@ -133,6 +133,8 @@ public class AdminPageController {
       funnelEndDate != null ? new Date(funnelEndDate) : new Date())
     );
 
+    model.addAttribute("cohort", statisticService.getCohortRetention(new Date()));
+
     return "pages/statistic";
   }
 }

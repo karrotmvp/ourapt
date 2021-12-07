@@ -53,6 +53,40 @@ public class StatisticService {
     };
   }
 
+  public Double[][] getCohortRetention(Date pointOfView) {
+    Date[] firstDates= IntStream.range(0, 8)
+      .mapToObj(useCountedDateGetterFromAWeekAgo(pointOfView))
+      .toArray(Date[]::new);
+    Long[] countDailyFirstVisitor = Arrays.stream(firstDates)
+        .map((firstDate) ->
+           statisticRepository.countDailyFirstRequest(
+              this.dateFormatter.format(firstDate)
+           )
+        )
+        .toArray(Long[]::new);
+    Double[][] cohort = new Double[8][8];
+    IntStream.range(0, 8).forEach((i) -> {
+      IntStream.range(0, 8 - i).forEach((j) -> {
+        cohort[i][j] = countDailyFirstVisitor[i] != 0
+          ?
+          (
+            statisticRepository.countRetentionUsers(
+              this.dateFormatter.format(firstDates[i]),
+              this.dateFormatter.format(addDate(firstDates[i], j))
+            ).doubleValue() / countDailyFirstVisitor[i].doubleValue()
+          )
+          : -1;
+      });
+    });
+    return cohort;
+  }
+  private Date addDate(Date source, int amount) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(source);
+    calendar.add(Calendar.DATE, amount);
+    return calendar.getTime();
+  }
+
   private IntFunction<Date> useCountedDateGetterFromAWeekAgo(Date pointOfView) {
     return (i) -> {
       Calendar calendar = Calendar.getInstance();

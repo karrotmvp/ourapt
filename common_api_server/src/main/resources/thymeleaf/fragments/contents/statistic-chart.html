@@ -73,7 +73,39 @@
                 </div>
             </div>
         </div>
-        <br/>
+        <div class="row">
+            <div class="col">
+                <h1>리텐션</h1>
+            </div>
+        </div>
+        <div class = "row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-title"><h3>코호트(메인피드 기준)</h3></div>
+                    <div class="card-body">
+                        <table>
+                            <thead>
+                                <th>+0일</th>
+                                <th>+1일</th>
+                                <th>+2일</th>
+                                <th>+3일</th>
+                                <th>+4일</th>
+                                <th>+5일</th>
+                                <th>+6일</th>
+                                <th>+7일</th>
+                            </thead>
+                            <tbody>
+                                <tr th:each="date : ${cohort}">
+                                    <td th:each="data : ${date}">
+                                        <p th:text="${data}"></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- chart.js-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>

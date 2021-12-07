@@ -115,5 +115,21 @@ public interface StatisticRepository extends JpaRepository<RequestLog, Long> {
     String startDateString,
     String startEndString
   );
+  ;
 
+  @Query(value = "SELECT COUNT(user_id) FROM first_request_log " +
+    "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1", nativeQuery = true)
+  Long countDailyFirstRequest(String dateString);
+
+  @Query(value = "SELECT COUNT(DISTINCT(rl.user_id)) FROM " +
+    "request_log rl " +
+      "INNER JOIN ( " +
+        "SELECT user_id FROM first_request_log " +
+        "WHERE DATE_FORMAT(created_at, '%Y-%m-%d') = ?1 " +
+      ") first_visitor " +
+      "ON first_visitor.user_id = rl.user_id " +
+    "WHERE DATE_FORMAT(rl.created_at, '%Y-%m-%d') = ?2 " +
+      "AND path LIKE '/api/v1/apartment/%/vote/pinned' " +
+      "AND method = 'GET'", nativeQuery = true)
+  Long countRetentionUsers(String firstVisitDateString, String comparingDateString);
 }
