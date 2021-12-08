@@ -59,7 +59,7 @@ public class StatisticService {
       .toArray(Date[]::new);
     Long[] countDailyFirstVisitor = Arrays.stream(firstDates)
         .map((firstDate) ->
-           statisticRepository.countDailyFirstRequest(
+           statisticRepository.countDailyFirstFeedView(
               this.dateFormatter.format(firstDate)
            )
         )
