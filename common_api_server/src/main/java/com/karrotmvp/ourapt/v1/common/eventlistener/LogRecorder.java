@@ -27,7 +27,8 @@ public class LogRecorder {
   private final ObjectMapper jsonBuilder = new ObjectMapper();
   private final String[] exclusionPatterns = {
     "/api/v1/app/*",
-    "/api/v1/survey"
+    "/api/v1/survey",
+    "/api/v1/preopen"
   };
 
   @EventListener(AccessEvent.class)

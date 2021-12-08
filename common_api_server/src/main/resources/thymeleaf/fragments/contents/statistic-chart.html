@@ -57,11 +57,11 @@
                     search.set('funnel_start_date', Date.parse(funnelStartDate) + '');
                     search.set('funnel_end_date', Date.parse(funnelEndDate) + '');
                     if (!funnelStartDate || !funnelEndDate || funnelStartDate.length === 0 || funnelEndDate.length === 0) {
-                        alert('퍼널 설정 날짜를 확인하세요');
+                        alert('퍼널 기간 설정을 확인하세요');
                     } else {
                         window.location.href=`/admin/statistic?${search.toString()}`;
                     }
-                ">이 날짜의 퍼널 데이터 조회
+                ">이 기간의 퍼널 데이터 조회
                 </button>
             </div>
         </div>
