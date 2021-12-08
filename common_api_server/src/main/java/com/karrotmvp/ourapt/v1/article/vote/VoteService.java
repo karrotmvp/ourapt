@@ -12,6 +12,7 @@ import com.karrotmvp.ourapt.v1.article.vote.entity.VotingId;
 import com.karrotmvp.ourapt.v1.article.vote.repository.VoteItemRepository;
 import com.karrotmvp.ourapt.v1.article.vote.repository.VoteRepository;
 import com.karrotmvp.ourapt.v1.article.vote.repository.VotingRepository;
+import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NotCheckedInUserException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
@@ -75,7 +76,7 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
     created.setWriter(writer);
     created.setMainText(content.getMainText());
     created.setRegionWhereCreated(regionId);
-    created.setPinnedUntil(addDate(new Date(), 7)); // terminated after 1 week
+    created.setPinnedUntil(addDate(new Date(), Static.DATE_TO_VOTE_LIVE)); // terminated after 1 week
     if (writer.getCheckedIn() == null) {
       throw new NotCheckedInUserException();
     }

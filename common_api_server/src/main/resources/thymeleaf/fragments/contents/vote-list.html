@@ -9,6 +9,7 @@
         <p th:text="${#strings.concat('오늘 작성 투표 게시글: ', countOfToday)}"></p>
     </div>
     <br />
+    <p>투표 재시작(생성)시 3일뒤 자동 종료됨</p>
     <table class="table">
         <thead>
         <th>순번</th>
@@ -20,7 +21,7 @@
         <th>댓글 수</th>
         <th>작성일</th>
         <th>수정일</th>
-        <th>핀 여부</th>
+        <th>진행현황</th>
         <th>삭제</th>
         </thead>
         <tbody>
@@ -53,7 +54,7 @@
                 >
                     <input type="hidden" name="id" th:value="${vote.id}" />
                     <div
-                            th:replace="fragments/toggle-button :: toggle-button(predicate = ${vote.isInProgress}, onTrue='고정됨', onFalse='일반')"
+                            th:replace="fragments/toggle-button :: toggle-button(predicate = ${vote.isInProgress}, onTrue='진행중', onFalse='재시작')"
                     ></div>
                 </form>
             </td>

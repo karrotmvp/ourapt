@@ -87,7 +87,7 @@ public abstract class ArticleBaseService<T extends Article, D> {
   @Transactional
   public void forceQuit(String articleId) {
     T target = safelyGetById(articleId);
-    target.setPinnedUntil(null);
+    target.setPinnedUntil(new Date());
     this.articleRepository.save(target);
   }
 

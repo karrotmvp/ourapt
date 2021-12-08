@@ -5,6 +5,8 @@ import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
 import com.karrotmvp.ourapt.v1.article.vote.VoteService;
 import com.karrotmvp.ourapt.v1.article.vote.dto.request.VoteContentDto;
+import com.karrotmvp.ourapt.v1.common.Static;
+import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.Calendar;
 import java.util.Date;
 
 @Controller
@@ -107,10 +108,7 @@ public class AdminActionController {
     RedirectView rd,
     @RequestParam String id
   ) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(new Date());
-    cal.add(Calendar.YEAR, 100); // Permanently
-    this.questionService.restart(id, cal.getTime());
+    this.questionService.restart(id, Utils.addDate(new Date(), Static.DATE_TO_VOTE_LIVE));
     rd.setUrl("/admin/questions?perPage=20&pageNum=1");
     return rd;
   }
@@ -141,10 +139,7 @@ public class AdminActionController {
     RedirectView rd,
     @RequestParam String id
   ) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(new Date());
-    cal.add(Calendar.YEAR, 100); // Permanently
-    this.voteService.restart(id, cal.getTime());
+    this.voteService.restart(id, Utils.addDate(new Date(), Static.DATE_TO_VOTE_LIVE));
     rd.setUrl("/admin/votes?perPage=20&pageNum=1");
     return rd;
   }

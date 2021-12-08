@@ -10,6 +10,7 @@ import java.util.Map;
 public class Static {
     public static Map<String, Region> regionDict = new HashMap<>();
     public static Date serverStartTime;
+    public static int DATE_TO_VOTE_LIVE = 3;
 
     static {
         //depth3
