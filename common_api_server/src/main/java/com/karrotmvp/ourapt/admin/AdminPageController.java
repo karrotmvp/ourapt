@@ -119,7 +119,8 @@ public class AdminPageController {
   public String renderStatistic(
     Model model,
     @RequestParam(name = "funnel_start_date", required = false) Long funnelStartDate,
-    @RequestParam(name = "funnel_end_date", required = false) Long funnelEndDate
+    @RequestParam(name = "funnel_end_date", required = false) Long funnelEndDate,
+    @RequestParam(name = "cohort_date", required = false) Long cohortDate
   ) {
     model.addAttribute("period", Arrays.stream(statisticService.getLast7DateFormats(new Date()))
       .map(date -> date.substring(5).replaceFirst("-", "/")).toArray(String[]::new));
@@ -128,12 +129,15 @@ public class AdminPageController {
     model.addAttribute("funnel_label", new String[] {
       "(아파트목록보기)", "(아파트가없나요? 제출)", "(체크인)", "메인피드", "게시글 상세(댓글보기)", "게시글 작성", "댓글 작성", "투표(정정)하기", "투표취소"
     });
+    Date now = new Date();
     model.addAttribute("funnel_data", this.statisticService.getFunnelBetween(
-      funnelStartDate != null ? new Date(funnelStartDate) : new Date(),
-      funnelEndDate != null ? new Date(funnelEndDate) : new Date())
+      funnelStartDate != null ? new Date(funnelStartDate) : now,
+      funnelEndDate != null ? new Date(funnelEndDate) : now)
     );
 
-    model.addAttribute("cohort", statisticService.getCohortRetention(new Date()));
+    model.addAttribute("cohort", statisticService.getCohortRetention(
+      cohortDate != null ? new Date(cohortDate) : now)
+    );
 
     return "pages/statistic";
   }

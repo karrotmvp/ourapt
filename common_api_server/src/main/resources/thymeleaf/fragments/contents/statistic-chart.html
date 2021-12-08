@@ -54,10 +54,12 @@
                 <button class="btn btn-primary" onclick="
                     const funnelStartDate = document.getElementById('funnel_date_start').value;
                     const funnelEndDate = document.getElementById('funnel_date_end').value;
+                    search.set('funnel_start_date', Date.parse(funnelStartDate) + '');
+                    search.set('funnel_end_date', Date.parse(funnelEndDate) + '');
                     if (!funnelStartDate || !funnelEndDate || funnelStartDate.length === 0 || funnelEndDate.length === 0) {
                         alert('퍼널 설정 날짜를 확인하세요');
                     } else {
-                        window.location.href=`/admin/statistic?funnel_start_date=${Date.parse(funnelStartDate)}&funnel_end_date=${Date.parse(funnelEndDate)}`;
+                        window.location.href=`/admin/statistic?${search.toString()}`;
                     }
                 ">이 날짜의 퍼널 데이터 조회
                 </button>
@@ -78,13 +80,49 @@
                 <h1>리텐션</h1>
             </div>
         </div>
+
         <div class = "row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-title"><h3>코호트(메인피드 기준)</h3></div>
+                    <label>
+                        <input
+                                id="cohort_date"
+                                type="date"
+                                name="cohort_date"
+                                style="margin-right: 10px; padding-left: 10px; padding-right: 10px; font-weight: bold; max-height: 34px;"/>
+                    </label>
+                    <script>
+                        const cohortDateParam = search.get("cohort_date");
+                        document.getElementById('cohort_date').value = cohortDateParam ? formatDate(new Date(Number(cohortDateParam))) : formatDate(new Date());
+                    </script>
+                    <button class="btn btn-primary" onclick="
+                        const cohortDate = document.getElementById('cohort_date').value;
+                        search.set('cohort_date', Date.parse(cohortDate) + '');
+                        if (!cohortDate || cohortDate.length === 0) {
+                            alert('리텐션 설정 날짜를 확인하세요');
+                        } else {
+                            window.location.href=`/admin/statistic?${search.toString()}`;
+                        }
+                    ">이 날짜 이전 7일간의 리텐션 데이터 조회
+                    </button>
+                    <div class="card-title"><h3>코호트(메인피드 최초사용자 기준)</h3></div>
                     <div class="card-body">
+                        <style>
+                            table {
+                                width: 100%;
+                            }
+                            table, th, td {
+                                text-align: center;
+                                border: 1px solid;
+                            }
+                            td > p {
+                                font-size: 13px;
+                                margin: 1px auto 1px auto;
+                            }
+                        </style>
                         <table>
                             <thead>
+                                <th>날짜</th>
                                 <th>+0일</th>
                                 <th>+1일</th>
                                 <th>+2일</th>
@@ -95,9 +133,11 @@
                                 <th>+7일</th>
                             </thead>
                             <tbody>
-                                <tr th:each="date : ${cohort}">
-                                    <td th:each="data : ${date}">
-                                        <p th:text="${data}"></p>
+                                <tr th:each="row, index : ${cohort.data}">
+                                    <td th:text="${#dates.format(cohort.dates[index.index], 'MM.dd')}" style="background-color: #CCCCCC"></td>
+                                    <td th:each="col : ${row}">
+                                        <p th:text="${#strings.concat(cohort.initialValue[index.index], ' x')}"></p>
+                                        <p th:text="${col > 0 ? #strings.concat(col * 100, '%') : '-'}"></p>
                                     </td>
                                 </tr>
                             </tbody>

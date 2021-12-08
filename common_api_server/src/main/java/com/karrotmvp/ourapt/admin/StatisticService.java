@@ -53,7 +53,7 @@ public class StatisticService {
     };
   }
 
-  public Double[][] getCohortRetention(Date pointOfView) {
+  public CohortDto getCohortRetention(Date pointOfView) {
     Date[] firstDates= IntStream.range(0, 8)
       .mapToObj(useCountedDateGetterFromAWeekAgo(pointOfView))
       .toArray(Date[]::new);
@@ -78,7 +78,7 @@ public class StatisticService {
           : -1;
       });
     });
-    return cohort;
+    return new CohortDto(firstDates, countDailyFirstVisitor, cohort);
   }
   private Date addDate(Date source, int amount) {
     Calendar calendar = Calendar.getInstance();
