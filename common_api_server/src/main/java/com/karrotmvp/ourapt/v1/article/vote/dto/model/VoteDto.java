@@ -22,7 +22,7 @@ public class VoteDto {
   @NotNull
   private Boolean byAdmin;
   @NotNull
-  private Boolean isPinned;
+  private Boolean isInProgress;
   @NotNull
   private List<VoteItemDto> items;
   @NotNull

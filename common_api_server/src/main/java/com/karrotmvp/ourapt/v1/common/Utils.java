@@ -36,4 +36,11 @@ public class Utils {
         random.setSeed(System.currentTimeMillis());
         return random.nextInt(max);
     }
+
+    public static Date addDate(Date source, int amount) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(source);
+        calendar.add(Calendar.DATE, amount);
+        return calendar.getTime();
+    }
 }

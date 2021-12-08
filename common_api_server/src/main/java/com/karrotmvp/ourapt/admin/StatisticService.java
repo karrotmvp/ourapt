@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
+import static com.karrotmvp.ourapt.v1.common.Utils.addDate;
+
 @Service
 @AllArgsConstructor
 public class StatisticService {
@@ -79,12 +81,6 @@ public class StatisticService {
       });
     });
     return new CohortDto(firstDates, countDailyFirstVisitor, cohort);
-  }
-  private Date addDate(Date source, int amount) {
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(source);
-    calendar.add(Calendar.DATE, amount);
-    return calendar.getTime();
   }
 
   private IntFunction<Date> useCountedDateGetterFromAWeekAgo(Date pointOfView) {

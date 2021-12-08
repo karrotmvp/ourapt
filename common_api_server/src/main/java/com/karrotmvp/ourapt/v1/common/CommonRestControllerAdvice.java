@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -47,7 +48,8 @@ public class CommonRestControllerAdvice {
     HttpMediaTypeNotSupportedException.class,
     MethodArgumentNotValidException.class,
     RequestHeaderNotFoundException.class,
-    ViolatingConsistencyInputException.class
+    ViolatingConsistencyInputException.class,
+    MissingServletRequestParameterException.class
   })
   public CommonResponseBody<Void> handleHttpMessageNotReadableException(
     HttpServletRequest request,

@@ -30,7 +30,7 @@ public class Question extends Article {
         super();
     }
 
-    public boolean isPinned() {
+    public boolean isInProgress() {
         return this.pinnedUntil != null && new Date().before(this.pinnedUntil);
     }
 

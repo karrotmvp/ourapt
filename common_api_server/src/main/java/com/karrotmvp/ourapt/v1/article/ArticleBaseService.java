@@ -2,7 +2,6 @@ package com.karrotmvp.ourapt.v1.article;
 
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NoPermissionException;
-import com.karrotmvp.ourapt.v1.common.exception.application.ViolatingConsistencyInputException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,14 +27,7 @@ public abstract class ArticleBaseService<T extends Article, D> {
     return mapper.map(this.safelyGetById(articleId), this.getClassOfDomainModel());
   }
 
-  public D getPinnedOneOfApartment(String apartmentId) {
-    List<T> pinned = this.articleCustomRepository.findByApartmentIdAndPinned(apartmentId);
-    if (pinned.size() == 0) {
-      throw new DataNotFoundFromDBException("There is no available pinned article");
-    }
-    return mapper.map(pinned.get(0), this.getClassOfDomainModel());
-  }
-
+  // not used
   public List<D> getPageOfApartmentWithDateCursor(String apartmentId, Date cursor, int perPage) {
     return this.articleCustomRepository
       .findFirstByApartmentIdToAndDateCursorByOrderByDesc(apartmentId, cursor, PageRequest.of(0, perPage))
@@ -81,18 +73,19 @@ public abstract class ArticleBaseService<T extends Article, D> {
   }
 
   @Transactional
-  public void pin(String articleId, Date until) {
+  public void restart(String articleId, Date until) {
     T target = this.safelyGetById(articleId);
-    List<T> alreadyPinned = this.articleCustomRepository.findByApartmentIdAndPinned(target.getApartmentWhereCreated().getId());
-    if (alreadyPinned.size() > 0) {
-      throw new ViolatingConsistencyInputException("The only one article can pinned for one apartment");
-    }
+    List<T> alreadyPinned = this.articleCustomRepository
+      .findAllByApartmentIdOrderByCreatedAtDesc(target.getApartmentWhereCreated().getId())
+      .stream()
+      .filter(Article::isInProgress)
+      .collect(Collectors.toList());
     target.setPinnedUntil(until);
     this.articleRepository.save(target);
   }
 
   @Transactional
-  public void unpin(String articleId) {
+  public void forceQuit(String articleId) {
     T target = safelyGetById(articleId);
     target.setPinnedUntil(null);
     this.articleRepository.save(target);

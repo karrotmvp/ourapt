@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -29,16 +27,23 @@ public class VoteController {
   private final VoteService voteService;
   private final QuestionService questionService;
 
-  @GetMapping("/apartment/{apartmentId}/vote/pinned")
-  @ApiOperation(value = "아파트의 핀 투표 조회")
-  public CommonResponseBody<OneVoteDto> getRandomPinnedVoteOfApartment(
-    @PathVariable String apartmentId
+  @GetMapping("/apartment/{apartmentId}/votes")
+  @ApiOperation(value = "아파트의 진행중/종료된 투표 조회")
+  public CommonResponseBody<VoteListDto> getVotes(
+    @RequestParam(name = "terminated") boolean terminated,
+    @RequestParam(name = "perPage") @Max(value = 10) int perPage,
+    @RequestParam(name = "cursor") long cursorTimestamp,
+    @PathVariable(name = "apartmentId") String apartmentId
   ) {
-    VoteDto pinned = this.voteService.getPinnedOneOfApartment(apartmentId);
-    List<QuestionDto> questionsOfPinned = this.questionService.getAllQuestionsAboutVote(pinned.getId());
-    return CommonResponseBody.<OneVoteDto>builder()
+    List<VoteDto> votes;
+    if (terminated) {
+      votes = this.voteService.getVotesTerminatedInApartment(apartmentId);
+    } else {
+      votes = this.voteService.getVotesInProgressInApartment(apartmentId);
+    }
+    return CommonResponseBody.<VoteListDto>builder()
       .success()
-      .data(new OneVoteDto(pinned, questionsOfPinned))
+      .data(new VoteListDto(votes))
       .build();
   }
 
@@ -93,18 +98,4 @@ public class VoteController {
       .build();
   }
 
-  @GetMapping("/apartment/{apartmentId}/votes")
-  @ApiOperation(value = "아파트의 unpinned 투표들 Date 커서로 페이징 조회")
-  public CommonResponseBody<VoteListDto> getVoteById(
-    @RequestParam(name = "perPage") @Max(value = 10) int perPage,
-    @RequestParam(name = "cursor") long cursorTimestamp,
-    @PathVariable(name = "apartmentId") String apartmentId
-  ) {
-    List<VoteDto> votes = this.voteService.getPageOfApartmentWithDateCursor(apartmentId, new Date(cursorTimestamp), perPage)
-      .stream().filter(vote -> !vote.getIsPinned()).collect(Collectors.toList());
-    return CommonResponseBody.<VoteListDto>builder()
-      .success()
-      .data(new VoteListDto(votes))
-      .build();
-  }
 }

@@ -64,14 +64,15 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
   }
 
   @Override
-  public List<Vote> findByApartmentIdAndPinned(String apartmentId) {
+  public List<Vote> findAllByApartmentIdOrderByCreatedAtDesc(String apartmentId) {
     TypedQuery<Vote> query = em.createQuery(
       "SELECT v FROM Vote v " +
         "LEFT JOIN FETCH v.writer " +
         "LEFT JOIN FETCH v.apartmentWhereCreated " +
-        "WHERE v.apartmentWhereCreated.id = ?1 AND v.pinnedUntil >= ?2 AND v.deletedAt IS NULL", Vote.class);
+        "WHERE v.apartmentWhereCreated.id = ?1 " +
+        "AND v.deletedAt IS NULL " +
+        "ORDER BY v.createdAt DESC", Vote.class);
     query.setParameter(1, apartmentId);
-    query.setParameter(2, new Date());
     return joinOnKarrotProfileAndCommentCount(query);
   }
 

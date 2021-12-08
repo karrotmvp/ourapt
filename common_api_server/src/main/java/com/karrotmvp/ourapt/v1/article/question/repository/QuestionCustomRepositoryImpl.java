@@ -63,14 +63,14 @@ public class QuestionCustomRepositoryImpl extends ArticleBaseCustomRepository<Qu
   }
 
   @Override
-  public List<Question> findByApartmentIdAndPinned(String apartmentId) {
+  public List<Question> findAllByApartmentIdOrderByCreatedAtDesc(String apartmentId) {
     TypedQuery<Question> query = em.createQuery(
       "SELECT q FROM Question q " +
         "LEFT JOIN FETCH q.writer " +
         "LEFT JOIN FETCH q.apartmentWhereCreated " +
-        "WHERE q.apartmentWhereCreated.id = ?1 AND q.pinnedUntil >= ?2 AND q.deletedAt IS NULL", Question.class);
+        "WHERE q.apartmentWhereCreated.id = ?1 " +
+        "AND q.deletedAt IS NULL", Question.class);
     query.setParameter(1, apartmentId);
-    query.setParameter(2, new Date());
     return joinOnKarrotProfileAndCommentCount(query);
   }
 

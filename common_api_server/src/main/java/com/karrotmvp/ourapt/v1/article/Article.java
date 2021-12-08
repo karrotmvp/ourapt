@@ -63,7 +63,7 @@ public abstract class Article extends BaseEntity {
     super();
   }
 
-  public boolean isPinned() {
+  public boolean isInProgress() {
     return this.pinnedUntil != null && new Date().before(this.pinnedUntil);
   }
 

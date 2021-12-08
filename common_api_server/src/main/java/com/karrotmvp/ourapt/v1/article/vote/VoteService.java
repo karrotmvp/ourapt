@@ -1,5 +1,6 @@
 package com.karrotmvp.ourapt.v1.article.vote;
 
+import com.karrotmvp.ourapt.v1.article.Article;
 import com.karrotmvp.ourapt.v1.article.ArticleBaseService;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteWithWhereCreatedDto;
@@ -22,9 +23,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static com.karrotmvp.ourapt.v1.common.Utils.addDate;
 
 @Service
 public class VoteService extends ArticleBaseService<Vote, VoteDto> {
@@ -42,10 +46,25 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
     this.userService = userService;
   }
 
+  public List<VoteDto> getVotesInProgressInApartment(String apartmentId) {
+    return this.articleCustomRepository.findAllByApartmentIdOrderByCreatedAtDesc(apartmentId)
+      .stream()
+      .filter(Article::isInProgress)
+      .map(v -> mapper.map(v,VoteDto.class))
+      .collect(Collectors.toList());
+  }
+
+  public List<VoteDto> getVotesTerminatedInApartment(String apartmentId) {
+    return this.articleCustomRepository.findAllByApartmentIdOrderByCreatedAtDesc(apartmentId)
+      .stream()
+      .filter(v -> !v.isInProgress())
+      .map(v -> mapper.map(v,VoteDto.class))
+      .collect(Collectors.toList());
+  }
+
   public List<VoteWithWhereCreatedDto> getVotesAndOriginWithOffsetCursor(int perPage, int pageNum) {
     return this.getPageAndOriginWithOffsetCursor(perPage, pageNum, VoteWithWhereCreatedDto.class);
   }
-
 
   @Transactional(rollbackFor = RuntimeException.class)
   public VoteDto writeNewVote(VoteContentDto content, String writerId, String regionId) {
@@ -56,6 +75,7 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
     created.setWriter(writer);
     created.setMainText(content.getMainText());
     created.setRegionWhereCreated(regionId);
+    created.setPinnedUntil(addDate(new Date(), 7)); // terminated after 1 week
     if (writer.getCheckedIn() == null) {
       throw new NotCheckedInUserException();
     }

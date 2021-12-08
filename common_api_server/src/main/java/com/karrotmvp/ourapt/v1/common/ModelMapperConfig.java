@@ -56,14 +56,12 @@ public class ModelMapperConfig {
       mapper -> {
         mapper.map((q) -> q.getWriter().getProfile(), QuestionDto::setWriter);
         mapper.map(Question::isByAdmin, QuestionDto::setByAdmin);
-        mapper.map(Question::isPinned, QuestionDto::setIsPinned);
       }
     );
     modelMapper.typeMap(Question.class, QuestionWithWhereCreatedDto.class).addMappings(
       mapper -> {
         mapper.map((q) -> q.getWriter().getProfile(), QuestionWithWhereCreatedDto::setWriter);
         mapper.map(Question::isByAdmin, QuestionWithWhereCreatedDto::setByAdmin);
-        mapper.map(Question::isPinned, QuestionWithWhereCreatedDto::setIsPinned);
       }
     );
 
@@ -72,14 +70,14 @@ public class ModelMapperConfig {
       mapper -> {
         mapper.map((v) -> v.getWriter().getProfile(), VoteDto::setWriter);
         mapper.map(Vote::isByAdmin, VoteDto::setByAdmin);
-        mapper.map(Vote::isPinned, VoteDto::setIsPinned);
+        mapper.map(Vote::isInProgress, VoteDto::setIsInProgress);
       }
     );
     modelMapper.typeMap(Vote.class, VoteWithWhereCreatedDto.class).addMappings(
       mapper -> {
         mapper.map((v) -> v.getWriter().getProfile(), VoteWithWhereCreatedDto::setWriter);
         mapper.map(Vote::isByAdmin, VoteWithWhereCreatedDto::setByAdmin);
-        mapper.map(Vote::isPinned, VoteWithWhereCreatedDto::setIsPinned);
+        mapper.map(Vote::isInProgress, VoteWithWhereCreatedDto::setIsInProgress);
       }
     );
     modelMapper.typeMap(VoteItem.class, VoteItemDto.class).addMappings(

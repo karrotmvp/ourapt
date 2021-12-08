@@ -35,10 +35,6 @@ public class QuestionService extends ArticleBaseService<Question, QuestionDto> {
     this.voteService = voteService;
   }
 
-  public List<QuestionWithWhereCreatedDto> getQuestionsAndOriginWithOffsetCursor(int perPage, int pageNum) {
-    return this.getPageAndOriginWithOffsetCursor(perPage, pageNum, QuestionWithWhereCreatedDto.class);
-  }
-
   public QuestionWithWhereCreatedDto getQuestionsAndOriginById(String questionId) {
     Question found = this.safelyGetById(questionId);
     return mapper.map(found, QuestionWithWhereCreatedDto.class);
