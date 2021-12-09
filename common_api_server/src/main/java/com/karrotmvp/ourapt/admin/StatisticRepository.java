@@ -119,28 +119,31 @@ public interface StatisticRepository extends JpaRepository<RequestLog, Long> {
   ;
 
   @Query(value =
-    "SELECT COUNT(DISTINCT (rl.user_id)) " +
+    "SELECT COUNT(DISTINCT(frl.user_id)) as first_user_id " +
       "FROM first_request_log frl " +
       "INNER JOIN request_log rl ON frl.user_id = rl.user_id " +
-      "WHERE DATE_FORMAT(frl.created_at, '%Y-%m-%d') = ?1 " +
-      "AND rl.path LIKE '/api/v1/apartment/%/vote/pinned' " +
-      "AND rl.method = 'GET' ", nativeQuery = true)
+      "AND DATE_FORMAT(frl.created_at, '%Y-%m-%d') = DATE_FORMAT(rl.created_at, '%Y-%m-%d') " +
+      "AND DATE_FORMAT(frl.created_at, '%Y-%m-%d') = ?1 " +
+      "AND (path LIKE '/api/v1/apartment/%/vote/pinned' OR path LIKE '/api/v1/apartment/%/votes') " +
+      "AND method = 'GET'", nativeQuery = true)
   Long countDailyFirstFeedView(String dateString);
 
   @Query(value =
-    "SELECT COUNT(DISTINCT(rl.user_id)) " +
-      "FROM request_log rl " +
+    "SELECT COUNT(DISTINCT(rl2.user_id)) as retention_user_id " +
+      "FROM request_log rl2 " +
       "INNER JOIN " +
       "( " +
-      "SELECT frl.user_id, rl.path, rl.method, frl.created_at " +
+      "SELECT frl.user_id, rl1.path, rl1.method, frl.created_at " +
       "FROM first_request_log frl " +
-      "INNER JOIN request_log rl ON frl.user_id = rl.user_id " +
-      ") ffv ON ffv.user_id =rl.user_id " +
-      "WHERE DATE_FORMAT(ffv.created_at, '%Y-%m-%d') = ?1 " +
-      "AND DATE_FORMAT(rl.created_at, '%Y-%m-%d') = ?2 " +
-      "AND ffv.path LIKE  '/api/v1/apartment/%/vote/pinned' " +
-      "AND rl.path LIKE '/api/v1/apartment/%/vote/pinned' " +
-      "AND ffv.method ='GET' " +
-      "AND rl.method ='GET' ", nativeQuery = true)
+      "INNER JOIN request_log rl1 ON frl.user_id = rl1.user_id " +
+      "AND DATE_FORMAT(frl.created_at, '%Y-%m-%d') = DATE_FORMAT(rl1.created_at, '%Y-%m-%d') " +
+      ") ffv " +
+      "ON ffv.user_id = rl2.user_id " +
+      "AND DATE_FORMAT(ffv.created_at, '%Y-%m-%d') = ?1 " +
+      "AND DATE_FORMAT(rl2.created_at, '%Y-%m-%d') = ?2 " +
+      "AND (ffv.path LIKE '/api/v1/apartment/%/vote/pinned' OR ffv.path LIKE '/api/v1/apartment/%/votes') " +
+      "AND ffv.method = 'GET' " +
+      "AND (rl2.path LIKE '/api/v1/apartment/%/vote/pinned' OR rl2.path LIKE '/api/v1/apartment/%/votes') " +
+      "AND rl2.method = 'GET';", nativeQuery = true)
   Long countRetentionUsers(String firstVisitDateString, String comparingDateString);
 }
