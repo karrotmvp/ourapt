@@ -123,6 +123,7 @@
                         <table>
                             <thead>
                                 <th>날짜</th>
+                                <th>기준(+0일)</th>
                                 <th>+0일</th>
                                 <th>+1일</th>
                                 <th>+2일</th>
@@ -135,8 +136,8 @@
                             <tbody>
                                 <tr th:each="row, index : ${cohort.data}">
                                     <td th:text="${#dates.format(cohort.dates[index.index], 'MM.dd')}" style="background-color: #CCCCCC"></td>
+                                    <td th:text="${cohort.initialValue[index.index]}"></td>
                                     <td th:each="col : ${row}">
-                                        <p th:text="${#strings.concat(cohort.initialValue[index.index], ' x')}"></p>
                                         <p th:text="${col > 0 ? #strings.concat(col * 100, '%') : '-'}"></p>
                                     </td>
                                 </tr>
