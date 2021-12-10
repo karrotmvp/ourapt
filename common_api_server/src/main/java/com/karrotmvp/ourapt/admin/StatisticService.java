@@ -71,12 +71,12 @@ public class StatisticService {
       IntStream.range(0, 8 - i).forEach((j) -> {
         cohort[i][j] = countDailyFirstVisitor[i] != 0
           ?
-          (
+          Math.round((
             statisticRepository.countRetentionUsers(
               this.dateFormatter.format(firstDates[i]),
               this.dateFormatter.format(addDate(firstDates[i], j))
             ).doubleValue() / countDailyFirstVisitor[i].doubleValue()
-          )
+          ) * 1000) / 1000.0
           : -1;
       });
     });
