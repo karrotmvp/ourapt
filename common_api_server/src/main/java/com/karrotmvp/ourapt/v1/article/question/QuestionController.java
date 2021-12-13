@@ -9,12 +9,14 @@ import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/api/v1")
 @Api(tags = "4-1. 투표에 대한 질문")
+@ApiIgnore
 public class QuestionController {
 
   private final QuestionService questionService;
@@ -23,28 +25,14 @@ public class QuestionController {
     this.questionService = questionService;
   }
 
-  @GetMapping(value = "/question/{questionId}")
-  @ApiOperation(value = "ID로 질문 게시글 조회")
-  public CommonResponseBody<OneQuestionDto> getQuestionById(
-    @PathVariable(name = "questionId") String questionId
-  ) {
-    return CommonResponseBody.<OneQuestionDto>builder()
-      .success()
-      .data(new OneQuestionDto(this.questionService.getOneById(questionId)))
-      .build();
-  }
-
-
-
-  @PostMapping(value = "/vote/{voteId}/question")
+  @PostMapping(value = "/question")
   @ApiOperation(value = "새로운 질문 게시글 작성")
   public CommonResponseBody<OneQuestionDto> writeNewQuestion(
-    @PathVariable String voteId,
     @RequestBody @Valid QuestionContentDto questionContent,
     @RequestHeader(name = "Region-Id") String regionId,
     @CurrentUser KarrotProfile userProfile
   ) {
-    QuestionDto createdQuestion = this.questionService.writeNewQuestion(questionContent, userProfile.getId(), regionId, voteId);
+    QuestionDto createdQuestion = this.questionService.writeNewQuestion(questionContent, userProfile.getId(), regionId);
     return CommonResponseBody.<OneQuestionDto>builder()
       .data(new OneQuestionDto(createdQuestion))
       .success()

@@ -39,7 +39,6 @@ public class QuestionCustomRepositoryImpl extends ArticleBaseCustomRepository<Qu
           Static.makeAdminKarrotProfile(question.getWriter().getId()) :
           karrotOAPI.getKarrotUserProfileById(question.getWriter().getId());
       question.getWriter().setProfile(profileOfWriter);
-      question.setCountOfComments(Math.toIntExact(this.countByParentId(question.getId())));
       return Optional.of(question);
     } catch (NoResultException ne) {
       return Optional.empty();
@@ -59,7 +58,7 @@ public class QuestionCustomRepositoryImpl extends ArticleBaseCustomRepository<Qu
     query.setParameter(2, dateCursor);
     query.setFirstResult(0);
     query.setMaxResults(pageable.getPageSize());
-    return joinOnKarrotProfileAndCommentCount(query);
+    return joinOnKarrotProfile(query);
   }
 
   @Override
@@ -71,7 +70,7 @@ public class QuestionCustomRepositoryImpl extends ArticleBaseCustomRepository<Qu
         "WHERE q.apartmentWhereCreated.id = ?1 " +
         "AND q.deletedAt IS NULL", Question.class);
     query.setParameter(1, apartmentId);
-    return joinOnKarrotProfileAndCommentCount(query);
+    return joinOnKarrotProfile(query);
   }
 
   @Override
@@ -84,19 +83,7 @@ public class QuestionCustomRepositoryImpl extends ArticleBaseCustomRepository<Qu
         "ORDER BY q.createdAt DESC", Question.class);
     query.setFirstResult(Math.toIntExact(pageable.getOffset()));
     query.setMaxResults(pageable.getPageSize());
-    return joinOnKarrotProfileAndCommentCount(query);
+    return joinOnKarrotProfile(query);
   }
 
-  @Override
-  public List<Question> findByAboutId(String voteId) {
-    TypedQuery<Question> query = em.createQuery(
-      "SELECT q FROM Question q " +
-        "LEFT JOIN FETCH q.writer " +
-        "LEFT JOIN FETCH q.apartmentWhereCreated " +
-        "WHERE q.deletedAt IS NULL " +
-        "AND q.about.id = ?1", Question.class
-    );
-    query.setParameter(1, voteId);
-    return joinOnKarrotProfileAndCommentCount(query);
-  }
 }

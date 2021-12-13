@@ -73,25 +73,6 @@ public abstract class ArticleBaseService<T extends Article, D> {
   }
 
   @Transactional
-  public void restart(String articleId, Date until) {
-    T target = this.safelyGetById(articleId);
-    List<T> alreadyPinned = this.articleCustomRepository
-      .findAllByApartmentIdOrderByCreatedAtDesc(target.getApartmentWhereCreated().getId())
-      .stream()
-      .filter(Article::isInProgress)
-      .collect(Collectors.toList());
-    target.setPinnedUntil(until);
-    this.articleRepository.save(target);
-  }
-
-  @Transactional
-  public void forceQuit(String articleId) {
-    T target = safelyGetById(articleId);
-    target.setPinnedUntil(new Date());
-    this.articleRepository.save(target);
-  }
-
-  @Transactional
   public D deleteById(String articleId) {
     T toDelete = this.safelyGetById(articleId);
     toDelete.setDeletedAt(new Date());

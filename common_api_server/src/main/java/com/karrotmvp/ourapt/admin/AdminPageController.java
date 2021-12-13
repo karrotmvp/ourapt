@@ -2,13 +2,10 @@ package com.karrotmvp.ourapt.admin;
 
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
 import com.karrotmvp.ourapt.v1.apartment.dto.model.ApartmentDto;
+import com.karrotmvp.ourapt.v1.article.comment.CommentService;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
-import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
-import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.article.vote.VoteService;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteWithWhereCreatedDto;
-import com.karrotmvp.ourapt.v1.comment.CommentService;
-import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.user.UserService;
 import com.karrotmvp.ourapt.v1.user.dto.model.UserDto;
 import lombok.AllArgsConstructor;
@@ -72,30 +69,6 @@ public class AdminPageController {
     return "pages/users";
   }
 
-  @GetMapping("/questions")
-  public String renderQuestionList(
-    Model model,
-    @RequestParam String voteId
-  ) {
-    List<QuestionDto> questions = this.questionService.getAllQuestionsAboutVote(voteId);
-    model.addAttribute("questions", questions);
-    model.addAttribute("voteId", voteId);
-    return "pages/questions";
-  }
-
-  @GetMapping("/question/detail")
-  public String renderQuestionDetail(
-    Model model,
-    @RequestParam String id
-  ) {
-    QuestionWithWhereCreatedDto question = this.questionService.getQuestionsAndOriginById(id);
-    List<CommentDto> comments = this.commentService.getCommentsByQuestionId(id);
-    model.addAttribute("question", question);
-    model.addAttribute("comments", comments);
-    return "pages/question-detail";
-  }
-
-
   @GetMapping("/votes")
   public String renderVoteList(
     Model model,
@@ -113,6 +86,16 @@ public class AdminPageController {
     model.addAttribute("apartments", apartments);
 
     return "pages/votes";
+  }
+
+  @GetMapping("/comments")
+  public String renderComments(
+    Model model,
+    @RequestParam(name = "article_id") String articleId
+  ) {
+    model.addAttribute("comments", this.commentService.getCommentsByArticleId(articleId));
+    model.addAttribute("articleId", articleId);
+    return "pages/comments";
   }
 
   @GetMapping("/statistic")

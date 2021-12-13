@@ -31,9 +31,9 @@
             <td th:text="${vote.writer.nickname}"></td>
             <td th:with="mainTextLength=${#strings.length(vote.mainText)}">
                 <a
-                        th:href="${#strings.concat('/admin/questions?voteId=', vote.id)}"
+                        th:href="${#strings.concat('/admin/comments?article_id=', vote.id)}"
                         th:text="${#strings.substring(vote.mainText, 0,
-                        mainTextLength <= 35 ? mainTextLength : 35)}"
+                        (mainTextLength <= 35 ? mainTextLength : 35))}"
                 ></a>
             </td>
             <td th:text="${vote.byAdmin ? 'O' : 'X'}"></td>

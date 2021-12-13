@@ -1,6 +1,5 @@
 package com.karrotmvp.ourapt.v1.article.vote;
 
-import com.karrotmvp.ourapt.v1.article.Article;
 import com.karrotmvp.ourapt.v1.article.ArticleBaseService;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteWithWhereCreatedDto;
@@ -50,7 +49,7 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
   public List<VoteDto> getVotesInProgressInApartment(String apartmentId) {
     return this.articleCustomRepository.findAllByApartmentIdOrderByCreatedAtDesc(apartmentId)
       .stream()
-      .filter(Article::isInProgress)
+      .filter(Vote::isInProgress)
       .map(v -> mapper.map(v,VoteDto.class))
       .collect(Collectors.toList());
   }
@@ -76,7 +75,7 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
     created.setWriter(writer);
     created.setMainText(content.getMainText());
     created.setRegionWhereCreated(regionId);
-    created.setPinnedUntil(addDate(new Date(), Static.DATE_TO_VOTE_LIVE)); // terminated after 1 week
+    created.setTerminatedAt(addDate(new Date(), Static.DATE_TO_VOTE_LIVE)); // terminated after 1 week
     if (writer.getCheckedIn() == null) {
       throw new NotCheckedInUserException();
     }
@@ -122,6 +121,25 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
       this.votingRepository.deleteById(new VotingId(userId, voteItemId));
     } catch (EmptyResultDataAccessException ignored) {
     }
+  }
+
+  @Transactional
+  public void restart(String voteId, Date until) {
+    Vote target = this.safelyGetById(voteId);
+    List<Vote> alreadyPinned = this.articleCustomRepository
+      .findAllByApartmentIdOrderByCreatedAtDesc(target.getApartmentWhereCreated().getId())
+      .stream()
+      .filter(Vote::isInProgress)
+      .collect(Collectors.toList());
+    target.setTerminatedAt(until);
+    this.articleRepository.save(target);
+  }
+
+  @Transactional
+  public void forceQuit(String voteId) {
+    Vote target = safelyGetById(voteId);
+    target.setTerminatedAt(new Date());
+    this.articleRepository.save(target);
   }
 
   private List<Voting> getVotingsOfUserForVote(String userId, String voteId) {

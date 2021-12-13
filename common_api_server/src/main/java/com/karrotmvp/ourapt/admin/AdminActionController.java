@@ -1,6 +1,8 @@
 package com.karrotmvp.ourapt.admin;
 
 import com.karrotmvp.ourapt.v1.apartment.ApartmentService;
+import com.karrotmvp.ourapt.v1.article.comment.CommentService;
+import com.karrotmvp.ourapt.v1.article.comment.dto.request.WriteNewCommentDto;
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
 import com.karrotmvp.ourapt.v1.article.question.dto.request.QuestionContentDto;
 import com.karrotmvp.ourapt.v1.article.vote.VoteService;
@@ -25,6 +27,7 @@ public class AdminActionController {
   private final ApartmentService apartmentService;
   private final QuestionService questionService;
   private final VoteService voteService;
+  private final CommentService commentService;
 
   @GetMapping(value = "/active-apartment.do")
   public RedirectView doTurnOnApartmentAction(
@@ -77,8 +80,7 @@ public class AdminActionController {
     this.questionService.writeNewQuestion(
       new QuestionContentDto(mainText),
       ADMIN_USER_ID,
-      regionId,
-      voteId
+      regionId
     );
     rd.setUrl("/admin/questions?voteId=" + voteId);
     return rd;
@@ -102,27 +104,6 @@ public class AdminActionController {
     return rd;
   }
 
-  // TODO: Refactor
-  @PostMapping("/pin-question.do")
-  public RedirectView doPinQuestionAction(
-    RedirectView rd,
-    @RequestParam String id
-  ) {
-    this.questionService.restart(id, Utils.addDate(new Date(), Static.DATE_TO_VOTE_LIVE));
-    rd.setUrl("/admin/questions?perPage=20&pageNum=1");
-    return rd;
-  }
-
-  @PostMapping("/unpin-question.do")
-  public RedirectView doUnpinQuestionAction(
-    RedirectView rd,
-    @RequestParam String id
-  ) {
-    this.questionService.forceQuit(id);
-    rd.setUrl("/admin/questions?perPage=20&pageNum=1");
-    return rd;
-  }
-
   @PostMapping("/delete-question.do")
   public RedirectView deleteQuestion(
     RedirectView rd,
@@ -133,6 +114,7 @@ public class AdminActionController {
     rd.setUrl(referrer);
     return rd;
   }
+
 
   @PostMapping("/pin-vote.do")
   public RedirectView doPinVoteAction(
@@ -161,6 +143,31 @@ public class AdminActionController {
   ) {
     this.voteService.deleteById(id);
     rd.setUrl("/admin/votes?perPage=20&pageNum=1");
+    return rd;
+  }
+
+  @PostMapping("/new-comment.do")
+  public RedirectView writeNewComment(
+    RedirectView rd,
+    @RequestHeader(value = HttpHeaders.REFERER) final String referrer,
+    @RequestParam(name = "articleId") String articleId,
+    @RequestParam(name = "regionId") String regionId,
+    @RequestParam(name = "mainText") String mainText
+  ) {
+    final String ADMIN_USER_ID = "ADMIN";
+    this.commentService.writeNewComment(new WriteNewCommentDto(mainText), articleId, ADMIN_USER_ID, regionId);
+    rd.setUrl(referrer);
+    return rd;
+  }
+
+  @PostMapping("/delete-comment.do")
+  public RedirectView deleteComment(
+    RedirectView rd,
+    @RequestHeader(value = HttpHeaders.REFERER) final String referrer,
+    @RequestParam String id
+  ) {
+    this.commentService.deleteCommentById(id);
+    rd.setUrl(referrer);
     return rd;
   }
 

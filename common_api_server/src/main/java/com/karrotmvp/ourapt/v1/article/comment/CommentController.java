@@ -1,11 +1,11 @@
-package com.karrotmvp.ourapt.v1.comment;
+package com.karrotmvp.ourapt.v1.article.comment;
 
 
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
-import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
-import com.karrotmvp.ourapt.v1.comment.dto.request.WriteNewCommentDto;
-import com.karrotmvp.ourapt.v1.comment.dto.response.GetCommentsOfQuestionDto;
-import com.karrotmvp.ourapt.v1.comment.dto.response.OneCommentDto;
+import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
+import com.karrotmvp.ourapt.v1.article.comment.dto.request.WriteNewCommentDto;
+import com.karrotmvp.ourapt.v1.article.comment.dto.response.CommentListDto;
+import com.karrotmvp.ourapt.v1.article.comment.dto.response.OneCommentDto;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import io.swagger.annotations.Api;
@@ -27,15 +27,14 @@ public class CommentController {
   }
 
   @GetMapping(value = "/article/{articleId}/comments")
-  @ApiOperation(value = "질문에 달린 게시글 보기")
-  public CommonResponseBody<GetCommentsOfQuestionDto> getCommentsOfQuestion(
+  @ApiOperation(value = "게시글에 달린 게시글 보기")
+  public CommonResponseBody<CommentListDto> getCommentsOfQuestion(
     @PathVariable String articleId
   ) {
-    List<CommentDto> comments = this.commentService.getCommentsByQuestionId(articleId);
-
-    return CommonResponseBody.<GetCommentsOfQuestionDto>builder()
+    List<CommentDto> comments = this.commentService.getCommentsByArticleId(articleId);
+    return CommonResponseBody.<CommentListDto>builder()
       .success()
-      .data(new GetCommentsOfQuestionDto(comments))
+      .data(new CommentListDto(comments))
       .build();
   }
 

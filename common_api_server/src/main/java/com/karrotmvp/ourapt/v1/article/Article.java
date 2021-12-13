@@ -30,7 +30,12 @@ public abstract class Article extends BaseEntity {
 
   @Column(name = "main_text")
   @Getter
-  private String mainText;
+  protected String mainText;
+
+  @Transient
+  @Getter
+  @Setter
+  private int countOfComments = 0;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "apartment_id", referencedColumnName = "id")
@@ -42,29 +47,15 @@ public abstract class Article extends BaseEntity {
   @Setter
   private String regionWhereCreated;
 
-  @Transient
-  @Getter
-  @Setter
-  private int countOfComments = 0;
-
   @Column(name = "deleted_at")
   @Temporal(TemporalType.TIMESTAMP)
   @Getter
   @Setter
   private Date deletedAt;
 
-  @Column(name = "pinned_until")
-  @Getter
-  @Setter
-  private Date pinnedUntil;
-
 
   public Article() {
     super();
-  }
-
-  public boolean isInProgress() {
-    return this.pinnedUntil != null && new Date().before(this.pinnedUntil);
   }
 
   public boolean isDeleted() {

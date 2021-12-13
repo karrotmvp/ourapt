@@ -1,0 +1,51 @@
+<div th:fragment="comment-list">
+    <div
+            th:replace="fragments/contents/comment-form.html :: comment-form"
+    ></div>
+    <div style="text-align: center">
+        <h1>댓글 관리</h1>
+    </div>
+    <br/>
+    <table class="table">
+        <thead>
+        <th>순번</th>
+        <th>ID</th>
+        <th>유저ID</th>
+        <th>닉네임</th>
+        <th>본문</th>
+        <th>작성일</th>
+        <th>수정일</th>
+        <th>삭제</th>
+        </thead>
+        <tbody>
+        <tr th:each="comment, index : ${comments}">
+            <td th:text="${index.index + 1}"></td>
+            <td th:text="${comment.id}"></td>
+            <td th:text="${comment.writer.id}"></td>
+            <td th:text="${comment.writer.nickname}"></td>
+            <td>
+                <a
+                    th:href="${#strings.concat('/admin/comments?article_id=', comment.id)}"
+                    th:text="${comment.mainText}"
+                >
+                </a>
+            </td>
+            <td
+                    th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}"
+            ></td>
+            <td
+                    th:text="${#dates.format(comment.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"
+            ></td>
+            <td>
+                <form
+                        action="/admin/action/delete-comment.do"
+                        method="post"
+                >
+                    <input type="hidden" name="id" th:value="${comment.id}"/>
+                    <button class="btn btn-danger">삭제</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,10 +1,11 @@
-package com.karrotmvp.ourapt.v1.comment;
+package com.karrotmvp.ourapt.v1.article.comment;
 
 import com.karrotmvp.ourapt.v1.article.Article;
+import com.karrotmvp.ourapt.v1.article.ArticleBaseService;
 import com.karrotmvp.ourapt.v1.article.ArticleRepository;
-import com.karrotmvp.ourapt.v1.comment.dto.model.CommentDto;
-import com.karrotmvp.ourapt.v1.comment.dto.request.WriteNewCommentDto;
-import com.karrotmvp.ourapt.v1.comment.repository.CommentRepository;
+import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
+import com.karrotmvp.ourapt.v1.article.comment.dto.request.WriteNewCommentDto;
+import com.karrotmvp.ourapt.v1.article.comment.repository.CommentRepository;
 import com.karrotmvp.ourapt.v1.common.exception.application.DataNotFoundFromDBException;
 import com.karrotmvp.ourapt.v1.common.exception.application.NotCheckedInUserException;
 import com.karrotmvp.ourapt.v1.common.exception.application.RegisteredUserNotFoundException;
@@ -20,36 +21,44 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CommentService {
+public class CommentService extends ArticleBaseService<Comment, CommentDto> {
 
-  private final ArticleRepository<Article> articleRepository;
   private final CommentRepository commentRepository;
   private final UserRepository userRepository;
-  private final ModelMapper mapper;
   private final UserService userService;
+  private final ArticleRepository<Article> commonArticleRepository;
 
-  public CommentService(ArticleRepository<Article> articleRepository, CommentRepository commentRepository, UserRepository userRepository, ModelMapper mapper, UserService userService) {
-    this.articleRepository = articleRepository;
+  public CommentService(
+    CommentRepository commentRepository,
+    ModelMapper mapper,
+    UserRepository userRepository,
+    ArticleRepository<Article> commonArticleRepository,
+    UserService userService
+  ) {
+    super(commentRepository, commentRepository, mapper);
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
-    this.mapper = mapper;
     this.userService = userService;
+    this.commonArticleRepository = commonArticleRepository;;
   }
 
-  public List<CommentDto> getCommentsByQuestionId(String articleId) {
-    List<Comment> foundComments = this.commentRepository.findByParentIdOrderByCreatedAtAsc(articleId);
+
+  public List<CommentDto> getCommentsByArticleId(String articleId) {
+    List<Comment> foundComments = this.commentRepository.findByParentId(articleId);
     return foundComments.stream()
       .map(c -> mapper.map(c, CommentDto.class))
       .collect(Collectors.toList());
   }
 
   @Transactional
-  public CommentDto writeNewComment(WriteNewCommentDto content, String articleId,  String writerId, String regionId) {
+  public CommentDto writeNewComment(WriteNewCommentDto content, String articleId, String writerId, String regionId) {
     User writer = this.userRepository.findById(writerId)
       .orElseThrow(RegisteredUserNotFoundException::new);
     this.userService.assertUserIsNotBanned(writer);
-    Article parent = this.articleRepository.findById(articleId)
+    Article parent = this.commonArticleRepository.findById(articleId)
       .orElseThrow(() -> new DataNotFoundFromDBException("Cannot find the Article matched with ID: " + articleId));
+    boolean parentIsComment = Comment.class.isAssignableFrom(parent.getClass());
+    // TODO: need logic to block subcomment of subcomment
     Comment comment = mapper.map(content, Comment.class);
     comment.setWriter(writer);
     comment.setRegionWhereCreated(regionId);
@@ -68,12 +77,13 @@ public class CommentService {
     this.commentRepository.save(toDelete);
   }
 
-  public int getCountOfAllComments() {
-    return Math.toIntExact(this.commentRepository.countByDeletedAtIsNull());
-  }
-
   private Comment safelyGetCommentById(String commentId) {
     return this.commentRepository.findById(commentId).orElseThrow(
       () -> new DataNotFoundFromDBException("Cannot found matched comment with id: " + commentId));
+  }
+
+  @Override
+  protected Class<CommentDto> getClassOfDomainModel() {
+    return CommentDto.class;
   }
 }

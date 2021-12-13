@@ -20,7 +20,7 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
     super(em, karrotOAPI);
   }
 
-  // SELECT 시 중복 때문에 OneToMany 관계는 eagar loading batchsize
+  // SELECT시 N+1 중복 때문에 OneToMany 관계는 eagar loading batchsize
   @Override
   public Optional<Vote> findById(String voteId) {
     TypedQuery<Vote> query = em.createQuery(
@@ -36,13 +36,26 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
           Static.makeAdminKarrotProfile(vote.getWriter().getId()) :
           karrotOAPI.getKarrotUserProfileById(vote.getWriter().getId())
       );
-      vote.setCountOfComments(Math.toIntExact(this.countByParentId(vote.getId())));
+      vote.setCountOfComments(Math.toIntExact(this.commentCountForParentId(vote.getId())));
       vote.sortItems();
       return Optional.of(vote);
     } catch (NoResultException ne) {
       return Optional.empty();
     }
   }
+
+  private long commentCountForParentId(String parentId) {
+    TypedQuery<Long> query = em.createQuery("SELECT COUNT(c) FROM Comment c " +
+      "WHERE " +
+        "(c.parent.id = ?1 " +
+            "OR c.parent.id IN " +
+              "(SELECT subc.id FROM Comment subc WHERE subc.parent.id = ?1)" +
+        ") " +
+        "AND c.deletedAt IS NULL", Long.class);
+    query.setParameter(1, parentId);
+    return query.getSingleResult();
+  }
+
 
   @Override
   public List<Vote> findFirstByApartmentIdToAndDateCursorByOrderByDesc(String apartmentId, Date dateCursor, Pageable pageable) {
@@ -60,7 +73,7 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
     query.setFirstResult(0);
     query.setMaxResults(pageable.getPageSize());
 
-    return joinOnKarrotProfileAndCommentCount(query);
+    return completeTransientAttribute(query);
   }
 
   @Override
@@ -73,7 +86,7 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
         "AND v.deletedAt IS NULL " +
         "ORDER BY v.createdAt DESC", Vote.class);
     query.setParameter(1, apartmentId);
-    return joinOnKarrotProfileAndCommentCount(query);
+    return completeTransientAttribute(query);
   }
 
   @Override
@@ -87,13 +100,27 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
         "ORDER BY v.createdAt DESC", Vote.class);
     query.setFirstResult(Math.toIntExact(pageable.getOffset()));
     query.setMaxResults(pageable.getPageSize());
-    return joinOnKarrotProfileAndCommentCount(query);
+    return completeTransientAttribute(query);
   }
 
+//  private long commentCountForParentIds(Set<String> parentIds) {
+//    TypedQuery<Long> query = em.createQuery("SELECT COUNT(c) FROM Comment c " +
+//      "WHERE (c.parent.id IN ?1 OR c.parent.id IN (SELECT subc.id FROM Comment subc)) " +
+//      "AND c.deletedAt IS NULL", Long.class);
+//    query.setParameter(1, parentId);
+//    return query.getSingleResult();
+//  }
+
+  private List<Vote> completeTransientAttribute(TypedQuery<Vote> query) {
+    return joinOnKarrotProfile(query);
+  }
+
+
   @Override
-  protected List<Vote> joinOnKarrotProfileAndCommentCount(TypedQuery<Vote> query) {
-    return super.joinOnKarrotProfileAndCommentCount(query).stream()
+  protected List<Vote> joinOnKarrotProfile(TypedQuery<Vote> query) {
+    return super.joinOnKarrotProfile(query).stream()
       .peek(Vote::sortItems)
       .collect(Collectors.toList());
   }
+
 }

@@ -138,7 +138,7 @@
                                     <td th:text="${#dates.format(cohort.dates[index.index], 'MM.dd')}" style="background-color: #CCCCCC"></td>
                                     <td th:text="${cohort.initialValue[index.index]}"></td>
                                     <td th:each="col : ${row}">
-                                        <p th:text="${col > 0 ? #strings.concat(col * 100, '%') : '-'}"></p>
+                                        <p th:text="${col > 0 ? #strings.concat(#strings.substring(col * 100, 0, 5), '%') : '-'}"></p>
                                     </td>
                                 </tr>
                             </tbody>

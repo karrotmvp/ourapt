@@ -8,6 +8,11 @@ server:
 #      prefix: stdout
 #      file-date-format:
 #      suffix:
+logging:
+  level:
+    org:
+      springframework:
+        cache: TRACE
 spring:
   application:
     name: ourapt_api_server

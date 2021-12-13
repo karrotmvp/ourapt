@@ -1,11 +1,11 @@
 package com.karrotmvp.ourapt.v1.article.vote;
 
 import com.karrotmvp.ourapt.v1.article.question.QuestionService;
-import com.karrotmvp.ourapt.v1.article.question.dto.model.QuestionDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.request.VoteContentDto;
+import com.karrotmvp.ourapt.v1.article.vote.dto.response.FeedDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.response.OneVoteDto;
-import com.karrotmvp.ourapt.v1.article.vote.dto.response.VoteListDto;
+import com.karrotmvp.ourapt.v1.article.vote.repository.VoteFeedService;
 import com.karrotmvp.ourapt.v1.auth.CurrentUser;
 import com.karrotmvp.ourapt.v1.common.CommonResponseBody;
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -25,25 +24,26 @@ import java.util.List;
 public class VoteController {
 
   private final VoteService voteService;
+  private final VoteFeedService voteFeedService;
   private final QuestionService questionService;
 
   @GetMapping("/apartment/{apartmentId}/votes")
   @ApiOperation(value = "아파트의 진행중/종료된 투표 조회")
-  public CommonResponseBody<VoteListDto> getVotes(
+  public CommonResponseBody<FeedDto> getVotes(
     @RequestParam(name = "terminated") boolean terminated,
     @RequestParam(name = "perPage") @Max(value = 10) int perPage,
     @RequestParam(name = "cursor") long cursorTimestamp,
     @PathVariable(name = "apartmentId") String apartmentId
   ) {
-    List<VoteDto> votes;
+    FeedDto feed;
     if (terminated) {
-      votes = this.voteService.getVotesTerminatedInApartment(apartmentId);
+      feed = this.voteFeedService.getFeedTerminatedInApartment(apartmentId);
     } else {
-      votes = this.voteService.getVotesInProgressInApartment(apartmentId);
+      feed = this.voteFeedService.getFeedInProgressInApartment(apartmentId);
     }
-    return CommonResponseBody.<VoteListDto>builder()
+    return CommonResponseBody.<FeedDto>builder()
       .success()
-      .data(new VoteListDto(votes))
+      .data(feed)
       .build();
   }
 
@@ -91,11 +91,11 @@ public class VoteController {
     @PathVariable String voteId
   ) {
     VoteDto vote = this.voteService.getOneById(voteId);
-    List<QuestionDto> questionsOfVote = this.questionService.getAllQuestionsAboutVote(voteId);
     return CommonResponseBody.<OneVoteDto>builder()
       .success()
-      .data(new OneVoteDto(vote, questionsOfVote))
+      .data(new OneVoteDto(vote))
       .build();
   }
+
 
 }

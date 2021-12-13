@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class GetQuestionsDto {
+public class QuestionListDto {
     @NotNull
     List<QuestionDto> questions;
 }

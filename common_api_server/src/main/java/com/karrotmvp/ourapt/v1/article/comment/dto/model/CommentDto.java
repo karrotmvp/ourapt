@@ -1,15 +1,15 @@
-package com.karrotmvp.ourapt.v1.comment.dto.model;
-
-import java.util.Date;
-
-import javax.validation.constraints.NotNull;
+package com.karrotmvp.ourapt.v1.article.comment.dto.model;
 
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -25,4 +25,6 @@ public class CommentDto {
   private Date createdAt;
   @NotNull
   private Date updatedAt;
+  @NotNull
+  private List<CommentDto> subComments = new ArrayList<>();
 }
