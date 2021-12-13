@@ -1,8 +1,11 @@
 package com.karrotmvp.ourapt.v1.article.vote.repository;
 
+import com.karrotmvp.ourapt.v1.article.Article;
 import com.karrotmvp.ourapt.v1.article.ArticleBaseCustomRepository;
+import com.karrotmvp.ourapt.v1.article.comment.repository.projection.CommentCount;
 import com.karrotmvp.ourapt.v1.article.vote.entity.Vote;
 import com.karrotmvp.ourapt.v1.common.Static;
+import com.karrotmvp.ourapt.v1.common.Utils;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import org.springframework.data.domain.Pageable;
 
@@ -12,6 +15,7 @@ import javax.persistence.TypedQuery;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> implements VoteCustomRepository {
@@ -36,7 +40,7 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
           Static.makeAdminKarrotProfile(vote.getWriter().getId()) :
           karrotOAPI.getKarrotUserProfileById(vote.getWriter().getId())
       );
-      vote.setCountOfComments(Math.toIntExact(this.commentCountForParentId(vote.getId())));
+      vote.setCountOfComments(Math.toIntExact(this.commentCountForRootArticleId(vote.getId())));
       vote.sortItems();
       return Optional.of(vote);
     } catch (NoResultException ne) {
@@ -44,14 +48,10 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
     }
   }
 
-  private long commentCountForParentId(String parentId) {
+  private long commentCountForRootArticleId(String parentId) {
     TypedQuery<Long> query = em.createQuery("SELECT COUNT(c) FROM Comment c " +
-      "WHERE " +
-        "(c.parent.id = ?1 " +
-            "OR c.parent.id IN " +
-              "(SELECT subc.id FROM Comment subc WHERE subc.parent.id = ?1)" +
-        ") " +
-        "AND c.deletedAt IS NULL", Long.class);
+      "WHERE c.root.id = ?1 " +
+      "AND c.deletedAt IS NULL", Long.class);
     query.setParameter(1, parentId);
     return query.getSingleResult();
   }
@@ -103,16 +103,26 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
     return completeTransientAttribute(query);
   }
 
-//  private long commentCountForParentIds(Set<String> parentIds) {
-//    TypedQuery<Long> query = em.createQuery("SELECT COUNT(c) FROM Comment c " +
-//      "WHERE (c.parent.id IN ?1 OR c.parent.id IN (SELECT subc.id FROM Comment subc)) " +
-//      "AND c.deletedAt IS NULL", Long.class);
-//    query.setParameter(1, parentId);
-//    return query.getSingleResult();
-//  }
+  private List<CommentCount> commentCountsForRootArticleIds(Set<String> parentIds) {
+    TypedQuery<CommentCount> query = em.createQuery(
+      "SELECT new " + CommentCount.class.getName() + "(c.root.id, COUNT(c)) " +
+      "FROM Comment c " +
+      "WHERE c.root.id IN ?1 " +
+      "AND c.deletedAt IS NULL", CommentCount.class);
+    query.setParameter(1, parentIds);
+    return query.getResultList();
+  }
 
   private List<Vote> completeTransientAttribute(TypedQuery<Vote> query) {
-    return joinOnKarrotProfile(query);
+    List<Vote> voteEntitiesWithKarrotProfiles = joinOnKarrotProfile(query);
+    return Utils.leftOuterHashJoin(
+      voteEntitiesWithKarrotProfiles,
+      this.commentCountsForRootArticleIds(voteEntitiesWithKarrotProfiles.stream()
+        .map(Article::getId).collect(Collectors.toSet())),
+      Article::getId,
+      CommentCount::getParentId,
+      (v, cc) -> v.setCountOfComments(Math.toIntExact(cc.getCommentCount()))
+    );
   }
 
 
@@ -122,5 +132,4 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
       .peek(Vote::sortItems)
       .collect(Collectors.toList());
   }
-
 }

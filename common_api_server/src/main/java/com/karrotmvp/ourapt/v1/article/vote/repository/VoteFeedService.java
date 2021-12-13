@@ -23,12 +23,8 @@ public class VoteFeedService {
   private CommentRepository commentRepository;
   private ModelMapper mapper;
 
-  public FeedDto getFeedTerminatedInApartment(String apartmentId) {
-    return joinWithLastComment(this.voteService.getVotesTerminatedInApartment(apartmentId));
-  }
-
-  public FeedDto getFeedInProgressInApartment(String apartmentId) {
-    return joinWithLastComment(this.voteService.getVotesInProgressInApartment(apartmentId));
+  public FeedDto getFeedInApartment(String apartmentId) {
+    return joinWithLastComment(this.voteService.getVotesInApartment(apartmentId));
   }
 
   private FeedDto joinWithLastComment(List<VoteDto> votes) {

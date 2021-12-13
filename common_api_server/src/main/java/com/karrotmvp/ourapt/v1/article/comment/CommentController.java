@@ -27,7 +27,7 @@ public class CommentController {
   }
 
   @GetMapping(value = "/article/{articleId}/comments")
-  @ApiOperation(value = "게시글에 달린 게시글 보기")
+  @ApiOperation(value = "게시글에 달린 댓글(대댓글) 보기")
   public CommonResponseBody<CommentListDto> getCommentsOfQuestion(
     @PathVariable String articleId
   ) {

@@ -58,7 +58,14 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
     return this.articleCustomRepository.findAllByApartmentIdOrderByCreatedAtDesc(apartmentId)
       .stream()
       .filter(v -> !v.isInProgress())
-      .map(v -> mapper.map(v,VoteDto.class))
+      .map(v -> mapper.map(v, VoteDto.class))
+      .collect(Collectors.toList());
+  }
+
+  public List<VoteDto> getVotesInApartment(String apartmentId) {
+    return this.articleCustomRepository.findAllByApartmentIdOrderByCreatedAtDesc(apartmentId)
+      .stream()
+      .map(v -> mapper.map(v, VoteDto.class))
       .collect(Collectors.toList());
   }
 

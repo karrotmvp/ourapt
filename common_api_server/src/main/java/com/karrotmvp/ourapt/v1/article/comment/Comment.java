@@ -16,4 +16,11 @@ public class Comment extends Article {
     @Setter
     @Getter
     private Article parent;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "root_id", referencedColumnName = "id")
+    @Getter
+    @Setter
+    private Article root;
+
 }

@@ -16,8 +16,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,15 +41,32 @@ public class CommentService extends ArticleBaseService<Comment, CommentDto> {
     this.commentRepository = commentRepository;
     this.userRepository = userRepository;
     this.userService = userService;
-    this.commonArticleRepository = commonArticleRepository;;
+    this.commonArticleRepository = commonArticleRepository;
+    ;
   }
 
 
   public List<CommentDto> getCommentsByArticleId(String articleId) {
-    List<Comment> foundComments = this.commentRepository.findByParentId(articleId);
-    return foundComments.stream()
+    List<CommentDto> foundComments = this.commentRepository.findByParentId(articleId)
+      .stream()
       .map(c -> mapper.map(c, CommentDto.class))
       .collect(Collectors.toList());
+    Map<String, List<Comment>> subCommentsMap = this.commentRepository.findByParentIdIn(foundComments.stream()
+      .map(CommentDto::getId)
+      .collect(Collectors.toSet())
+    ).stream().collect(Collectors.groupingBy(subc -> subc.getParent().getId()));
+    foundComments.forEach(c ->
+      {
+        c.setSubComments(subCommentsMap.getOrDefault(
+          c.getId(),
+          new ArrayList<>()
+          ).stream()
+          .map(subc -> mapper.map(subc, CommentDto.class))
+          .collect(Collectors.toList())
+        );
+      }
+    );
+    return foundComments;
   }
 
   @Transactional
@@ -57,12 +76,17 @@ public class CommentService extends ArticleBaseService<Comment, CommentDto> {
     this.userService.assertUserIsNotBanned(writer);
     Article parent = this.commonArticleRepository.findById(articleId)
       .orElseThrow(() -> new DataNotFoundFromDBException("Cannot find the Article matched with ID: " + articleId));
-    boolean parentIsComment = Comment.class.isAssignableFrom(parent.getClass());
     // TODO: need logic to block subcomment of subcomment
     Comment comment = mapper.map(content, Comment.class);
     comment.setWriter(writer);
     comment.setRegionWhereCreated(regionId);
     comment.setParent(parent);
+    if (Comment.class.isAssignableFrom(parent.getClass())) {
+      // subcomment
+      comment.setRoot(((Comment) parent).getParent());
+    } else {
+      comment.setRoot(parent);
+    }
     if (writer.getCheckedIn() == null) {
       throw new NotCheckedInUserException();
     }

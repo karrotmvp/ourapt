@@ -30,20 +30,13 @@ public class VoteController {
   @GetMapping("/apartment/{apartmentId}/votes")
   @ApiOperation(value = "아파트의 진행중/종료된 투표 조회")
   public CommonResponseBody<FeedDto> getVotes(
-    @RequestParam(name = "terminated") boolean terminated,
     @RequestParam(name = "perPage") @Max(value = 10) int perPage,
     @RequestParam(name = "cursor") long cursorTimestamp,
     @PathVariable(name = "apartmentId") String apartmentId
   ) {
-    FeedDto feed;
-    if (terminated) {
-      feed = this.voteFeedService.getFeedTerminatedInApartment(apartmentId);
-    } else {
-      feed = this.voteFeedService.getFeedInProgressInApartment(apartmentId);
-    }
     return CommonResponseBody.<FeedDto>builder()
       .success()
-      .data(feed)
+      .data(this.voteFeedService.getFeedInApartment(apartmentId))
       .build();
   }
 
