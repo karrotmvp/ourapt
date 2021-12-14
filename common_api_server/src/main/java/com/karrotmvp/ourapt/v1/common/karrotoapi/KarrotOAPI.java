@@ -4,13 +4,15 @@ import com.karrotmvp.ourapt.v1.common.exception.application.KarrotUnexpectedResp
 import com.karrotmvp.ourapt.v1.user.entity.KarrotProfile;
 import com.karrotmvp.ourapt.v1.user.karrotapidto.KarrotOApiUserListResponseDto;
 import com.karrotmvp.ourapt.v1.user.karrotapidto.KarrotOApiUserResponseDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -18,21 +20,23 @@ import java.util.Set;
 public class KarrotOAPI {
 
     private final WebClient karrotOApiClient;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public KarrotOAPI(@Qualifier("karrotOApiClient") WebClient karrotOApiClient) {
         this.karrotOApiClient = karrotOApiClient;
     }
 
-    @Cacheable(cacheNames = "KARROT_PROFILE:IDS", key="#ids")
     public List<KarrotProfile> getKarrotUserProfilesByIds(Set<String> ids) {
+        long start = new Date().getTime();
         KarrotOApiResponseBody<KarrotOApiUserListResponseDto> responseBody = this.sendGet("/api/v2/users/by_ids?ids=" + String.join(",", ids))
                 .bodyToMono(new ParameterizedTypeReference<KarrotOApiResponseBody<KarrotOApiUserListResponseDto>>() {})
                 .blockOptional().orElseThrow(KarrotUnexpectedResponseException::new);
         responseBody.checkIfError();
+        long end = new Date().getTime();
+        logger.info((end - start) + "");
         return responseBody.getData().getUsers();
     }
 
-    @Cacheable(cacheNames = "KARROT_PROFILE:ID", key="#p0")
     public KarrotProfile getKarrotUserProfileById(@NotNull String id) {
         KarrotOApiResponseBody<KarrotOApiUserResponseDto> responseBody = this.sendGet("/api/v2/users/" + id)
                 .bodyToMono(new ParameterizedTypeReference<KarrotOApiResponseBody<KarrotOApiUserResponseDto>>() {})

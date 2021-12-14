@@ -45,6 +45,9 @@ public class CommentService extends ArticleBaseService<Comment, CommentDto> {
     ;
   }
 
+  public CommentDto getCommentById(String commentId) {
+    return mapper.map(this.safelyGetById(commentId), CommentDto.class);
+  }
 
   public List<CommentDto> getCommentsByArticleId(String articleId) {
     List<CommentDto> foundComments = this.commentRepository.findByParentId(articleId)
@@ -96,15 +99,15 @@ public class CommentService extends ArticleBaseService<Comment, CommentDto> {
   }
 
   public void deleteCommentById(String commentId) {
-    Comment toDelete = this.safelyGetCommentById(commentId);
+    Comment toDelete = this.safelyGetById(commentId);
     toDelete.setDeletedAt(new Date());
     this.commentRepository.save(toDelete);
   }
 
-  private Comment safelyGetCommentById(String commentId) {
-    return this.commentRepository.findById(commentId).orElseThrow(
-      () -> new DataNotFoundFromDBException("Cannot found matched comment with id: " + commentId));
-  }
+//  private Comment safelyGetCommentById(String commentId) {
+//    return this.commentRepository.findById(commentId).orElseThrow(
+//      () -> new DataNotFoundFromDBException("Cannot found matched comment with id: " + commentId));
+//  }
 
   @Override
   protected Class<CommentDto> getClassOfDomainModel() {

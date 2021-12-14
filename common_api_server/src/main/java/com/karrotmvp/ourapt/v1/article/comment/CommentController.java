@@ -53,6 +53,17 @@ public class CommentController {
       .build();
   }
 
+  @GetMapping(value = "/comment/{commentId}")
+  @ApiOperation(value = "댓글 조회하기")
+  public CommonResponseBody<OneCommentDto> getComment(
+    @PathVariable(name = "commentId") String commentId
+  ) {
+    return CommonResponseBody.<OneCommentDto>builder()
+      .data(new OneCommentDto(this.commentService.getCommentById(commentId)))
+      .success()
+      .build();
+  }
+
   @DeleteMapping(value = "/comment/{commentId}")
   @ApiOperation(value = "댓글 삭제하기")
   public CommonResponseBody<Void> deleteComment(

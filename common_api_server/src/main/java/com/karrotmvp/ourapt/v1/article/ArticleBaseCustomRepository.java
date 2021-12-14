@@ -41,24 +41,5 @@ public abstract class ArticleBaseCustomRepository<T extends Article> {
       .stream()
       .sorted(new BaseEntityCreatedDateComparator(BaseEntityCreatedDateComparator.Order.DESC))
       .collect(Collectors.toList());
-
-//  protected List<CommentCount> findCountPerParentIdIn(Set<String> parentIds) {
-//    TypedQuery<CommentCount> query = em.createQuery(
-//      "SELECT new " + CommentCount.class.getName() + "(c.parent.id, COUNT(c)) " +
-//        "FROM Comment c WHERE c.parent.id IN ?1 AND c.deletedAt IS NULL " +
-//        "GROUP BY c.parent.id", CommentCount.class);
-//    query.setParameter(1, parentIds);
-//    return query.getResultList();
-//  }
-
-//    return Utils.leftOuterHashJoin(
-//        incompleteArticles,
-//        this.findCountPerParentIdIn(questionIds),
-//        Article::getId,
-//        CommentCount::getParentId,
-//        (q, cc) -> q.setCountOfComments(Math.toIntExact(cc.getCommentCount())))
-//      .stream()
-//      .sorted(new BaseEntityCreatedDateComparator(BaseEntityCreatedDateComparator.Order.DESC))
-//      .collect(Collectors.toList());
   }
 }
