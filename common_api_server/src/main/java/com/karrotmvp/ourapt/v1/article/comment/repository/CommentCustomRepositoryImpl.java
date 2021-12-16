@@ -2,6 +2,7 @@ package com.karrotmvp.ourapt.v1.article.comment.repository;
 
 import com.karrotmvp.ourapt.v1.article.ArticleBaseCustomRepository;
 import com.karrotmvp.ourapt.v1.article.comment.Comment;
+import com.karrotmvp.ourapt.v1.common.BaseEntityCreatedDateComparator;
 import com.karrotmvp.ourapt.v1.common.Static;
 import com.karrotmvp.ourapt.v1.common.karrotoapi.KarrotOAPI;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @Transactional
@@ -68,7 +70,7 @@ public class CommentCustomRepositoryImpl extends ArticleBaseCustomRepository<Com
         "LEFT JOIN FETCH c.writer " +
         "WHERE c.parent.id = ?1 AND c.deletedAt IS NULL", Comment.class);
     query.setParameter(1, parentId);
-    return joinOnKarrotProfile(query);
+    return completeTransientAttribute(query);
   }
 
   @Override
@@ -78,7 +80,16 @@ public class CommentCustomRepositoryImpl extends ArticleBaseCustomRepository<Com
         "LEFT JOIN FETCH c.writer " +
         "WHERE c.parent.id IN ?1 AND c.deletedAt IS NULL", Comment.class);
     query.setParameter(1, parentIds);
-    return joinOnKarrotProfile(query);
+    return completeTransientAttribute(query);
+  }
+
+  private List<Comment> completeTransientAttribute(TypedQuery<Comment> query) {
+    return joinOnKarrotProfile(query)
+      .stream()
+      .sorted(
+        new BaseEntityCreatedDateComparator(BaseEntityCreatedDateComparator.Order.ASC)
+      )
+      .collect(Collectors.toList());
   }
 
 }
