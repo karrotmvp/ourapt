@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({" not "})
+@Profile({"none"})
 public class MockOAuthProvider extends KarrotOAuthProvider {
     // MockOAuthProvider is a Bean that is injected instead of KarrotOAuthProvider when the Profile is not production
     private Logger logger = LoggerFactory.getLogger(this.getClass());

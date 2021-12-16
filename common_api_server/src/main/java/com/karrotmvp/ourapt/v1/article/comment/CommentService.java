@@ -16,10 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,11 +39,15 @@ public class CommentService extends ArticleBaseService<Comment, CommentDto> {
     this.userRepository = userRepository;
     this.userService = userService;
     this.commonArticleRepository = commonArticleRepository;
-    ;
   }
 
   public CommentDto getCommentById(String commentId) {
-    return mapper.map(this.safelyGetById(commentId), CommentDto.class);
+    CommentDto found = mapper.map(this.safelyGetById(commentId), CommentDto.class);
+    try {
+      return joinOnSubComments(List.of(found)).get(0);
+    } catch (IndexOutOfBoundsException e) {
+      throw new DataNotFoundFromDBException("Cannot found comment matched with ID: " + commentId);
+    }
   }
 
   public List<CommentDto> getCommentsByArticleId(String articleId) {
@@ -54,22 +55,26 @@ public class CommentService extends ArticleBaseService<Comment, CommentDto> {
       .stream()
       .map(c -> mapper.map(c, CommentDto.class))
       .collect(Collectors.toList());
-    Map<String, List<Comment>> subCommentsMap = this.commentRepository.findByParentIdIn(foundComments.stream()
+    return joinOnSubComments(foundComments);
+  }
+
+  public List<CommentDto> joinOnSubComments(List<CommentDto> comments) {
+    Map<String, List<Comment>> subCommentsMap = this.commentRepository.findByParentIdIn(comments.stream()
       .map(CommentDto::getId)
       .collect(Collectors.toSet())
     ).stream().collect(Collectors.groupingBy(subc -> subc.getParent().getId()));
-    foundComments.forEach(c ->
+    comments.forEach(c ->
       {
         c.setSubComments(subCommentsMap.getOrDefault(
-          c.getId(),
-          new ArrayList<>()
-          ).stream()
-          .map(subc -> mapper.map(subc, CommentDto.class))
-          .collect(Collectors.toList())
+              c.getId(),
+              new ArrayList<>()
+            ).stream()
+            .map(subc -> mapper.map(subc, CommentDto.class))
+            .collect(Collectors.toList())
         );
       }
     );
-    return foundComments;
+    return comments;
   }
 
   @Transactional
@@ -93,7 +98,7 @@ public class CommentService extends ArticleBaseService<Comment, CommentDto> {
     if (writer.getCheckedIn() == null) {
       throw new NotCheckedInUserException();
     }
-    comment.setApartmentWhereCreated(writer.getCheckedIn());
+    comment.setApartmentWhereCreated(parent.getApartmentWhereCreated());
     this.commentRepository.save(comment);
     return mapper.map(comment, CommentDto.class);
   }
@@ -103,11 +108,6 @@ public class CommentService extends ArticleBaseService<Comment, CommentDto> {
     toDelete.setDeletedAt(new Date());
     this.commentRepository.save(toDelete);
   }
-
-//  private Comment safelyGetCommentById(String commentId) {
-//    return this.commentRepository.findById(commentId).orElseThrow(
-//      () -> new DataNotFoundFromDBException("Cannot found matched comment with id: " + commentId));
-//  }
 
   @Override
   protected Class<CommentDto> getClassOfDomainModel() {

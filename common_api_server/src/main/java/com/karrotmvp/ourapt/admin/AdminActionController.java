@@ -94,12 +94,13 @@ public class AdminActionController {
     @ModelAttribute VoteContentDto content
   ) {
     final String ADMIN_USER_ID = "ADMIN";
-    this.userService.updateCheckedInUserById(ADMIN_USER_ID, apartmentId);
     content.trimItems();
     this.voteService.writeNewVote(
       content,
       ADMIN_USER_ID,
-      regionId);
+      regionId,
+      apartmentId
+    );
     rd.setUrl("/admin/votes?perPage=20&pageNum=1");
     return rd;
   }

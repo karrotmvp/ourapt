@@ -20,6 +20,8 @@ import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.GenericFilterBean;
 
+import javax.naming.AuthenticationException;
+
 @Order(1)
 @Configuration
 @EnableWebSecurity
@@ -75,7 +77,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         );
         exceptionEventPublisher.publish(
           request.getMethod() + " " + request.getRequestURI() + " " + 401,
-          firstException
+          new AuthenticationException(firstException)
         );
         response.sendError(
           HttpStatus.UNAUTHORIZED.value(),

@@ -2,10 +2,10 @@ package com.karrotmvp.ourapt.v1.common.eventlistener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.karrotmvp.ourapt.v1.common.exception.event.ExceptionOccurEvent;
 import com.karrotmvp.ourapt.v1.log.LogService;
 import com.karrotmvp.ourapt.v1.log.event.AccessEvent;
 import com.karrotmvp.ourapt.v1.log.vo.LogVo;
+import io.sentry.Sentry;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class LogRecorder {
     try {
       logger.info(buildRequestLogToPrint(event));
     } catch (JsonProcessingException e) {
-      logger.error("Fail to build LogJson: " + e.getMessage());
+      Sentry.captureException(e);
     }
 
     if (Arrays.stream(exclusionPatterns).anyMatch((pattern) -> event.getLog().getPath().matches(pattern))) {
@@ -46,11 +46,6 @@ public class LogRecorder {
 
     // Record access log to DB
     this.logService.logEveryRequest(event.getLog(), event.getEventAt());
-  }
-
-  @EventListener(ExceptionOccurEvent.class)
-  public void handleExceptionOccurEvent(ExceptionOccurEvent event) {
-    logger.error(event.getSummary());
   }
 
   private String buildRequestLogToPrint(AccessEvent event) throws JsonProcessingException {

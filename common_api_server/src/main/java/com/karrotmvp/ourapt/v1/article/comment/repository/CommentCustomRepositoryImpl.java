@@ -30,7 +30,8 @@ public class CommentCustomRepositoryImpl extends ArticleBaseCustomRepository<Com
       "SELECT c FROM Comment c " +
         "LEFT JOIN FETCH c.writer " +
         "LEFT JOIN FETCH c.apartmentWhereCreated " +
-        "WHERE c.id = ?1", Comment.class);
+        "WHERE c.id = ?1", Comment.class
+    );
     query.setParameter(1, commentId);
     try {
       Comment comment = query.getSingleResult();

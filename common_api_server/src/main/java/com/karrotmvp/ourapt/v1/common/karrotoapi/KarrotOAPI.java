@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -27,13 +26,10 @@ public class KarrotOAPI {
     }
 
     public List<KarrotProfile> getKarrotUserProfilesByIds(Set<String> ids) {
-        long start = new Date().getTime();
         KarrotOApiResponseBody<KarrotOApiUserListResponseDto> responseBody = this.sendGet("/api/v2/users/by_ids?ids=" + String.join(",", ids))
                 .bodyToMono(new ParameterizedTypeReference<KarrotOApiResponseBody<KarrotOApiUserListResponseDto>>() {})
                 .blockOptional().orElseThrow(KarrotUnexpectedResponseException::new);
         responseBody.checkIfError();
-        long end = new Date().getTime();
-        logger.info((end - start) + "");
         return responseBody.getData().getUsers();
     }
 

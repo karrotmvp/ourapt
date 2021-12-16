@@ -29,6 +29,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.modelmapper:modelmapper:2.4.4'
 
+    implementation 'io.sentry:sentry-spring-boot-starter:5.5.0' // sentry
+    implementation 'io.sentry:sentry-logback:5.5.0' // sentry - logback
     implementation "io.springfox:springfox-boot-starter:3.0.0" // swagger
 
 

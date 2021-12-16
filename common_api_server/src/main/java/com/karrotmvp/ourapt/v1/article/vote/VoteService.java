@@ -1,6 +1,9 @@
 package com.karrotmvp.ourapt.v1.article.vote;
 
+import com.karrotmvp.ourapt.v1.apartment.ApartmentRepository;
+import com.karrotmvp.ourapt.v1.apartment.entity.Apartment;
 import com.karrotmvp.ourapt.v1.article.ArticleBaseService;
+import com.karrotmvp.ourapt.v1.article.comment.dto.model.CommentDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.model.VoteWithWhereCreatedDto;
 import com.karrotmvp.ourapt.v1.article.vote.dto.request.VoteContentDto;
@@ -36,30 +39,16 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
   private final VoteItemRepository voteItemRepository;
   private final VotingRepository votingRepository;
   private final UserRepository userRepository;
+  private final ApartmentRepository apartmentRepository;
   private final UserService userService;
 
-  public VoteService(VoteRepository voteRepository, ModelMapper mapper, VoteItemRepository voteItemRepository, VotingRepository votingRepository, UserRepository userRepository, UserService userService) {
+  public VoteService(VoteRepository voteRepository, ModelMapper mapper, VoteItemRepository voteItemRepository, VotingRepository votingRepository, UserRepository userRepository, ApartmentRepository apartmentRepository, UserService userService) {
     super(voteRepository, voteRepository, mapper);
     this.voteItemRepository = voteItemRepository;
     this.votingRepository = votingRepository;
     this.userRepository = userRepository;
+    this.apartmentRepository = apartmentRepository;
     this.userService = userService;
-  }
-
-  public List<VoteDto> getVotesInProgressInApartment(String apartmentId) {
-    return this.articleCustomRepository.findAllByApartmentIdOrderByCreatedAtDesc(apartmentId)
-      .stream()
-      .filter(Vote::isInProgress)
-      .map(v -> mapper.map(v,VoteDto.class))
-      .collect(Collectors.toList());
-  }
-
-  public List<VoteDto> getVotesTerminatedInApartment(String apartmentId) {
-    return this.articleCustomRepository.findAllByApartmentIdOrderByCreatedAtDesc(apartmentId)
-      .stream()
-      .filter(v -> !v.isInProgress())
-      .map(v -> mapper.map(v, VoteDto.class))
-      .collect(Collectors.toList());
   }
 
   public List<VoteDto> getVotesInApartment(String apartmentId) {
@@ -74,7 +63,7 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
   }
 
   @Transactional(rollbackFor = RuntimeException.class)
-  public VoteDto writeNewVote(VoteContentDto content, String writerId, String regionId) {
+  public VoteDto writeNewVote(VoteContentDto content, String writerId, String regionId, String apartmentId) {
     User writer = this.userRepository.findById(writerId)
       .orElseThrow(RegisteredUserNotFoundException::new);
     this.userService.assertUserIsNotBanned(writer);
@@ -86,7 +75,9 @@ public class VoteService extends ArticleBaseService<Vote, VoteDto> {
     if (writer.getCheckedIn() == null) {
       throw new NotCheckedInUserException();
     }
-    created.setApartmentWhereCreated(writer.getCheckedIn());
+    Apartment apt = this.apartmentRepository.findById(apartmentId)
+      .orElseThrow(() -> new DataNotFoundFromDBException("Cannot find apartment as ID: " + apartmentId));
+    created.setApartmentWhereCreated(apt);
     Vote saved = this.articleRepository.save(created);
 
     List<VoteItem> items = IntStream.range(0, content.getItems().size())

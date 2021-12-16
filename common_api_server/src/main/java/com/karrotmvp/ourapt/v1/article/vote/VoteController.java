@@ -40,14 +40,15 @@ public class VoteController {
       .build();
   }
 
-  @PostMapping("/vote")
+  @PostMapping("/apartment/{apartmentId}/vote")
   @ApiOperation(value = "새 투표 게시글 작성")
   public CommonResponseBody<OneVoteDto> writeNewVote(
     @RequestBody @Valid VoteContentDto voteContent,
+    @PathVariable(name = "apartmentId") String apartmentId,
     @RequestHeader(name = "Region-Id") String regionId,
     @CurrentUser KarrotProfile profile
   ) {
-    VoteDto created = this.voteService.writeNewVote(voteContent, profile.getId(), regionId);
+    VoteDto created = this.voteService.writeNewVote(voteContent, profile.getId(), regionId, apartmentId);
     return CommonResponseBody.<OneVoteDto>builder()
       .success()
       .data(new OneVoteDto(created))
@@ -89,6 +90,5 @@ public class VoteController {
       .data(new OneVoteDto(vote))
       .build();
   }
-
 
 }

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 public class ExceptionOccurEventPublisher {
   private final ApplicationEventPublisher applicationEventPublisher;
 
-  public void publish(final String traceHint, final String message) {
-    ExceptionOccurEvent event = new ExceptionOccurEvent(this, traceHint, message);
+  public void publish(final String traceHint, final Exception exception) {
+    ExceptionOccurEvent event = new ExceptionOccurEvent(this, traceHint, exception);
     applicationEventPublisher.publishEvent(event);
   }
 }

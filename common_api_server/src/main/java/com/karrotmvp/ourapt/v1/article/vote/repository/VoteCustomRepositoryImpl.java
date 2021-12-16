@@ -125,7 +125,6 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
     );
   }
 
-
   @Override
   protected List<Vote> joinOnKarrotProfile(TypedQuery<Vote> query) {
     return super.joinOnKarrotProfile(query).stream()

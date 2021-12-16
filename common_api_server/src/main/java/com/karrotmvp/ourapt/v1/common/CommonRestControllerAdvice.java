@@ -99,7 +99,7 @@ public class CommonRestControllerAdvice {
     );
     exceptionEventPublisher.publish(
       request.getMethod() + " " + request.getRequestURI() + " " + status.value(),
-      exception.getMessage()
+      exception
     );
   }
 

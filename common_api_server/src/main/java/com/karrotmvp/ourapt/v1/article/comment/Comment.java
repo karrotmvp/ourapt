@@ -11,16 +11,16 @@ import javax.persistence.*;
 @DiscriminatorValue(value = "C")
 public class Comment extends Article {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id", referencedColumnName = "id")
-    @Setter
-    @Getter
-    private Article parent;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "parent_id", referencedColumnName = "id")
+  @Setter
+  @Getter
+  private Article parent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "root_id", referencedColumnName = "id")
-    @Getter
-    @Setter
-    private Article root;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "root_id", referencedColumnName = "id")
+  @Getter
+  @Setter
+  private Article root;
 
 }

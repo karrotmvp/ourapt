@@ -42,20 +42,19 @@ public class VoteFeedService {
         existing.getCreatedAt().getTime() < c.getCreatedAt().getTime() ? c : existing
       );
     });
-    return new FeedDto(votes.stream()
-      .map(FeedItemDto::new)
-      .peek((item) -> {
-        String voteId = item.getVote().getId();
-        Comment lastComment = voteIdAndCommentMap.getOrDefault(voteId, null);
-        item.setLastComment(
-          lastComment != null
-            ? mapper.map(lastComment, CommentDto.class)
-            : null
-        );
-      })
-      .collect(Collectors.toList())
+    return new FeedDto(
+      votes.stream()
+        .map(FeedItemDto::new)
+        .peek((item) -> {
+          String voteId = item.getVote().getId();
+          Comment lastComment = voteIdAndCommentMap.getOrDefault(voteId, null);
+          item.setLastComment(
+            lastComment != null
+              ? mapper.map(lastComment, CommentDto.class)
+              : null
+          );
+        })
+        .collect(Collectors.toList())
     );
   }
-
-
 }

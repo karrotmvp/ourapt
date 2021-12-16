@@ -48,6 +48,10 @@ spring:
     cache: false
     order: 0
 
+sentry:
+  dsn: https://b96910f5fc0348c78f45a911b197f86e@o1091881.ingest.sentry.io/6109524
+  traces-sample-rate: 0.3
+  environment: dev
 
 karrot:
   api:
