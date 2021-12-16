@@ -60,7 +60,7 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
   @Override
   public List<Vote> findFirstByApartmentIdToAndDateCursorByOrderByDesc(String apartmentId, Date dateCursor, Pageable pageable) {
     TypedQuery<Vote> query = em.createQuery(
-      "SELECT v FROM Vote v " + 
+      "SELECT v FROM Vote v " +
         "LEFT JOIN FETCH v.writer " +
         "LEFT JOIN FETCH v.apartmentWhereCreated " +
         "WHERE v.apartmentWhereCreated.id = ?1 " +
@@ -106,9 +106,10 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
   private List<CommentCount> commentCountsForRootArticleIds(Set<String> parentIds) {
     TypedQuery<CommentCount> query = em.createQuery(
       "SELECT new " + CommentCount.class.getName() + "(c.root.id, COUNT(c)) " +
-      "FROM Comment c " +
-      "WHERE c.root.id IN ?1 " +
-      "AND c.deletedAt IS NULL", CommentCount.class);
+        "FROM Comment c " +
+        "WHERE c.root.id IN ?1 " +
+        "AND c.deletedAt IS NULL " +
+        "GROUP BY c.root.id", CommentCount.class);
     query.setParameter(1, parentIds);
     return query.getResultList();
   }
@@ -117,8 +118,9 @@ public class VoteCustomRepositoryImpl extends ArticleBaseCustomRepository<Vote> 
     List<Vote> voteEntitiesWithKarrotProfiles = joinOnKarrotProfile(query);
     return Utils.leftOuterHashJoin(
       voteEntitiesWithKarrotProfiles,
-      this.commentCountsForRootArticleIds(voteEntitiesWithKarrotProfiles.stream()
-        .map(Article::getId).collect(Collectors.toSet())),
+      this.commentCountsForRootArticleIds(
+        voteEntitiesWithKarrotProfiles.stream()
+          .map(Article::getId).collect(Collectors.toSet())),
       Article::getId,
       CommentCount::getParentId,
       (v, cc) -> v.setCountOfComments(Math.toIntExact(cc.getCommentCount()))
