@@ -76,7 +76,7 @@ public class StatisticService {
               this.dateFormatter.format(firstDates[i]),
               this.dateFormatter.format(addDate(firstDates[i], j))
             ).doubleValue() / countDailyFirstVisitor[i].doubleValue()
-          ) * 1000) / 1000.0
+          ) * 100 * 1000) / 1000.0
           : -1;
       });
     });
